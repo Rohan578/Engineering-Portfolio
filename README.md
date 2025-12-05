@@ -1,5 +1,5 @@
 # Engineering-Portfolio
-Hi, I'm Rohan, a student at Rutgers University studying Electrical and Computer Engineering. Some projects I have worked on and am working on include:<br>
+Hi, I'm Rohan, a student at Rutgers University studying Electrical and Computer Engineering. Some projects I have worked on and am currently working on include:<br>
 <br>
 RU-HART Mini prototype Robot: Parts:ESP32,Rasberry PI5,NRF(Radio module),GPS,IMU(MPU6500),LIDAR,N20 motors,mt3608,TP4056,N-type Mosfets,P type Mosfets,IPHONE 6s,18650 battery cells,Arduino nano<br>
 -Custom Motor driver<br>
