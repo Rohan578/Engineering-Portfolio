@@ -50,24 +50,43 @@
       z-index: 1;
     }
 
-    /* Centered Header Section */
-    .header-section {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
+    /* Header Title */
     h1 {
       font-size: 2.3rem;
       color: #79c0ff;
-      margin-bottom: 8px;
+      margin-bottom: 24px;
       text-shadow: 0 0 12px rgba(121, 192, 255, 0.4);
       text-align: center;
     }
 
-    .intro {
-      font-size: 1.1rem;
+    /* Side-by-Side Intro Layout */
+    .intro-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .intro-text {
+      flex: 1;
+      font-size: 1.05rem;
       color: #a5d6ff;
-      text-align: center;
+      text-align: left;
+    }
+
+    .intro-image-wrapper {
+      flex-shrink: 0;
+    }
+
+    .profile-pic {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #79c0ff;
+      box-shadow: 0 0 15px rgba(121, 192, 255, 0.3);
+      display: block;
     }
 
     /* Centered Section Titles */
@@ -174,16 +193,33 @@
     a:hover {
       text-decoration: underline;
     }
+
+    /* Mobile Responsive Adjustment */
+    @media (max-width: 600px) {
+      .intro-container {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+      .intro-text {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <div class="header-section">
-      <h1>Rohan Shrivastava | Engineering Portfolio</h1>
-      <p class="intro">Hi, I’m Rohan,  an Electrical & Computer Engineering student at Rutgers University passionate about hardware design, embedded systems, and robotics. Always building, testing, and scaling  new hardware projects.
-Explore my featured projects and research below!
-</p>
+    <h1>Rohan Shrivastava | Engineering Portfolio</h1>
+
+    <!-- Side-by-Side Intro Section -->
+    <div class="intro-container">
+      <div class="intro-text">
+        <p>Hi, I’m Rohan — an Electrical & Computer Engineering student at Rutgers University passionate about hardware design, embedded systems, and robotics. Always building, testing, and scaling new hardware projects.</p>
+        <p>Explore my featured projects and research below!</p>
+      </div>
+      <div class="intro-image-wrapper">
+        <img src="Intropic.jpeg" alt="Rohan Shrivastava" class="profile-pic">
+      </div>
     </div>
 
     <h2 class="section-title">Projects & Research</h2>
