@@ -1,24 +1,227 @@
-# Engineering-Portfolio
-Hi, I'm Rohan, a student at Rutgers University studying Electrical and Computer Engineering. Some projects I have worked on and am currently working on include:<br>
-<br>
-## Soil Node<br>
-<br>
-## RU HART<br>
-### RU-HART Prototype Version 1(Maxbot)<br>
-### RU-HART Motor Driver V1<br>
-### RU-HART Maxbot V2 Cadmodel<br>
-<br>
-## IGVC Team<br>
-### Re-designed E-Stop remote: <br>
-### Parts:RAK3172-9-SM-I,CP210N,1 AMP Battery,TPS62840,ESP32C3 <br>
-###Dual ESP and RAK Communication system can send both wifi and LoRa E-STOP signal <br>
-###Lora Research<br>
-<br>
-## RU STAR LUNABOTICS <br>
-###CAN-BUS communication Research<br>
-###Sliding rail mechanism Research<br>
-<br>
-## Contact Me: <br>
-* **Email:**srohanshri@gmail.com <br>
-* **LinkedIn:**linkedin.com/in/rohan-shrivastava456 <br>
-* **Number:**732-841-1484 <br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohan Shrivastava | Portfolio</title>
+  <style>
+    /* Starry Night Sky Background */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #e6edf3;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* CSS Star Field */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #e0e6ff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 230px 190px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 310px 80px, #8bb4f6, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 450px 220px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 580px 150px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 700px 90px, #8bb4f6, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 820px 290px, #ffffff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 900px 400px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Centered Header Section */
+    .header-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      color: #79c0ff;
+      margin-bottom: 8px;
+      text-shadow: 0 0 12px rgba(121, 192, 255, 0.4);
+      text-align: center;
+    }
+
+    .intro {
+      font-size: 1.1rem;
+      color: #a5d6ff;
+      text-align: center;
+    }
+
+    /* Centered Section Titles */
+    .section-title {
+      font-size: 1.8rem;
+      color: #f0f6fc;
+      border-bottom: 2px solid rgba(88, 166, 255, 0.3);
+      padding-bottom: 8px;
+      margin-top: 40px;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Pop-out Glassmorphism Cards */
+    .project-card {
+      background: rgba(13, 17, 23, 0.75);
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      border-radius: 12px;
+      padding: 26px;
+      margin-bottom: 26px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                  box-shadow 0.3s ease, 
+                  border-color 0.3s ease;
+    }
+
+    /* Card Pop-Out & Highlight on Hover */
+    .project-card:hover {
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 15px 30px rgba(88, 166, 255, 0.25);
+      border-color: #79c0ff;
+    }
+
+    /* Centered Project Headers */
+    .project-card h2 {
+      font-size: 1.5rem;
+      color: #79c0ff;
+      margin-top: 0;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .project-card h3 {
+      font-size: 1.15rem;
+      color: #f0f6fc;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .overview-text {
+      color: #8b949e;
+      font-style: italic;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    ul {
+      margin-top: 8px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      color: #c9d1d9;
+    }
+
+    /* Contact Card */
+    .contact-card {
+      background: rgba(13, 17, 23, 0.85);
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      border-radius: 12px;
+      padding: 26px;
+      margin-top: 60px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .contact-card h2 {
+      color: #f0f6fc;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .contact-list {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
+    .contact-list li {
+      margin-bottom: 8px;
+    }
+
+    a {
+      color: #79c0ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-section">
+      <h1>Rohan Shrivastava | Engineering Portfolio</h1>
+      <p class="intro">Hi, I'm Rohan, a student at Rutgers University studying Electrical and Computer Engineering.</p>
+    </div>
+
+    <h2 class="section-title">Projects & Research</h2>
+
+    <div class="project-card">
+      <h2>Soil Node</h2>
+      <p class="overview-text">Overview</p>
+    </div>
+
+    <div class="project-card">
+      <h2>RU HART</h2>
+      <h3>RU-HART Prototype Version 1 (Maxbot)</h3>
+      <h3>RU-HART Motor Driver V1</h3>
+      <h3>RU-HART Maxbot V2 CAD Model</h3>
+    </div>
+
+    <div class="project-card">
+      <h2>IGVC Team</h2>
+      <h3>Re-designed E-Stop Remote</h3>
+      <ul>
+        <li><strong>Parts:</strong> RAK3172-9-SM-I, CP210N, 1 AMP Battery, TPS62840, ESP32C3</li>
+        <li>Dual ESP and RAK communication system capable of sending both Wi-Fi and LoRa E-STOP signals.</li>
+      </ul>
+      <h3>LoRa Research</h3>
+    </div>
+
+    <div class="project-card">
+      <h2>RU STAR LUNABOTICS</h2>
+      <h3>CAN-BUS Communication Research</h3>
+      <h3>Sliding Rail Mechanism Research</h3>
+    </div>
+
+    <div class="contact-card">
+      <h2>Contact Me</h2>
+      <ul class="contact-list">
+        <li><strong>Email:</strong> <a href="mailto:srohanshri@gmail.com">srohanshri@gmail.com</a></li>
+        <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/rohan-shrivastava456" target="_blank">linkedin.com/in/rohan-shrivastava456</a></li>
+        <li><strong>Phone:</strong> 732-841-1484</li>
+      </ul>
+    </div>
+  </div>
+
+</body>
+</html>
