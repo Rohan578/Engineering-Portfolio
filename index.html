@@ -137,6 +137,17 @@
       color: #c9d1d9;
     }
 
+    /* Custom Subpage Link Styling */
+    .item-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .item-link:hover {
+      text-decoration: underline;
+      color: #79c0ff;
+    }
+
     /* Minimalist Footer Style for Contact Info */
     footer {
       margin-top: 60px;
@@ -170,37 +181,39 @@
   <div class="container">
     <div class="header-section">
       <h1>Rohan Shrivastava | Engineering Portfolio</h1>
-      <p class="intro">Hi, I'm Rohan, a student at Rutgers University studying Electrical and Computer Engineering.</p>
+      <p class="intro">Hi, I’m Rohan,  an Electrical & Computer Engineering student at Rutgers University passionate about hardware design, embedded systems, and robotics. Always building, testing, and scaling  new hardware projects.
+Explore my featured projects and research below!
+.</p>
     </div>
 
     <h2 class="section-title">Projects & Research</h2>
 
     <div class="project-card">
-  <h2><a href="soilnodemainpage.html" class="card-link">Soil Node</a></h2>
-  <p class="overview-text"><a href="soilnodemainpage.html">Overview →</a></p>
-</div>
+      <h2><a href="soilnodemainpage.html" class="item-link">Soil Node</a></h2>
+      <p class="overview-text"><a href="soilnodemainpage.html" class="item-link">Overview</a></p>
+    </div>
 
     <div class="project-card">
       <h2>RU HART</h2>
-      <h3>RU-HART Prototype Version 1 (Maxbot)</h3>
-      <h3>RU-HART Motor Driver V1</h3>
+      <h3><a href="maxbotv1.html" class="item-link">RU-HART Prototype Version 1 (Maxbot)</a></h3>
+      <h3><a href="motordriver.html" class="item-link">RU-HART Motor Driver V1</a></h3>
       <h3>RU-HART Maxbot V2 CAD Model</h3>
     </div>
 
     <div class="project-card">
       <h2>IGVC Team</h2>
-      <h3>Re-designed E-Stop Remote</h3>
+      <h3><a href="ESTOP.html" class="item-link">Re-designed E-Stop Remote</a></h3>
       <ul>
         <li><strong>Parts:</strong> RAK3172-9-SM-I, CP210N, 1 AMP Battery, TPS62840, ESP32C3</li>
         <li>Dual ESP and RAK communication system capable of sending both Wi-Fi and LoRa E-STOP signals.</li>
       </ul>
-      <h3>LoRa Research</h3>
+      <h3><a href="Loraresearch.html" class="item-link">LoRa Research</a></h3>
     </div>
 
     <div class="project-card">
       <h2>RU STAR LUNABOTICS</h2>
-      <h3>CAN-BUS Communication Research</h3>
-      <h3>Sliding Rail Mechanism Research</h3>
+      <h3><a href="overview.html" class="item-link">CAN-BUS Communication Research</a></h3>
+      <h3><a href="overview.html" class="item-link">Sliding Rail Mechanism Research</a></h3>
     </div>
 
     <!-- Footnote Footer -->
