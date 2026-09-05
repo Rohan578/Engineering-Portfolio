@@ -111,13 +111,30 @@
       padding-left: 20px;
     }
 
-    /* Responsive Images */
-    .project-img {
-      max-width: 100%;
+    /* Side-by-Side Flex Layout inside Card */
+    .card-split-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .card-text {
+      flex: 1;
+      margin: 0;
+    }
+
+    .card-image-wrapper {
+      flex-shrink: 0;
+      max-width: 40%;
+    }
+
+    /* Responsive Side Image */
+    .project-img-side {
+      width: 100%;
       height: auto;
       border-radius: 8px;
       border: 1px solid rgba(48, 54, 61, 0.8);
-      margin: 15px 0;
       display: block;
     }
 
@@ -139,6 +156,16 @@
     a:hover {
       text-decoration: underline;
     }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 650px) {
+      .card-split-content {
+        flex-direction: column;
+      }
+      .card-image-wrapper {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -147,8 +174,8 @@
     <a href="index.html" class="back-link">← Back to Main Portfolio</a>
 
     <div class="header-section">
-      <h1>Project Title Subpage</h1>
-      <p class="subtitle">Dummy template page for testing layout and rendering</p>
+      <h1>RU-HART Motor Driver V1</h1>
+      <p class="subtitle">Hardware Overview & System Architecture</p>
     </div>
 
     <!-- Section 1 -->
@@ -157,13 +184,15 @@
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </div>
 
-    <!-- Section 2 with Image Placeholder -->
+    <!-- Section 2 with Side-by-Side Layout -->
     <div class="content-card">
       <h2>Hardware & Architecture</h2>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <!-- Image Placeholder (Replace src with your image file name later) -->
-      <img src="https://via.placeholder.com/800x400/161b22/79c0ff?text=Placeholder+Circuit+Image" alt="Placeholder Diagram" class="project-img">
+      <div class="card-split-content">
+        <p class="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div class="card-image-wrapper">
+          <img src="Motor Driver Official.png" alt="Motor Driver Official Diagram" class="project-img-side">
+        </div>
+      </div>
     </div>
 
     <!-- Section 3 with Bullet Points -->
