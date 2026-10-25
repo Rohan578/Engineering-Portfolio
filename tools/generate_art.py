@@ -163,26 +163,26 @@ HERO_FRONT = mirror([
     "......HsSSSS",
     ".......hsSSs",   # chin
     "..........sS",   # neck
-    "...cPPPPTTTT",   # pauldrons + gold collar, cape behind the shoulders
-    "..cCPLPPAAAT",   # breastplate with a gold center line
-    "..cCPPPAALAT",
-    "..cCaAaAAAAT",
-    "..cC.aAaAAAT",   # arms angle in toward the sword
-    "..cC..aAaAAA",
-    "..cC...aAa.T",   # gold pommel between the forearms
-    "..cC....LAak",   # gauntlets gripping the leather hilt
-    "..cC....aAak",
-    "..cC..aAAAak",
-    "..cC.TTTTTTT",   # crossguard
-    "..cC..AAAAaE",   # armored skirt; blade runs down the middle
-    "..cC..AAAAaE",
-    "..cC..aAA..E",   # legs apart, blade between them
-    "..cC..aAA..E",
-    ".cCC..aLA..E",
-    ".cCC..aAA..E",
-    "cCCC..TTT..E",   # gold knee trim
-    "cCC..kKKK..E",   # boots
-    "cC..kKKKK..e",   # blade tip in the grass
+    "...cPPPPTTTT",   # pauldrons + gold collar
+    "...CPLPPAAAT",   # breastplate with a gold center line
+    "...CPPPAALAT",   # (the cape hangs straight down behind him: it only shows
+    "...CaAaAAAAT",   #  at his outline and in the gaps between arms, body, and legs)
+    "...CcaAaAAAT",   # arms angle in toward the sword
+    "...CccaAaAAA",
+    "...CcccaAaKT",   # gold pommel between the forearms
+    "...CccccLAak",   # gauntlets gripping the leather hilt
+    "...CccccaAak",
+    "...CccaAAAak",
+    "...CcTTTTTTT",   # crossguard
+    "...CccAAAAaE",   # armored skirt; blade runs down the middle
+    "...CccAAAAaE",
+    "...CccaAAccE",   # legs apart, cape visible behind and between them
+    "...CccaAAccE",
+    "..CCccaLAccE",
+    "..CCccaAAccE",   # the cape widens toward the hem
+    ".CCCccTTTccE",   # gold knee trim
+    ".CCcckKKKccE",   # boots
+    "CCcckKKKKcce",   # blade tip in the grass; cape hem on the ground
 ])
 
 

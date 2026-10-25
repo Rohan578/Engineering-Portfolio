@@ -19,6 +19,7 @@ assets/project-scene.svg   Project page banner (hero facing forward)   │ gener
 assets/contact-scene.svg   Contact scene on every page (from behind)   │ tools/generate_art.py
 assets/starfield.svg       Background star tile                        ┘
 tools/generate_art.py      Draws the pixel art (edit this, then run it)
+tools/bump_version.py      Makes browsers load fresh CSS/JS/art after a change
 media/                     Photos, schematics, and videos, one folder per project
 files/                     Downloadable files (resume)
 fonts/                     Bundled fonts (Pixelify Sans, Inter)
@@ -52,6 +53,19 @@ the contact section at the bottom come along automatically. Building blocks you 
 **Add the Soil Node demo video** – save it as `media/soilnode/demo.mp4`, then follow
 the comment in the Demo section of `soilnode.html`.
 
+## Seeing your changes right away
+
+Browsers keep copies of the CSS, JS, and art for a while. After changing
+anything in `css/`, `js/`, or `assets/`, run:
+
+```
+python3 tools/bump_version.py
+```
+
+It updates the `?v=` tag on every link to those files so visitors get the new
+versions immediately. (If you still see an old version, a hard refresh with
+Ctrl+Shift+R / Cmd+Shift+R always works.)
+
 ## Editing the pixel art
 
 ```
@@ -65,7 +79,7 @@ page banners; only its left half is written, `mirror()` copies it), and
 (e.g. `A` = steel armor, `C` = violet cape, `H` = hair), so changing a color
 there updates him everywhere. Each scene's
 layout (horizon, cliff, moon position) is in the constants above its
-`build_...()` function. Rerun the script and refresh the page.
+`build_...()` function. Rerun the script, then `tools/bump_version.py`.
 
 ## Contact links
 

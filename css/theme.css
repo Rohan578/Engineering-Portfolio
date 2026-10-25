@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1923") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1923") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
