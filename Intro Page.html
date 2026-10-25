@@ -52,9 +52,9 @@
 
     /* Header Title */
     h1 {
-      font-size: 2.3rem;
+      font-size: 2.5rem;
       color: #79c0ff;
-      margin-bottom: 24px;
+      margin-bottom: 30px;
       text-shadow: 0 0 12px rgba(121, 192, 255, 0.4);
       text-align: center;
     }
@@ -64,13 +64,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 30px;
-      margin-bottom: 40px;
+      gap: 35px;
+      margin-bottom: 60px; /* Increased bottom spacing */
     }
 
+    /* Larger Intro Text */
     .intro-text {
       flex: 1;
-      font-size: 1.05rem;
+      font-size: 1.2rem; /* Increased font size */
+      line-height: 1.7;
       color: #a5d6ff;
       text-align: left;
     }
@@ -79,23 +81,24 @@
       flex-shrink: 0;
     }
 
+    /* Square Profile Picture with Larger Dimensions */
     .profile-pic {
-      width: 180px;
-      height: 180px;
+      width: 220px; /* Increased size */
+      height: 220px; /* Square dimensions */
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 12px; /* Square shape with slightly rounded corners */
       border: 2px solid #79c0ff;
       box-shadow: 0 0 15px rgba(121, 192, 255, 0.3);
       display: block;
     }
 
-    /* Centered Section Titles */
+    /* Centered Section Titles with Increased Top Spacing */
     .section-title {
       font-size: 1.8rem;
       color: #f0f6fc;
       border-bottom: 2px solid rgba(88, 166, 255, 0.3);
       padding-bottom: 8px;
-      margin-top: 40px;
+      margin-top: 60px; /* Added extra space above section header */
       margin-bottom: 30px;
       text-align: center;
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
@@ -194,6 +197,77 @@
       text-decoration: underline;
     }
 
+    /* Side-by-side vertical project cards */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+    .project-grid .project-card {
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+    }
+    .project-grid .project-card h2 { font-size: 1.3rem; }
+    .project-grid .project-card h3 { font-size: 1rem; margin-top: 10px; }
+    .card-sub {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #8b949e;
+      margin-top: 4px;
+    }
+    .card-images {
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .card-img-link {
+      display: block;
+      text-align: center;
+      color: #8b949e;
+      font-size: 0.85rem;
+    }
+    .card-img-link img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      display: block;
+      margin-bottom: 6px;
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+    .card-img-link.tall img { aspect-ratio: 3 / 4; }
+    .card-img-link:hover img { border-color: #79c0ff; opacity: 0.9; }
+    .card-img-link:hover { text-decoration: none; color: #79c0ff; }
+
+    /* Resume download button */
+    .resume-btn {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 9px 18px;
+      border: 1px solid #79c0ff;
+      border-radius: 8px;
+      color: #79c0ff;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .resume-btn:hover {
+      text-decoration: none;
+      background: rgba(121, 192, 255, 0.12);
+      box-shadow: 0 0 12px rgba(121, 192, 255, 0.3);
+    }
+
+    @media (max-width: 800px) {
+      .project-grid { grid-template-columns: 1fr; }
+      .card-img-link img, .card-img-link.tall img { aspect-ratio: 16 / 10; }
+    }
+
     /* Mobile Responsive Adjustment */
     @media (max-width: 600px) {
       .intro-container {
@@ -216,6 +290,7 @@
       <div class="intro-text">
         <p>Hi, I’m Rohan — an Electrical & Computer Engineering student at Rutgers University passionate about hardware design, embedded systems, and robotics. Always building, testing, and scaling new hardware projects.</p>
         <p>Explore my featured projects and research below!</p>
+        <a href="Rohan_Shrivastava_Resume.pdf" class="resume-btn" download>⬇ Download My Resume</a>
       </div>
       <div class="intro-image-wrapper">
         <img src="Intropic.jpeg" alt="Rohan Shrivastava" class="profile-pic">
@@ -224,21 +299,42 @@
 
     <h2 class="section-title">Projects & Research</h2>
 
-    <div class="project-card">
-      <h2><a href="soilnodemainpage.html" class="item-link">Soil Node</a></h2>
-      <p class="overview-text"><a href="soilnodemainpage.html" class="item-link">Overview</a></p>
-    </div>
+    <div class="project-grid">
+      <div class="project-card">
+        <h2><a href="soilnodemainpage.html" class="item-link">Soil Node</a></h2>
+        <p class="overview-text"><a href="soilnodemainpage.html" class="item-link">Overview</a></p>
+        <div class="card-images">
+          <a href="soilnodemainpage.html" class="card-img-link tall">
+            <img src="soilnode/3d-view.png" alt="Soil Node PCB 3D view">
+          </a>
+        </div>
+      </div>
 
-    <div class="project-card">
-      <h2>RU HART</h2>
-      <h3><a href="maxbotv1.html" class="item-link">RU-HART Prototype Version 1 (Maxbot)</a></h3>
-      <h3><a href="motordriver.html" class="item-link">RU-HART Motor Driver V1</a></h3>
-    </div>
+      <div class="project-card">
+        <h2>RU HART</h2>
+        <h3><a href="maxbotv1.html" class="item-link">RU-HART Prototype Version 1 (Maxbot)</a></h3>
+        <h3><a href="motordriver.html" class="item-link">RU-HART Motor Driver V1</a></h3>
+        <div class="card-images">
+          <a href="maxbotv1.html" class="card-img-link">
+            <img src="placeholder.svg" alt="RU-HART Prototype Version 1 (Maxbot)">
+            Prototype V1 (Maxbot)
+          </a>
+          <a href="motordriver.html" class="card-img-link">
+            <img src="placeholder.svg" alt="RU-HART Motor Driver V1">
+            Motor Driver V1
+          </a>
+        </div>
+      </div>
 
-    <div class="project-card">
-      <h2>HACKRU26</h2>
-      <h3><a href="hackru26-project.html" class="item-link">HackRU26 Project Overview</a></h3>
-      <h3><a href="hackru26-demo.html" class="item-link">HackRU26 Build &amp; Demo</a></h3>
+      <div class="project-card">
+        <h2><a href="hackru26-project.html" class="item-link">Breathe.exe</a>
+          <span class="card-sub">HackRU26 | Best Use of Presage Winner</span></h2>
+        <div class="card-images">
+          <a href="hackru26-project.html" class="card-img-link tall">
+            <img src="placeholder.svg" alt="Breathe.exe project">
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- Footnote Footer -->
