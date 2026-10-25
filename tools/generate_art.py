@@ -11,9 +11,6 @@ Writes these files into assets/:
     contact-scene.svg   Contact section. The same hero seen from behind, looking
                         out at what he sees: the ocean, the moon, the stars.
     starfield.svg       Small repeating tile of stars for the page background.
-    nebula-violet.svg   ┐
-    nebula-teal.svg     ├ Soft pixel nebulae that float behind the project cards.
-    nebula-rose.svg     ┘
 
 How drawing works
 -----------------
@@ -517,7 +514,7 @@ def build_contact_scene():
 
 
 # ===========================================================================
-# Background art: star tile and nebulae
+# Background art: star tile
 # ===========================================================================
 def build_starfield(size=360, seed=7):
     """A seamless tile of pixel stars and sparkles for the page background."""
@@ -549,24 +546,6 @@ def build_starfield(size=360, seed=7):
     return "\n".join(out) + "\n"
 
 
-NEBULAE = {
-    # name: (colors from faint edge to bright core, seed)
-    "violet": (["#1d1240", "#2a1a52", "#3d2470", "#58308f", "#7a45b0", "#a066d0"], 11),
-    "teal":   (["#0e2236", "#12304a", "#18465f", "#216178", "#2f8296", "#4fb0c0"], 12),
-    "rose":   (["#26112f", "#3a1a46", "#56245e", "#7a3478", "#a24d93", "#d07ab8"], 13),
-}
-
-
-def build_nebula(colors, seed, w=120, h=80):
-    """A cloud of overlapping dithered blobs with a few stars caught inside."""
-    c = Canvas(w, h, seed)
-    for _ in range(5):
-        cx = w // 2 + c.rng.randrange(-24, 25)
-        cy = h // 2 + c.rng.randrange(-14, 15)
-        paint_cloud(c, cx, cy, c.rng.randrange(12, 22), colors, density=0.5)
-    for _ in range(14):
-        c.put(c.rng.randrange(w), c.rng.randrange(h), c.rng.choice(STAR_COLORS))
-    return c.to_svg("Decorative nebula behind the project cards.")
 
 
 # ===========================================================================
@@ -585,8 +564,6 @@ def main():
     write("hero-scene.svg", build_banner())
     write("contact-scene.svg", build_contact_scene())
     write("starfield.svg", build_starfield())
-    for name, (colors, seed) in NEBULAE.items():
-        write(f"nebula-{name}.svg", build_nebula(colors, seed))
 
 
 if __name__ == "__main__":
