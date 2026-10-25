@@ -211,26 +211,27 @@
     }
 
 
-    /* Side-by-side vertical project cards (whole card is a link) */
+    /* Side-by-side vertical project cards (whole card is clickable) */
     .project-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      align-items: stretch;
+      align-items: start;
     }
-    a.project-card {
-      display: flex;
-      flex-direction: column;
+    .project-grid .project-card {
+      position: relative;
       margin-bottom: 0;
-      padding: 24px;
-      color: inherit;
-      text-decoration: none;
+      padding: 22px;
       cursor: pointer;
     }
-    a.project-card:hover { text-decoration: none; }
-    a.project-card:focus-visible { outline: 2px solid #79c0ff; outline-offset: 3px; }
     .project-grid .project-card h2 { font-size: 1.4rem; margin-bottom: 6px; }
-    .project-grid .project-card h3 { font-size: 1.02rem; margin-top: 8px; color: #f0f6fc; }
+    .project-grid .project-card h3 { font-size: 1.02rem; margin: 6px 0 4px 0; color: #f0f6fc; text-align: center; }
+    /* Stretched link: the title link covers the whole card */
+    .card-link { color: inherit; }
+    .card-link:hover { text-decoration: none; }
+    .card-link::after { content: ""; position: absolute; inset: 0; border-radius: 12px; }
+    .card-link:focus-visible { outline: none; }
+    .card-link:focus-visible::after { outline: 2px solid #79c0ff; outline-offset: 3px; }
     .card-sub {
       display: block;
       font-size: 0.85rem;
@@ -240,32 +241,70 @@
     }
     .page-tag {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: #8b949e;
       margin-bottom: 2px;
     }
-    /* Images keep their natural shape so nothing is cropped */
-    .card-img {
-      width: 100%;
-      height: auto;
-      display: block;
+    .card-desc { min-height: 4.65em; }
+    .card-frame, .card-more { flex-shrink: 0; }
+    /* Uniform image frame; whole image always visible */
+    .card-frame {
+      height: 220px;
       border-radius: 8px;
       border: 1px solid rgba(48, 54, 61, 0.8);
-      margin: 6px 0 14px 0;
+      background: rgba(1, 4, 9, 0.6);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0 14px 0;
       transition: border-color 0.3s ease;
     }
-    a.project-card:hover .card-img { border-color: #79c0ff; }
+    .card-frame img { max-width: 100%; max-height: 100%; display: block; }
+    .project-card:hover .card-frame { border-color: #79c0ff; }
+
+    /* RU HART expandable page 2 */
+    .card-more { position: relative; z-index: 2; margin-bottom: 4px; }
+    .card-more summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(121, 192, 255, 0.35);
+      border-radius: 8px;
+      color: #79c0ff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .card-more summary::-webkit-details-marker { display: none; }
+    .card-more summary:hover { background: rgba(121, 192, 255, 0.1); }
+    .chev {
+      width: 9px; height: 9px;
+      border-right: 2px solid #79c0ff;
+      border-bottom: 2px solid #79c0ff;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform 0.25s ease;
+    }
+    .card-more[open] .chev { transform: rotate(-135deg) translate(-2px, 0); }
+    .more-link { display: block; color: inherit; margin-top: 12px; }
+    .more-link:hover { text-decoration: none; }
+    .more-link:hover .card-frame { border-color: #79c0ff; }
+
+    .project-grid .project-card { display: flex; flex-direction: column; box-sizing: border-box; }
     .card-skills {
-      margin-top: auto;
-      padding-top: 14px;
+      padding-top: 12px;
       border-top: 1px solid rgba(48, 54, 61, 0.8);
     }
     .card-skills-label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -286,6 +325,7 @@
 
     @media (max-width: 900px) {
       .project-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+      .card-desc { min-height: 0; }
     }
 
     /* Resume download button */
@@ -343,10 +383,10 @@
     <h2 class="section-title">Projects &amp; Research</h2>
 
     <div class="project-grid">
-      <a href="soilnodemainpage.html" class="project-card">
-        <h2>Soil Node</h2>
+      <div class="project-card">
+        <h2><a href="soilnodemainpage.html" class="card-link">Soil Node</a></h2>
         <p class="card-desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
-        <img src="soilnode/3d-view.png" alt="Soil Node PCB 3D view" class="card-img">
+        <div class="card-frame"><img src="soilnode/3d-view.png" alt="Soil Node PCB 3D view"></div>
         <div class="card-skills">
           <span class="card-skills-label">Skills Used</span>
           <div class="chips">
@@ -360,16 +400,21 @@
             <span class="chip">Git / GitHub</span>
           </div>
         </div>
-      </a>
+      </div>
 
-      <a href="maxbotv1.html" class="project-card">
-        <h2>RU HART</h2>
+      <div class="project-card">
+        <h2><a href="maxbotv1.html" class="card-link">RU HART</a></h2>
         <h3><span class="page-tag">Page 1</span>RU-HART Prototype Version 1 (Maxbot)</h3>
         <p class="card-desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
-        <img src="ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot" class="card-img">
-        <h3><span class="page-tag">Page 2</span>RU-HART Motor Driver V1</h3>
-        <p class="card-desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
-        <img src="ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic" class="card-img">
+        <div class="card-frame"><img src="ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot"></div>
+        <details class="card-more">
+          <summary><span class="more-label">Page 2 · Motor Driver</span><span class="chev" aria-hidden="true"></span></summary>
+          <a href="motordriver.html" class="more-link">
+            <h3>RU-HART Motor Driver V1</h3>
+            <p class="card-desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
+            <div class="card-frame"><img src="ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
+          </a>
+        </details>
         <div class="card-skills">
           <span class="card-skills-label">Skills Used</span>
           <div class="chips">
@@ -379,6 +424,7 @@
             <span class="chip">Arduino IDE</span>
             <span class="chip">ESP32-S3</span>
             <span class="chip">ESP32-C3</span>
+            <span class="chip">ESP-NOW</span>
             <span class="chip">Embedded C++</span>
             <span class="chip">I²C</span>
             <span class="chip">SPI</span>
@@ -387,16 +433,21 @@
             <span class="chip">Git / GitHub</span>
           </div>
         </div>
-      </a>
+      </div>
 
-      <a href="hackru26-project.html" class="project-card">
-        <h2>Breathe.exe
+      <div class="project-card">
+        <h2><a href="hackru26-project.html" class="card-link">Breathe.exe</a>
           <span class="card-sub">HackRU26 | Best Use of Presage Winner</span></h2>
         <p class="card-desc">Co-developed an interview simulator disguised as a horror game, designing custom glove interface devices and other immersive elements of the game.</p>
-        <img src="breathe/interview-scary.jpg" alt="Breathe.exe" class="card-img">
+        <div class="card-frame"><img src="breathe/interview-scary.jpg" alt="Breathe.exe"></div>
         <div class="card-skills">
           <span class="card-skills-label">Skills Used</span>
           <div class="chips">
+            <span class="chip">Unity</span>
+            <span class="chip">Gemini API</span>
+            <span class="chip">Presage SDK</span>
+            <span class="chip">Agentic Frameworks</span>
+            <span class="chip">ESP-NOW</span>
             <span class="chip">VS Code</span>
             <span class="chip">Arduino IDE</span>
             <span class="chip">ESP32-C3</span>
@@ -404,10 +455,9 @@
             <span class="chip">Python</span>
             <span class="chip">I²C</span>
             <span class="chip">Git / GitHub</span>
-            <span class="chip">Agentic AI</span>
           </div>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Footnote Footer -->
@@ -420,5 +470,25 @@
     </footer>
   </div>
 
+  <script>
+    // Match card heights while RU HART's page 2 is collapsed; let it grow when expanded.
+    (function () {
+      function equalize() {
+        var cards = document.querySelectorAll('.project-grid .project-card');
+        var single = window.matchMedia('(max-width: 900px)').matches;
+        cards.forEach(function (c) { c.style.minHeight = ''; });
+        if (single) return;
+        var openDetails = document.querySelectorAll('.card-more[open]');
+        openDetails.forEach(function (d) { d.open = false; });
+        var max = 0;
+        cards.forEach(function (c) { max = Math.max(max, c.offsetHeight); });
+        cards.forEach(function (c) { c.style.minHeight = max + 'px'; });
+        openDetails.forEach(function (d) { d.open = true; });
+      }
+      window.addEventListener('load', function () { requestAnimationFrame(equalize); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(equalize);
+      window.addEventListener('resize', equalize);
+    })();
+  </script>
 </body>
 </html>
