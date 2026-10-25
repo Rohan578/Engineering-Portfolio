@@ -182,6 +182,7 @@
 
     .footer-links {
       display: flex;
+      align-items: center;
       justify-content: center;
       gap: 20px;
       flex-wrap: wrap;
@@ -195,6 +196,59 @@
 
     a:hover {
       text-decoration: underline;
+    }
+
+    /* Card one-line descriptions */
+    .card-desc {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #c9d1d9;
+      text-align: center;
+      margin: 4px 0 10px 0;
+    }
+
+    /* Technical skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+    .skill-group {
+      background: rgba(13, 17, 23, 0.75);
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .skill-group:hover {
+      border-color: #79c0ff;
+      box-shadow: 0 8px 22px rgba(88, 166, 255, 0.2);
+    }
+    .skill-group h3 {
+      font-size: 1.05rem;
+      color: #79c0ff;
+      margin: 0 0 14px 0;
+      text-align: center;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .chip {
+      font-size: 0.85rem;
+      color: #a5d6ff;
+      background: rgba(121, 192, 255, 0.08);
+      border: 1px solid rgba(121, 192, 255, 0.3);
+      border-radius: 999px;
+      padding: 4px 12px;
+      white-space: nowrap;
+    }
+    @media (max-width: 800px) {
+      .skills-grid { grid-template-columns: 1fr; }
     }
 
     /* Side-by-side vertical project cards */
@@ -298,12 +352,51 @@
       </div>
     </div>
 
-    <h2 class="section-title">Projects & Research</h2>
+    <h2 class="section-title">Technical Skills</h2>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h3>Programming</h3>
+        <div class="chips">
+          <span class="chip">Java</span>
+          <span class="chip">MATLAB</span>
+          <span class="chip">C++</span>
+          <span class="chip">C</span>
+          <span class="chip">Python</span>
+          <span class="chip">HTML</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Embedded &amp; Hardware</h3>
+        <div class="chips">
+          <span class="chip">Embedded C++</span>
+          <span class="chip">Arduino</span>
+          <span class="chip">ESP32 (C3, S3)</span>
+          <span class="chip">I²C / SPI</span>
+          <span class="chip">RP2040</span>
+          <span class="chip">RP2350</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Tools &amp; Software</h3>
+        <div class="chips">
+          <span class="chip">KiCad</span>
+          <span class="chip">EasyEDA</span>
+          <span class="chip">Arduino IDE</span>
+          <span class="chip">Onshape</span>
+          <span class="chip">SolidWorks</span>
+          <span class="chip">Git / GitHub</span>
+          <span class="chip">VS Code</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Projects &amp; Research</h2>
 
     <div class="project-grid">
       <div class="project-card">
         <h2><a href="soilnodemainpage.html" class="item-link">Soil Node</a></h2>
-        <p class="overview-text"><a href="soilnodemainpage.html" class="item-link">Overview</a></p>
+        <p class="card-desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
         <div class="card-images">
           <a href="soilnodemainpage.html" class="card-img-link tall">
             <img src="soilnode/3d-view.png" alt="Soil Node PCB 3D view">
@@ -314,10 +407,12 @@
       <div class="project-card">
         <h2>RU HART</h2>
         <h3><a href="maxbotv1.html" class="item-link">RU-HART Prototype Version 1 (Maxbot)</a></h3>
+        <p class="card-desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
         <a href="maxbotv1.html" class="card-img-link">
           <img src="ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot">
         </a>
         <h3><a href="motordriver.html" class="item-link">RU-HART Motor Driver V1</a></h3>
+        <p class="card-desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
         <a href="motordriver.html" class="card-img-link">
           <img src="ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic">
         </a>
@@ -326,6 +421,7 @@
       <div class="project-card">
         <h2><a href="hackru26-project.html" class="item-link">Breathe.exe</a>
           <span class="card-sub">HackRU26 | Best Use of Presage Winner</span></h2>
+        <p class="card-desc">Co-developed an interview simulator disguised as a horror game, designing custom glove interface devices and other immersive elements of the game.</p>
         <div class="card-images">
           <a href="hackru26-project.html" class="card-img-link tall">
             <img src="breathe/interview-scary.jpg" alt="Breathe.exe">
@@ -336,13 +432,10 @@
 
     <!-- Footnote Footer -->
     <footer>
-      <p><strong>Contact:</strong></p>
+      <p><strong>Get in Touch</strong></p>
       <div class="footer-links">
-        <span>Email: <a href="mailto:srohanshri@gmail.com">srohanshri@gmail.com</a></span>
-        <span>•</span>
-        <span>LinkedIn: <a href="https://linkedin.com/in/rohan-shrivastava456" target="_blank">rohan-shrivastava456</a></span>
-        <span>•</span>
-        <span>Phone: 732-841-1484</span>
+        <a href="mailto:srohanshri@gmail.com" class="resume-btn">✉ srohanshri@gmail.com</a>
+        <a href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" class="resume-btn">in&nbsp; LinkedIn</a>
       </div>
     </footer>
   </div>
