@@ -8,8 +8,8 @@ Push to `main` and the site updates in about a minute.
 ```
 index.html                 Homepage: hero banner, intro, Quest Log cards, contact
 soilnode.html              Soil Node project page
-ruhart-lidar-bot.html      RU HART page 1 (LiDAR bot)
-ruhart-motor-driver.html   RU HART page 2 (motor driver)
+ruhart-lidar-bot.html      RU HART: LiDAR bot
+ruhart-motor-driver.html   RU HART extension: motor driver
 breathe.html               Breathe.exe project page
 
 css/theme.css              All styling for every page (colors are at the top)
