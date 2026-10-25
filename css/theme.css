@@ -60,9 +60,6 @@
   --fade-out-bottom: linear-gradient(180deg,
     #000 0%, #000 40%, rgba(0, 0, 0, 0.94) 48%, rgba(0, 0, 0, 0.84) 56%, rgba(0, 0, 0, 0.68) 64%,
     rgba(0, 0, 0, 0.5) 72%, rgba(0, 0, 0, 0.32) 80%, rgba(0, 0, 0, 0.17) 88%, rgba(0, 0, 0, 0.06) 95%, transparent 100%);
-  /* project banners: the hero stands near the bottom, so fade only the meadow below him */
-  --fade-out-bottom-late: linear-gradient(180deg,
-    #000 0%, #000 84%, rgba(0, 0, 0, 0.8) 88%, rgba(0, 0, 0, 0.5) 92%, rgba(0, 0, 0, 0.22) 96%, transparent 100%);
   --fade-in-top: linear-gradient(0deg,
     #000 0%, #000 40%, rgba(0, 0, 0, 0.94) 48%, rgba(0, 0, 0, 0.84) 56%, rgba(0, 0, 0, 0.68) 64%,
     rgba(0, 0, 0, 0.5) 72%, rgba(0, 0, 0, 0.32) 80%, rgba(0, 0, 0, 0.17) 88%, rgba(0, 0, 0, 0.06) 95%, transparent 100%);
@@ -495,38 +492,42 @@ img { max-width: 100%; }
 
 /* 9. Project pages ------------------------------------------------------- */
 
-/* Banner: the hero standing guard (assets/project-scene.svg), with the page
-   title in the sky above him and the back link in the top-left corner. */
+/* Banner: the hero standing guard (assets/project-scene.svg).
+   The scene spans the full width at its natural shape, anchored to the bottom
+   of the banner. His head is 36 of the scene's 66 rows above the bottom, i.e.
+   36/160 = 22.5% of the width, so the title sits just above that line. The
+   banner is only as tall as it needs to be for the link and title to fit. */
 .page-hero {
   position: relative;
   z-index: 1;
-  height: clamp(460px, 46vw, 900px);
+  height: calc(22.5vw + 215px);
   overflow: hidden;
 }
 .page-hero__scene {
   position: absolute;
-  inset: 0;
+  left: 0;
+  bottom: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 100%;
-  -webkit-mask-image: var(--fade-out-bottom-late);
-          mask-image: var(--fade-out-bottom-late);
+  height: auto;
+  /* soft top edge (in case the banner is taller than the scene) and a
+     short fade at the bottom; the last rows already match the page color */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 10%, #000 92%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 10%, #000 92%, transparent 100%);
 }
 .page-hero__nav {
   position: absolute;
-  top: 18px;
-  left: 22px;
+  top: 20px;
+  left: 24px;
   z-index: 3;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 .page-hero__title {
   position: absolute;
-  top: 11%;
   left: 0;
   right: 0;
+  bottom: calc(22.5vw + 16px);   /* just above his head */
   z-index: 2;
   padding: 0 16px;
   text-align: center;
@@ -538,25 +539,27 @@ img { max-width: 100%; }
   z-index: -1;
   left: 50%;
   top: 50%;
-  width: min(820px, 98vw);
-  height: 220%;
+  width: min(860px, 98vw);
+  height: 190%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse at center, rgba(5, 4, 15, 0.75) 0%, rgba(5, 4, 15, 0.45) 45%, rgba(5, 4, 15, 0) 72%);
+  background: radial-gradient(ellipse at center, rgba(5, 4, 15, 0.8) 0%, rgba(5, 4, 15, 0.5) 45%, rgba(5, 4, 15, 0) 72%);
 }
 
-/* "← Back to the Quest Log": a small pixel tab so it reads over the sky */
+/* "← Back to the Quest Log": a clear pixel tab in the top-left corner */
 .back-link {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 10px 18px;
   font-family: var(--font-pixel);
-  font-weight: 500;
-  font-size: 1.05rem;
-  color: var(--color-sky);
-  background: rgba(8, 6, 26, 0.72);
-  border: 1px solid var(--color-border);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  color: var(--color-gold);
+  background: rgba(8, 6, 26, 0.85);
+  border: 2px solid rgba(242, 217, 138, 0.7);
   clip-path: var(--pixel-corners);
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.back-link:hover { color: var(--color-gold); border-color: var(--color-gold); text-decoration: none; }
+.back-link:hover { color: #14102e; background: var(--color-gold); text-decoration: none; }
 
 /* Page content below the banner */
 .project {
@@ -564,7 +567,7 @@ img { max-width: 100%; }
   z-index: 1;
   max-width: 900px;
   margin: 0 auto;
-  padding: 8px 20px 10px;
+  padding: 0 20px 10px;
 }
 
 .project__title {
@@ -576,7 +579,17 @@ img { max-width: 100%; }
   color: var(--color-heading);
   text-shadow: 0 3px 0 #2a1d57, 0 0 24px rgba(242, 217, 138, 0.25);
 }
-.project__subtitle { margin: 0; font-size: 1.1rem; color: #cfe2f7; text-shadow: 0 2px 0 #05040f; }
+.project__subtitle {
+  display: inline-block;
+  margin: 2px 0 0;
+  padding: 4px 14px;
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  color: #e6f0ff;
+  background: rgba(8, 6, 26, 0.55);
+  text-shadow: 0 2px 0 #05040f;
+}
 
 /* One content section on a project page */
 .section { margin-bottom: 28px; padding: 26px; }
@@ -679,18 +692,20 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 }
 @media (max-width: 700px) {
   /* On phones the links and title sit above the scene instead of over it,
-     and the scene (faded at both ends) fills the space underneath. */
-  .page-hero { height: auto; padding: 12px 12px 0; }
+     and the scene fills the space underneath at a fixed height. */
+  .page-hero { height: auto; padding: 14px 12px 0; }
   .page-hero::after { content: ""; display: block; height: 250px; }
   .page-hero__nav { position: relative; top: auto; left: auto; }
-  .page-hero__nav .back-link { font-size: 0.95rem; }
-  .page-hero__title { position: relative; top: auto; margin-top: 22px; padding: 0; }
+  .page-hero__nav .back-link { font-size: 1.05rem; padding: 8px 14px; }
+  .page-hero__title { position: relative; bottom: auto; margin-top: 22px; padding: 0; }
   .page-hero__scene {
-    top: auto;
-    bottom: 0;
-    height: 380px;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 80%, transparent 100%);
-            mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 80%, transparent 100%);
+    left: 50%;
+    width: auto;
+    max-width: none;   /* override the global img rule so the scene keeps its size */
+    height: 360px;
+    transform: translateX(-50%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 90%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 90%, transparent 100%);
   }
   .contact { height: 600px; min-height: 0; }
   .contact__card { top: 3%; padding: 22px 18px 18px; }

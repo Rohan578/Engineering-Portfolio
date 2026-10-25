@@ -158,7 +158,7 @@ HERO_FRONT = mirror([
     "....HHHHHHHH",
     "....hHHHSSSS",   # forehead
     "....HHHGGGGS",   # sunglasses (nose bridge in the middle)
-    "....hHHGgGGS",
+    "....hHHGGGGS",
     ".....hHSSSSS",   # cheeks
     "......HsSSSS",
     ".......hsSSs",   # chin
@@ -196,11 +196,16 @@ class Canvas:
         self.w, self.h = width, height
         self.pixels = {}          # (x, y) -> color
         self.animated = []        # (x, y, w, h, color, css_class)
+        self.animated_at = {}     # (x, y) -> indexes into self.animated covering that cell
+        self.covered = set()      # animated pixels hidden by something drawn later
         self.rng = random.Random(seed)
 
     def put(self, x, y, color):
         if 0 <= x < self.w and 0 <= y < self.h:
             self.pixels[(x, y)] = color
+            # anything drawn later sits in front, so it hides an animated
+            # pixel underneath (e.g. a twinkling star behind the hero)
+            self.covered.update(self.animated_at.get((x, y), ()))
 
     def get(self, x, y):
         return self.pixels.get((x, y))
@@ -217,7 +222,11 @@ class Canvas:
                     self.put(x0 + dx, y0 + dy, palette[ch])
 
     def animate(self, x, y, color, css_class, w=1, h=1):
+        index = len(self.animated)
         self.animated.append((x, y, w, h, color, css_class))
+        for yy in range(y, y + h):
+            for xx in range(x, x + w):
+                self.animated_at.setdefault((xx, yy), []).append(index)
 
     def to_svg(self, note, css="", extra=""):
         out = [
@@ -238,7 +247,9 @@ class Canvas:
                 while x < self.w and self.get(x, y) == color:
                     x += 1
                 out.append(f'<rect x="{start}" y="{y}" width="{x - start}" height="1" fill="{color}"/>')
-        for x, y, w, h, color, cls in self.animated:
+        for i, (x, y, w, h, color, cls) in enumerate(self.animated):
+            if i in self.covered:
+                continue
             out.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{color}" class="{cls}"/>')
         if extra:
             out.append(extra)
@@ -562,10 +573,10 @@ def build_contact_scene():
 # ===========================================================================
 # Scene 3: project page banner (front view, standing guard in a meadow)
 # ===========================================================================
-PROJECT_W, PROJECT_H = 160, 72   # extra meadow below his feet so the fade never reaches him
+PROJECT_W, PROJECT_H = 160, 66   # only a strip of meadow below his feet, so content starts close
 PROJECT_HORIZON = 44     # where the sky meets the far mountains
 PROJECT_GROUND = 50      # top of the meadow in front of him
-PROJECT_FEET = 60        # y of his boots
+PROJECT_FEET = 60        # y of his boots (the CSS places the title 36 rows above the bottom: his head)
 PROJECT_MOON = (132, 12, 6)
 
 
@@ -600,8 +611,8 @@ def build_project_banner():
 
     # the meadow, darker the closer it is to us; the last rows sink into the
     # page's night color so the banner melts into the page below
-    meadow = [(2, GRASS["top"]), (5, GRASS["mid"]), (9, GRASS["dark"]), (12, GRASS["deep"]),
-              (15, GRASS["deepest"]), (18, "#0b1a17"), (99, "#0a0f1c")]
+    meadow = [(2, GRASS["top"]), (4, GRASS["mid"]), (7, GRASS["dark"]), (10, GRASS["deep"]),
+              (12, GRASS["deepest"]), (14, "#0b1a17"), (99, "#0a0f1c")]
     for x in range(c.w):
         ground = PROJECT_GROUND + round(math.sin(x / 9.0))
         c.put(x, ground - 1, GRASS["rim"])
@@ -621,7 +632,6 @@ def build_project_banner():
     c.rect(cx - 6, PROJECT_FEET + 1, 13, 1, GRASS["deep"])
     width = len(HERO_FRONT[0])
     c.sprite(HERO_FRONT, cx - width // 2, PROJECT_FEET - len(HERO_FRONT) + 1, HERO_PALETTE)
-    c.animate(cx - width // 2 + 8, PROJECT_FEET - len(HERO_FRONT) + 7, "#ffffff", "tw2")   # glint on his lens (sprite row 6)
     c.sprite(SHIELD, cx - 19, PROJECT_FEET - 6, SHIELD_PALETTE)    # shield resting beside him
     paint_lantern(c, cx + 14, PROJECT_FEET)
     paint_fireflies(c, [(cx - 30, 46), (cx + 26, 42), (cx - 46, 52), (cx + 40, 54), (cx - 18, 36), (cx + 20, 32)])
