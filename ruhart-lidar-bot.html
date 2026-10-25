@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RU-HART LiDAR Bot | Rohan Shrivastava</title>
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <main class="project">
+    <a class="back-link" href="index.html">← Back to the Quest Log</a>
+
+    <header class="project__header">
+      <h1 class="project__title">RU-HART Prototype Version 1</h1>
+      <p class="project__subtitle">LiDAR Bot (Maxbot)</p>
+    </header>
+
+    <!-- RU HART page switcher (page 1 of 2) -->
+    <nav class="pager" aria-label="RU HART pages">
+      <span class="pager__prev"></span>
+      <div class="pager__status">
+        RU HART · Page 1 of 2
+        <div class="pager__dots">
+          <a href="ruhart-lidar-bot.html" aria-current="page" aria-label="Page 1: LiDAR Bot"></a>
+          <a href="ruhart-motor-driver.html" aria-label="Page 2: Motor Driver"></a>
+        </div>
+      </div>
+      <a class="button pager__next" href="ruhart-motor-driver.html">Motor Driver →</a>
+    </nav>
+
+    <!-- LiDAR bot: photo left, text right -->
+    <section class="section panel">
+      <h2>LiDAR Bot</h2>
+      <div class="split">
+        <a class="split__media split__media--wide zoom" href="media/ruhart/lidarbot.jpeg" target="_blank">
+          <img class="framed" src="media/ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot prototype">
+        </a>
+        <p class="split__text">The first RU-HART prototype is a four-wheel-drive rover with a 360° LiDAR scanner mounted on a raised mast above the chassis. The prototype was built to test the core autonomy stack early: scanning the surroundings, building a picture of nearby obstacles, and driving the motors in response. Lessons from this build fed directly into the custom motor driver and the next version of the robot.</p>
+      </div>
+    </section>
+
+    <!-- Demo video -->
+    <section class="section panel">
+      <h2>Demo</h2>
+      <video class="video" src="media/ruhart/lidarbot-demo.mp4" poster="media/ruhart/lidarbot-demo-poster.jpg" controls playsinline preload="metadata"></video>
+      <p>The LiDAR bot running in the lab, scanning its environment and driving under its own control.</p>
+    </section>
+
+    <!-- page switcher again at the bottom -->
+    <nav class="pager" aria-label="RU HART pages">
+      <span class="pager__prev"></span>
+      <div class="pager__status">RU HART · Page 1 of 2</div>
+      <a class="button pager__next" href="ruhart-motor-driver.html">Motor Driver →</a>
+    </nav>
+
+    <footer class="project__footer">Rohan Shrivastava | <a href="index.html">Return to Home</a></footer>
+  </main>
+</body>
+</html>

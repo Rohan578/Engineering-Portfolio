@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soil Node | Rohan Shrivastava</title>
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <main class="project">
+    <a class="back-link" href="index.html">← Back to the Quest Log</a>
+
+    <header class="project__header">
+      <h1 class="project__title">Soil Node</h1>
+      <p class="project__subtitle">Battery-Powered Soil &amp; Climate Sensor Node</p>
+    </header>
+
+    <!-- Schematic: image left, text right -->
+    <section class="section panel">
+      <h2>Schematic</h2>
+      <div class="split">
+        <a class="split__media split__media--wide zoom" href="media/soilnode/schematic.png" target="_blank">
+          <img class="framed" src="media/soilnode/schematic.png" alt="Soil Node schematic">
+        </a>
+        <p class="split__text">The Soil Node is built around an ESP32-C3 SuperMini. A capacitive soil moisture sensor feeds an analog input, and an AHT20 reports air temperature and humidity over I²C. An RGB LED and push button give quick status and user input. An MT3608 boost converter steps the battery up to a stable 5&nbsp;V rail, so the node can run untethered in the field.</p>
+      </div>
+    </section>
+
+    <!-- Breadboard: text left, image right (split--reverse) -->
+    <section class="section panel">
+      <h2>Breadboard Prototype</h2>
+      <div class="split split--reverse">
+        <a class="split__media zoom" href="media/soilnode/breadboard.jpeg" target="_blank">
+          <img class="framed" src="media/soilnode/breadboard.jpeg" alt="Soil Node breadboard prototype">
+        </a>
+        <p class="split__text">Before committing to a PCB, I wired the full circuit on a breadboard to validate the design. This let me check the sensor readings, I²C communication with the AHT20, the LED and button behavior, and the soil probe calibration, and fix wiring issues while changes were still cheap.</p>
+      </div>
+    </section>
+
+    <!-- PCB: 3D view and layout side by side, text below -->
+    <section class="section panel">
+      <h2>PCB Design</h2>
+      <div class="image-pair">
+        <figure>
+          <a class="zoom" href="media/soilnode/pcb-3d-view.png" target="_blank">
+            <img class="framed" src="media/soilnode/pcb-3d-view.png" alt="Soil Node PCB 3D view">
+          </a>
+          <figcaption>3D View</figcaption>
+        </figure>
+        <figure>
+          <a class="zoom" href="media/soilnode/pcb-layout.png" target="_blank">
+            <img class="framed" src="media/soilnode/pcb-layout.png" alt="Soil Node PCB layout">
+          </a>
+          <figcaption>PCB Layout</figcaption>
+        </figure>
+      </div>
+      <p>After the breadboard prototype was validated, I moved the design onto a custom PCB. The board brings the ESP32-C3, power regulation, and sensor connectors onto one compact footprint, with JST-style connectors for the soil probe and AHT20 so sensors can be swapped easily. The 3D render was used to check component fit and connector placement before ordering.</p>
+    </section>
+
+    <!-- Demo
+         To add the video: save it as media/soilnode/demo.mp4, delete the
+         placeholder <div> below, and uncomment this line:
+         <video class="video" src="media/soilnode/demo.mp4" controls playsinline preload="metadata"></video>
+    -->
+    <section class="section panel">
+      <h2>Demo</h2>
+      <div class="video-placeholder">
+        <div class="video-placeholder__icon"></div>
+        <span>Demo video coming soon</span>
+      </div>
+      <p>A demo of the assembled Soil Node is coming soon. It will show live soil moisture, temperature, and humidity readings, along with the RGB status LED and button interaction.</p>
+    </section>
+
+    <footer class="project__footer">Rohan Shrivastava | <a href="index.html">Return to Home</a></footer>
+  </main>
+</body>
+</html>

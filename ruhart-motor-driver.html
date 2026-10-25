@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RU-HART Motor Driver V1 | Rohan Shrivastava</title>
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <main class="project">
+    <a class="back-link" href="index.html">← Back to the Quest Log</a>
+
+    <header class="project__header">
+      <h1 class="project__title">RU-HART Motor Driver V1</h1>
+      <p class="project__subtitle">Tank-Drive Motor Controller</p>
+    </header>
+
+    <!-- RU HART page switcher (page 2 of 2) -->
+    <nav class="pager" aria-label="RU HART pages">
+      <a class="button pager__prev" href="ruhart-lidar-bot.html">← LiDAR Bot</a>
+      <div class="pager__status">
+        RU HART · Page 2 of 2
+        <div class="pager__dots">
+          <a href="ruhart-lidar-bot.html" aria-label="Page 1: LiDAR Bot"></a>
+          <a href="ruhart-motor-driver.html" aria-current="page" aria-label="Page 2: Motor Driver"></a>
+        </div>
+      </div>
+      <span class="pager__next"></span>
+    </nav>
+
+    <!-- Proof of concept: photo left, text right -->
+    <section class="section panel">
+      <h2>Proof of Concept</h2>
+      <div class="split">
+        <a class="split__media split__media--wide zoom" href="media/ruhart/motordriver-poc.jpeg" target="_blank">
+          <img class="framed" src="media/ruhart/motordriver-poc.jpeg" alt="Motor driver proof of concept on a breadboard">
+        </a>
+        <p class="split__text">Before designing a board, I built a breadboard proof of concept: a Raspberry Pi Pico driving a discrete MOSFET H-bridge, powered through a boost converter, spinning a small DC motor. This validated the switching circuit and the control logic, and showed the motor could be driven in both directions at variable speed.</p>
+      </div>
+    </section>
+
+    <!-- Schematic: full width (too detailed for half width), text below -->
+    <section class="section panel">
+      <h2>Schematic</h2>
+      <a class="zoom" href="media/ruhart/motordriver-schematic.png" target="_blank">
+        <img class="framed framed--spaced" src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic">
+      </a>
+      <p>The V1 schematic turns the proof of concept into a full tank-drive controller. An RP2040 handles control, and a dedicated gate driver switches power MOSFETs for each motor channel. An MCP2515 CAN controller with a CAN transceiver lets the board take commands over the robot's CAN bus. Onboard regulation provides the logic rails, and XT60 connectors handle battery and motor power.</p>
+    </section>
+
+    <!-- page switcher again at the bottom -->
+    <nav class="pager" aria-label="RU HART pages">
+      <a class="button pager__prev" href="ruhart-lidar-bot.html">← LiDAR Bot</a>
+      <div class="pager__status">RU HART · Page 2 of 2</div>
+      <span class="pager__next"></span>
+    </nav>
+
+    <footer class="project__footer">Rohan Shrivastava | <a href="index.html">Return to Home</a></footer>
+  </main>
+</body>
+</html>
