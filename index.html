@@ -50,103 +50,129 @@
          Each card: tag, title link (makes the whole card clickable),
          description, image, skills. To add a project, copy a card.
          =================================================================== -->
-    <h2 class="section-title">Quest Log</h2>
-    <p class="section-subtitle">Projects &amp; research — select a quest to explore</p>
+    <section class="quests">
+      <!-- decorative pixel nebulae floating behind the cards (assets/nebula-*.svg) -->
+      <img class="nebula nebula--violet" src="assets/nebula-violet.svg" alt="" aria-hidden="true">
+      <img class="nebula nebula--teal" src="assets/nebula-teal.svg" alt="" aria-hidden="true">
+      <img class="nebula nebula--rose" src="assets/nebula-rose.svg" alt="" aria-hidden="true">
 
-    <div class="quest-grid">
-      <!-- Quest I: RU HART (LiDAR bot, with an expandable extension for the motor driver) -->
-      <article class="quest-card panel">
-        <span class="quest-card__tag pixel">Quest I · Team Quest</span>
-        <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-lidar-bot.html">RU HART</a></h3>
-        <h4 class="quest-card__subtitle">LiDAR Mapping Bot (Maxbot)</h4>
-        <p class="quest-card__desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
-        <div class="quest-card__image"><img src="media/ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot"></div>
+      <h2 class="section-title">Quest Log</h2>
+      <p class="section-subtitle">Engineering Projects &amp; Technical Work</p>
 
-        <details class="quest-card__more">
-          <summary class="pixel"><span class="arrow" aria-hidden="true">▾</span> <span class="when-closed">View the Motor Driver</span><span class="when-open">Hide the Motor Driver</span></summary>
-          <a class="quest-card__more-link" href="ruhart-motor-driver.html">
-            <h4 class="quest-card__subtitle">RU-HART Motor Driver V1</h4>
-            <p class="quest-card__desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
-            <div class="quest-card__image"><img src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
-          </a>
-        </details>
+      <div class="quest-grid">
+        <!-- Quest I: RU HART (LiDAR bot, with an expandable extension for the motor driver) -->
+        <article class="quest-card panel">
+          <span class="quest-card__tag pixel">Quest I · Team Quest</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-lidar-bot.html">RU HART</a></h3>
+          <h4 class="quest-card__subtitle">LiDAR Mapping Bot (Maxbot)</h4>
+          <p class="quest-card__desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
+          <div class="quest-card__image"><img src="media/ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot"></div>
 
-        <span class="quest-card__skills-label">Skills Used</span>
-        <div class="chip-list">
-          <span class="chip">HTML</span>
-          <span class="chip">VS Code</span>
-          <span class="chip">KiCad</span>
-          <span class="chip">Arduino IDE</span>
-          <span class="chip">ESP32-S3</span>
-          <span class="chip">ESP32-C3</span>
-          <span class="chip">ESP-NOW</span>
-          <span class="chip">Embedded C++</span>
-          <span class="chip">I²C</span>
-          <span class="chip">SPI</span>
-          <span class="chip">RP2040</span>
-          <span class="chip">RP2350</span>
-          <span class="chip">Git / GitHub</span>
-        </div>
-      </article>
+          <details class="quest-card__more">
+            <summary class="pixel"><span class="arrow" aria-hidden="true">▾</span> <span class="when-closed">View the Motor Driver</span><span class="when-open">Hide the Motor Driver</span></summary>
+            <a class="quest-card__more-link" href="ruhart-motor-driver.html">
+              <h4 class="quest-card__subtitle">RU-HART Motor Driver V1</h4>
+              <p class="quest-card__desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
+              <div class="quest-card__image"><img src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
+            </a>
+          </details>
 
-      <!-- Quest II: Breathe.exe -->
-      <article class="quest-card panel">
-        <span class="quest-card__tag pixel">Quest II · Completed</span>
-        <h3 class="quest-card__title"><a class="quest-card__link" href="breathe.html">Breathe.exe</a></h3>
-        <div class="quest-card__award pixel">★ HackRU26 · Best Use of Presage Winner</div>
-        <p class="quest-card__desc quest-card__desc--short">Co-developed an interview simulator disguised as a horror game, designing custom glove interface devices and other immersive elements of the game.</p>
-        <div class="quest-card__image"><img src="media/breathe/interview-scary.jpg" alt="Breathe.exe interview scene"></div>
-        <span class="quest-card__skills-label">Skills Used</span>
-        <div class="chip-list">
-          <span class="chip">Unity</span>
-          <span class="chip">Gemini API</span>
-          <span class="chip">Presage SDK</span>
-          <span class="chip">Agentic Frameworks</span>
-          <span class="chip">ESP-NOW</span>
-          <span class="chip">VS Code</span>
-          <span class="chip">Arduino IDE</span>
-          <span class="chip">ESP32-C3</span>
-          <span class="chip">Embedded C++</span>
-          <span class="chip">Python</span>
-          <span class="chip">I²C</span>
-          <span class="chip">Git / GitHub</span>
-        </div>
-      </article>
+          <span class="quest-card__skills-label">Skills Used</span>
+          <div class="chip-list">
+            <span class="chip">HTML</span>
+            <span class="chip">VS Code</span>
+            <span class="chip">KiCad</span>
+            <span class="chip">Arduino IDE</span>
+            <span class="chip">ESP32-S3</span>
+            <span class="chip">ESP32-C3</span>
+            <span class="chip">ESP-NOW</span>
+            <span class="chip">Embedded C++</span>
+            <span class="chip">I²C</span>
+            <span class="chip">SPI</span>
+            <span class="chip">RP2040</span>
+            <span class="chip">RP2350</span>
+            <span class="chip">Git / GitHub</span>
+          </div>
+        </article>
 
-      <!-- Quest III: Soil Node -->
-      <article class="quest-card panel">
-        <span class="quest-card__tag pixel">Quest III · In Progress</span>
-        <h3 class="quest-card__title"><a class="quest-card__link" href="soilnode.html">Soil Node</a></h3>
-        <p class="quest-card__desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
-        <div class="quest-card__image"><img src="media/soilnode/pcb-3d-view.png" alt="Soil Node PCB 3D view"></div>
-        <span class="quest-card__skills-label">Skills Used</span>
-        <div class="chip-list">
-          <span class="chip">Python</span>
-          <span class="chip">VS Code</span>
-          <span class="chip">KiCad</span>
-          <span class="chip">Arduino IDE</span>
-          <span class="chip">ESP32-C3</span>
-          <span class="chip">Embedded C++</span>
-          <span class="chip">I²C</span>
-          <span class="chip">Git / GitHub</span>
-        </div>
-      </article>
-    </div>
+        <!-- Quest II: Breathe.exe -->
+        <article class="quest-card panel">
+          <span class="quest-card__tag pixel">Quest II · Completed</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="breathe.html">Breathe.exe</a></h3>
+          <div class="quest-card__award pixel">★ HackRU26 · Best Use of Presage Winner</div>
+          <p class="quest-card__desc quest-card__desc--short">Co-developed an interview simulator disguised as a horror game, designing custom glove interface devices and other immersive elements of the game.</p>
+          <div class="quest-card__image"><img src="media/breathe/interview-scary.jpg" alt="Breathe.exe interview scene"></div>
+          <span class="quest-card__skills-label">Skills Used</span>
+          <div class="chip-list">
+            <span class="chip">Unity</span>
+            <span class="chip">Gemini API</span>
+            <span class="chip">Presage SDK</span>
+            <span class="chip">Agentic Frameworks</span>
+            <span class="chip">ESP-NOW</span>
+            <span class="chip">VS Code</span>
+            <span class="chip">Arduino IDE</span>
+            <span class="chip">ESP32-C3</span>
+            <span class="chip">Embedded C++</span>
+            <span class="chip">Python</span>
+            <span class="chip">I²C</span>
+            <span class="chip">Git / GitHub</span>
+          </div>
+        </article>
 
-
-    <!-- ===================================================================
-         CONTACT
-         =================================================================== -->
-    <footer class="contact panel">
-      <div class="contact__title">Get in Touch</div>
-      <div class="contact__buttons">
-        <a class="button" href="mailto:srohanshri@gmail.com">✉ Email</a>
-        <a class="button" href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" rel="noopener">LinkedIn</a>
+        <!-- Quest III: Soil Node -->
+        <article class="quest-card panel">
+          <span class="quest-card__tag pixel">Quest III · In Progress</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="soilnode.html">Soil Node</a></h3>
+          <p class="quest-card__desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
+          <div class="quest-card__image"><img src="media/soilnode/pcb-3d-view.png" alt="Soil Node PCB 3D view"></div>
+          <span class="quest-card__skills-label">Skills Used</span>
+          <div class="chip-list">
+            <span class="chip">Python</span>
+            <span class="chip">VS Code</span>
+            <span class="chip">KiCad</span>
+            <span class="chip">Arduino IDE</span>
+            <span class="chip">ESP32-C3</span>
+            <span class="chip">Embedded C++</span>
+            <span class="chip">I²C</span>
+            <span class="chip">Git / GitHub</span>
+          </div>
+        </article>
       </div>
-      <div class="contact__email">srohanshri@gmail.com</div>
-    </footer>
+    </section>
 
   </main>
+
+
+  <!-- ===================================================================
+       CONTACT
+       Full-width scene: the same hero, now seen from behind, looking out
+       at the ocean and the night sky (assets/contact-scene.svg).
+       "Email Me" opens a Gmail draft addressed to me; "Copy" copies the
+       address (handled in js/main.js).
+       =================================================================== -->
+  <footer class="contact" id="contact">
+    <img class="contact__scene" src="assets/contact-scene.svg"
+         alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
+
+    <div class="contact__card panel">
+      <h2 class="contact__title">Get in Touch</h2>
+      <p class="contact__text">Have a question or an opportunity? I’d love to hear from you.</p>
+
+      <div class="contact__buttons">
+        <a class="button button--solid"
+           href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=srohanshri@gmail.com&amp;su=Hello%20from%20your%20portfolio"
+           target="_blank" rel="noopener">✉ Email Me</a>
+        <a class="button" href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <div class="contact__email">
+        <span class="contact__address">srohanshri@gmail.com</span>
+        <button class="contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy</button>
+      </div>
+      <a class="contact__alt" href="mailto:srohanshri@gmail.com">or open in another mail app</a>
+      <span class="visually-hidden" id="copy-status" aria-live="polite"></span>
+    </div>
+  </footer>
 
   <script src="js/main.js"></script>
 </body>

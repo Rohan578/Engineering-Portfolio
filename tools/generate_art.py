@@ -1,33 +1,34 @@
 #!/usr/bin/env python3
 """
-generate_art.py — builds the pixel-art images used by the site.
+generate_art.py — draws all of the site's pixel art.
 
     python3 tools/generate_art.py
 
-Writes two files:
-    assets/hero-scene.svg   the homepage banner: an armored hero sitting on a
-                            cliff above the ocean, under a starry night sky
-    assets/starfield.svg    a small repeating tile of pixel stars used as the
-                            page background behind the content
+Writes these files into assets/:
 
-How the drawing works
----------------------
-The banner is a grid of W x H "pixels" (each one becomes a 1x1 <rect> in the
-SVG, which the browser scales up with crisp edges). You draw into that grid
-with a few helpers:
+    hero-scene.svg      Homepage banner. The armored hero sits on a cliff above
+                        the ocean at night, seen from the side.
+    contact-scene.svg   Contact section. The same hero seen from behind, looking
+                        out at what he sees: the ocean, the moon, the stars.
+    starfield.svg       Small repeating tile of stars for the page background.
+    nebula-violet.svg   ┐
+    nebula-teal.svg     ├ Soft pixel nebulae that float behind the project cards.
+    nebula-rose.svg     ┘
 
-    put(x, y, color)            one pixel
-    rect(x, y, w, h, color)     a filled block
-    sprite(rows, x, y, palette) a small picture drawn from text rows, where each
-                                character maps to a color in `palette`
-                                ("." or any unmapped character = transparent)
-    animated(x, y, color, cls)  a pixel that gets a CSS class so it can
-                                twinkle / glow (animations are defined in
-                                SCENE_CSS below)
+How drawing works
+-----------------
+Each picture is a Canvas: a grid of "pixels" that becomes 1x1 <rect>s in an SVG,
+which the browser scales up with crisp edges. Canvas methods:
 
-Everything is drawn back-to-front: sky, stars, moon, ocean, cliff, hero.
-Change a section, re-run the script, and refresh the page.
+    put(x, y, color)               one pixel
+    rect(x, y, w, h, color)        a filled block
+    sprite(rows, x, y, palette)    text art: each character maps to a color in
+                                   `palette`; "." (or anything unmapped) is empty
+    animate(x, y, color, cls)      a pixel that twinkles or glows; the animation
+                                   for each class is defined in SCENE_CSS
 
+Scenes are painted back to front: sky, stars, moon, ocean, land, hero.
+To change something, edit it below, run the script, and refresh the page.
 Only the Python standard library is needed.
 """
 
@@ -36,35 +37,46 @@ import os
 import random
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_SCENE = os.path.join(ROOT, "assets", "hero-scene.svg")
-OUT_STARS = os.path.join(ROOT, "assets", "starfield.svg")
+ASSETS = os.path.join(ROOT, "assets")
 
-# ---------------------------------------------------------------------------
-# Scene layout (all values in scene pixels)
-# ---------------------------------------------------------------------------
-W, H = 200, 90        # size of the pixel grid
-HORIZON = 64          # y of the ocean surface
-CLIFF_TOP = 54        # y of the grass on the cliff
-EDGE = 74             # x where the cliff top ends (the hero sits here)
-MOON = (160, 14, 7)   # crescent moon: center x, center y, radius
 
-SEED = 26             # change to reshuffle all the random stars/waves
-
-# Color palettes ------------------------------------------------------------
+# ===========================================================================
+# Colors
+# ===========================================================================
 SKY = ["#05040f", "#08061a", "#0b0922", "#0f0c2c", "#141036", "#1a1442", "#21184d", "#2a1d57"]
 MILKY_WAY = ["#2a2160", "#33296e", "#3d3280", "#4a3c8f"]
+BRIGHT_DUST = ["#c9c2ff", "#ffffff", "#ffd9f2"]
 STAR_COLORS = ["#ffffff", "#fff1c9", "#c8d4ff", "#e2d4ff"]
 SEA = ["#0d1640", "#0b1338", "#0a1131", "#080e29", "#070b22", "#06091c"]
 WAVES = ["#1d2a66", "#24357a", "#2f4590"]
 MOON_GLINT = ["#f2d98a", "#fff3c4", "#c9a956"]
 ROCK = ["#2b2440", "#241e38", "#1e1930", "#181428"]
-GRASS = {"top": "#2f7d4a", "mid": "#235f3a", "dark": "#1a462c", "blade": "#3f9a5c"}
+GRASS = {"rim": "#3f9a5c", "top": "#2f7d4a", "mid": "#235f3a", "dark": "#1a462c", "deep": "#12331f", "deepest": "#0c2416"}
+FLOWERS = ["#e9a6d8", "#f2d98a", "#9ad7f0"]
+FIREFLY = "#fff2a0"
 
-# The hero. Each letter below is a color; "." is transparent.
-# He sits on the cliff edge facing the sea (right), head tilted up at the moon.
-# Curly dark hair + sunglasses (Rohan), steel plate armor with gold trim,
-# a violet cape draped on the grass behind him, armored legs over the edge.
-HERO = [
+# The hero's colors (shared by both views so he always looks the same)
+HERO_PALETTE = {
+    "H": "#1b1412", "h": "#3a2a22",   # curly black hair + highlights
+    "S": "#c68b5e", "s": "#a46e48",   # skin + shadow
+    "G": "#0b0b14", "g": "#8fb0ff",   # sunglasses + lens glint
+    "A": "#b8c2d6", "a": "#7d88a3",   # steel armor + shadow
+    "L": "#eef3ff",                   # armor highlight (moonlight)
+    "P": "#9aa6c2",                   # pauldrons (shoulder plates)
+    "T": "#e0b65a",                   # gold trim
+    "C": "#7b3fc4", "c": "#4e2585",   # violet cape + shadow
+    "K": "#5a3a1c", "k": "#3d2612",   # leather belt / boots
+}
+
+
+# ===========================================================================
+# Sprites (text art). Each letter is a color from the palette next to it.
+# ===========================================================================
+
+# Side view: sitting on the cliff edge facing the sea (right), head tilted up
+# at the moon. Curly hair and sunglasses, plate armor, cape behind him on the
+# grass, armored legs hanging over the edge.
+HERO_SIDE = [
     "....hHH.Hh.H........",
     "...HHhHHHHhHH.......",
     "..hHHHHHHHHHHH......",
@@ -89,21 +101,36 @@ HERO = [
     "............KKKk....",
     "............KKKKk...",
 ]
-HERO_PALETTE = {
-    "H": "#1b1412", "h": "#3a2a22",   # curly black hair + highlights
-    "S": "#c68b5e", "s": "#a46e48",   # skin + shadow
-    "G": "#0b0b14", "g": "#8fb0ff",   # sunglasses + lens glint
-    "A": "#b8c2d6", "a": "#7d88a3",   # steel armor + shadow
-    "L": "#eef3ff",                   # armor highlight (moonlight)
-    "P": "#9aa6c2",                   # pauldron (shoulder plate)
-    "T": "#e0b65a",                   # gold trim
-    "C": "#7b3fc4", "c": "#4e2585",   # violet cape + shadow
-    "K": "#5a3a1c", "k": "#3d2612",   # leather belt / boots
-}
-HERO_SEAT_ROW = 17     # sprite row that sits level with the grass
-HERO_LEG_COLUMN = 13   # sprite column where his legs go over the edge
+HERO_SIDE_SEAT_ROW = 17     # row that sits level with the grass
+HERO_SIDE_LEG_COLUMN = 13   # column where his legs go over the edge
 
-# Round shield leaning on the grass beside him
+# Back view: what you see standing behind him. Curly hair, the arms of his
+# sunglasses at the ears, shoulder plates, and the violet cape spreading onto
+# the grass.
+HERO_BACK = [
+    "........hHh.hH......",
+    "......hHHHHhHHh.....",
+    ".....hHHhHHHHHHh....",
+    ".....HHHHHHHhHHH....",
+    "....hHHhHHHHHHHHh...",
+    ".....HHHHHHHHhHH....",
+    ".....GHHHhHHHHHG....",
+    "......hHHHHHHHh.....",
+    ".......sHHHHHs......",
+    "...PPPPTTCCTTPPPP...",
+    "..PLPPPTCCCCTPPPLP..",
+    "..PPPPACCCCCCAPPPP..",
+    "..aAAACCCCCCCCAAAa..",
+    "...aAACCCCcCCCAAa...",
+    "...AAACCCCcCCCAAA...",
+    "...aAACCCCcCCCCAa...",
+    "...KKCCCCCcCCCCKK...",
+    "..cCCCCCCCcCCCCCCc..",
+    ".cCCCCCCCCcCCCCCCCc.",
+    "cCCCCCCCCcCCCCCCCCCc",
+]
+
+# Round shield (blue with a gold star) and its colors
 SHIELD = [
     "..TTTT..",
     ".TBBBBT.",
@@ -116,247 +143,67 @@ SHIELD = [
 SHIELD_PALETTE = {"T": "#e0b65a", "B": "#2c4a8c", "Y": "#f2d98a"}
 
 
-# ---------------------------------------------------------------------------
-# Drawing helpers
-# ---------------------------------------------------------------------------
-grid = {}       # (x, y) -> color for static pixels
-animated_px = []  # (x, y, w, h, color, css_class) for pixels that animate
-rng = random.Random(SEED)
+# ===========================================================================
+# Canvas
+# ===========================================================================
+class Canvas:
+    """A grid of pixels that can be written out as an SVG."""
+
+    def __init__(self, width, height, seed):
+        self.w, self.h = width, height
+        self.pixels = {}          # (x, y) -> color
+        self.animated = []        # (x, y, w, h, color, css_class)
+        self.rng = random.Random(seed)
+
+    def put(self, x, y, color):
+        if 0 <= x < self.w and 0 <= y < self.h:
+            self.pixels[(x, y)] = color
+
+    def get(self, x, y):
+        return self.pixels.get((x, y))
+
+    def rect(self, x, y, w, h, color):
+        for yy in range(y, y + h):
+            for xx in range(x, x + w):
+                self.put(xx, yy, color)
+
+    def sprite(self, rows, x0, y0, palette):
+        for dy, row in enumerate(rows):
+            for dx, ch in enumerate(row):
+                if ch in palette:
+                    self.put(x0 + dx, y0 + dy, palette[ch])
+
+    def animate(self, x, y, color, css_class, w=1, h=1):
+        self.animated.append((x, y, w, h, color, css_class))
+
+    def to_svg(self, note, css="", extra=""):
+        out = [
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.w} {self.h}" shape-rendering="crispEdges">',
+            f"<!-- {note} Generated by tools/generate_art.py: edit that script, not this file. -->",
+        ]
+        if css:
+            out.append(f"<style>{css}</style>")
+        # merge horizontal runs of the same color to keep the file small
+        for y in range(self.h):
+            x = 0
+            while x < self.w:
+                color = self.get(x, y)
+                if color is None:
+                    x += 1
+                    continue
+                start = x
+                while x < self.w and self.get(x, y) == color:
+                    x += 1
+                out.append(f'<rect x="{start}" y="{y}" width="{x - start}" height="1" fill="{color}"/>')
+        for x, y, w, h, color, cls in self.animated:
+            out.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{color}" class="{cls}"/>')
+        if extra:
+            out.append(extra)
+        out.append("</svg>")
+        return "\n".join(out) + "\n"
 
 
-def put(x, y, color):
-    """Set one static pixel (ignored if off the canvas)."""
-    if 0 <= x < W and 0 <= y < H:
-        grid[(x, y)] = color
-
-
-def rect(x, y, w, h, color):
-    """Fill a w x h block of static pixels."""
-    for yy in range(y, y + h):
-        for xx in range(x, x + w):
-            put(xx, yy, color)
-
-
-def sprite(rows, x0, y0, palette):
-    """Draw a text-art sprite: each character is looked up in `palette`."""
-    for dy, row in enumerate(rows):
-        for dx, ch in enumerate(row):
-            if ch in palette:
-                put(x0 + dx, y0 + dy, palette[ch])
-
-
-def animated(x, y, color, css_class, w=1, h=1):
-    """Add a pixel (or short bar) that animates via a CSS class."""
-    animated_px.append((x, y, w, h, color, css_class))
-
-
-# ---------------------------------------------------------------------------
-# 1. Sky: banded gradient with dithered seams
-# ---------------------------------------------------------------------------
-def draw_sky():
-    band_h = HORIZON / len(SKY)
-    for y in range(HORIZON):
-        i = min(int(y / band_h), len(SKY) - 1)
-        progress = y / band_h - i
-        nxt = SKY[min(i + 1, len(SKY) - 1)]
-        for x in range(W):
-            # checkerboard dither into the next band near each seam
-            if progress > 0.8 and (x + y) % 2 == 0:
-                put(x, y, nxt)
-            elif progress > 0.6 and (x + 2 * y) % 4 == 0:
-                put(x, y, nxt)
-            else:
-                put(x, y, SKY[i])
-
-
-# ---------------------------------------------------------------------------
-# 2. Milky Way band, nebula clouds, and a tiny spiral galaxy
-# ---------------------------------------------------------------------------
-def draw_milky_way():
-    x1, y1, x2, y2 = 0, 4, 200, 46            # the band runs along this line
-
-    def distance(x, y):
-        return abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / math.hypot(y2 - y1, x2 - x1)
-
-    for y in range(HORIZON - 6):
-        for x in range(W):
-            width = 6 + 3 * math.sin(x / 13.0) + 2 * math.sin(x / 5.3)
-            d = distance(x, y)
-            if d < width:
-                core = 1 - d / width          # 1 at the center of the band
-                if rng.random() < 0.18 + 0.55 * core:
-                    put(x, y, MILKY_WAY[min(3, int(core * 4))])
-                if rng.random() < 0.06 * core:
-                    put(x, y, rng.choice(["#c9c2ff", "#ffffff", "#ffd9f2"]))
-
-
-def draw_nebulae():
-    clouds = [  # (center x, center y, radius, colors from edge to core)
-        (46, 14, 10, ["#4a2463", "#5c2c75", "#7a3a8c"]),
-        (128, 30, 9, ["#1d3f66", "#235078", "#2f6a8c"]),
-        (178, 40, 7, ["#47245f", "#5c2c75"]),
-    ]
-    for cx, cy, radius, colors in clouds:
-        for y in range(cy - radius, cy + radius + 1):
-            for x in range(cx - radius * 2, cx + radius * 2 + 1):
-                d = math.hypot((x - cx) / 2.0, y - cy) / radius
-                if d < 1 and rng.random() < 0.55 * (1 - d) ** 1.2:
-                    put(x, y, colors[min(len(colors) - 1, int((1 - d) * len(colors)))])
-
-
-def draw_galaxy(gx=30, gy=40):
-    for t in range(60):
-        angle, radius = t * 0.35, 0.12 * t
-        for arm in (0, math.pi):
-            color = "#b9a8ff" if t < 25 else "#6d5bc4"
-            put(int(gx + radius * math.cos(angle + arm) * 1.8), int(gy + radius * math.sin(angle + arm) * 0.8), color)
-
-
-# ---------------------------------------------------------------------------
-# 3. Stars and the crescent moon
-# ---------------------------------------------------------------------------
-def draw_stars():
-    for _ in range(150):
-        x, y = rng.randrange(W), rng.randrange(HORIZON - 4)
-        color = rng.choice(STAR_COLORS)
-        if rng.random() < 0.35:
-            animated(x, y, color, "tw" + str(rng.randrange(3)))   # twinkling
-        else:
-            put(x, y, color)
-    # a few bright four-point sparkles
-    for x, y in [(22, 30), (84, 22), (112, 46), (150, 54), (190, 18), (64, 6), (140, 4)]:
-        for dx, dy in [(0, -1), (-1, 0), (1, 0), (0, 1)]:
-            animated(x + dx, y + dy, "#9fb0ff", "tw1")
-        animated(x, y, "#ffffff", "tw1")
-
-
-def draw_moon():
-    mx, my, r = MOON
-    for y in range(my - r - 3, my + r + 4):                    # soft halo
-        for x in range(mx - r - 3, mx + r + 4):
-            if r < math.hypot(x - mx, y - my) < r + 3 and rng.random() < 0.35:
-                put(x, y, "#2c2462")
-    for y in range(my - r, my + r + 1):                        # crescent
-        for x in range(mx - r, mx + r + 1):
-            inside = math.hypot(x - mx, y - my) <= r
-            bite = math.hypot(x - (mx + 4), y - (my - 2)) <= r - 0.5
-            if inside and not bite:
-                put(x, y, "#fff3c4" if math.hypot(x - mx + 2, y - my) < r - 2 else "#f2d98a")
-
-
-# ---------------------------------------------------------------------------
-# 4. Ocean: bands, horizon islands, waves, moon reflection
-# ---------------------------------------------------------------------------
-def draw_ocean():
-    for y in range(HORIZON, H):
-        i = min((y - HORIZON) * len(SEA) // (H - HORIZON), len(SEA) - 1)
-        rect(0, y, W, 1, SEA[i])
-    rect(0, HORIZON, W, 1, "#2a2a6a")                          # horizon line
-
-    for x0, w, h in [(118, 14, 3), (128, 6, 5), (184, 16, 2)]:  # islands
-        for i in range(w):
-            hh = max(1, int(h * math.sin(math.pi * i / w)))
-            rect(x0 + i, HORIZON - hh, 1, hh, "#120f33")
-
-    for _ in range(70):                                        # wave highlights
-        x, y = rng.randrange(EDGE + 6, W), rng.randrange(HORIZON + 2, H)
-        w, color = rng.randrange(2, 6), rng.choice(WAVES)
-        if rng.random() < 0.3:
-            animated(x, y, color, "wave" + str(rng.randrange(2)), w)
-        else:
-            rect(x, y, w, 1, color)
-
-    mx = MOON[0]                                               # moon path on water
-    for y in range(HORIZON + 1, H, 2):
-        spread = 1 + (y - HORIZON) // 6
-        for _ in range(2):
-            x = mx - spread + rng.randrange(2 * spread + 1)
-            animated(x, y, rng.choice(MOON_GLINT), "glint" + str(rng.randrange(3)), rng.randrange(1, 4))
-
-
-# ---------------------------------------------------------------------------
-# 5. The cliff on the left, with grass, flowers, a tree, and surf
-# ---------------------------------------------------------------------------
-def cliff_edge_x(y):
-    """x position of the cliff's right edge at height y (juts out, then slopes into the sea)."""
-    t = y - CLIFF_TOP
-    return EDGE + (1 if 4 < t < 9 else 0) + (2 if 9 <= t < 14 else 0) + max(0, (t - 12) // 2)
-
-
-def draw_cliff():
-    for y in range(CLIFF_TOP, H):
-        edge = cliff_edge_x(y)
-        for x in range(edge):
-            depth = edge - x
-            put(x, y, ROCK[min(3, depth // 6)] if depth < 24 else ROCK[3])
-        put(edge - 1, y, "#3a3156")                            # moonlit rim
-
-    for _ in range(60):                                        # rock cracks
-        x, y = rng.randrange(4, EDGE + 4), rng.randrange(CLIFF_TOP + 4, H)
-        if grid.get((x, y)) in ROCK:
-            rect(x, y, rng.randrange(2, 5), 1, rng.choice(["#352d4f", "#14111f"]))
-
-    for y in range(HORIZON, H, 3):                             # surf at the base
-        ex = cliff_edge_x(y) + 2
-        animated(ex, y, "#c8d6ff", "foam" + str(y % 2), 2)
-        animated(ex + 2, y + 1, "#7f93d6", "foam" + str((y + 1) % 2), 2)
-
-    rect(0, CLIFF_TOP - 1, EDGE + 1, 2, GRASS["top"])          # grass
-    rect(0, CLIFF_TOP + 1, EDGE, 2, GRASS["mid"])
-    rect(0, CLIFF_TOP + 3, EDGE - 1, 1, GRASS["dark"])
-    for x in range(EDGE + 1):
-        if rng.random() < 0.5:
-            put(x, CLIFF_TOP - 2, GRASS["blade"])
-        if rng.random() < 0.18:
-            put(x, CLIFF_TOP - 3, GRASS["blade"])
-    for x, color in [(10, "#e9a6d8"), (19, "#f2d98a"), (31, "#9ad7f0"), (40, "#e9a6d8")]:
-        put(x, CLIFF_TOP - 3, GRASS["mid"])
-        put(x, CLIFF_TOP - 4, color)
-
-    tx = 12                                                    # lone tree
-    rect(tx + 4, CLIFF_TOP - 16, 3, 15, "#3a2618")
-    rect(tx + 4, CLIFF_TOP - 16, 1, 15, "#4f3523")
-    for dx, dy, w, h, color in [(0, -30, 11, 5, "#1f4d34"), (-3, -26, 17, 6, "#1f4d34"), (-1, -21, 14, 5, "#1f4d34"),
-                                (1, -29, 6, 2, "#2f6e48"), (-2, -25, 7, 2, "#2f6e48"), (9, -20, 4, 1, "#163a27")]:
-        rect(tx + dx, CLIFF_TOP + dy, w, h, color)
-
-
-# ---------------------------------------------------------------------------
-# 6. The hero, his sword, shield, and lantern
-# ---------------------------------------------------------------------------
-def draw_hero():
-    hx = EDGE - HERO_LEG_COLUMN                 # legs land just past the edge
-    hy = CLIFF_TOP - HERO_SEAT_ROW + 1
-    sprite(HERO, hx, hy, HERO_PALETTE)
-
-    # sword planted in the grass behind him
-    sx = hx - 4
-    for y in range(CLIFF_TOP - 13, CLIFF_TOP + 1):
-        put(sx, y, "#e3eaff")                                  # blade
-    rect(sx + 1, CLIFF_TOP - 12, 1, 10, "#9aa6d6")             # blade shadow
-    rect(sx - 2, CLIFF_TOP - 14, 5, 1, "#e0b65a")              # crossguard
-    rect(sx, CLIFF_TOP - 17, 1, 3, "#5a3a1c")                  # grip
-    put(sx, CLIFF_TOP - 18, "#e0b65a")                         # pommel
-    animated(sx, CLIFF_TOP - 11, "#ffffff", "tw2")             # glint on the blade
-
-    # shield leaning against the grass
-    sprite(SHIELD, hx - 14, CLIFF_TOP - 7, SHIELD_PALETTE)
-
-    # lantern with a warm glow
-    lx = hx - 20
-    rect(lx, CLIFF_TOP - 5, 4, 5, "#3a2618")
-    rect(lx + 1, CLIFF_TOP - 6, 2, 1, "#2a1a10")
-    animated(lx + 1, CLIFF_TOP - 4, "#ffd27a", "lamp", 2, 3)
-
-    # fireflies drifting off the cliff
-    for x, y, delay in [(56, 44, "f0"), (84, 40, "f1"), (34, 46, "f2"), (92, 50, "f0"), (26, 38, "f1"), (68, 32, "f2")]:
-        animated(x, y, "#fff2a0", "ff " + delay)
-
-
-# ---------------------------------------------------------------------------
-# SVG output
-# ---------------------------------------------------------------------------
-# Animations live inside the SVG so the image works on its own (<img src=...>).
+# Animations embedded in each scene SVG, so the images work on their own.
 SCENE_CSS = """
   @keyframes twinkle { 50% { opacity: .2 } }
   @keyframes lamp { to { fill: #ffb45e } }
@@ -380,41 +227,304 @@ SCENE_CSS = """
 """
 
 
-def scene_svg():
-    out = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" shape-rendering="crispEdges">',
-        "<!-- Generated by tools/generate_art.py. Edit that script, not this file. -->",
-        f"<style>{SCENE_CSS}</style>",
-    ]
-    # Static pixels: merge horizontal runs of the same color to keep the file small.
-    for y in range(H):
-        x = 0
-        while x < W:
-            color = grid.get((x, y))
-            if color is None:
-                x += 1
-                continue
-            start = x
-            while x < W and grid.get((x, y)) == color:
-                x += 1
-            out.append(f'<rect x="{start}" y="{y}" width="{x - start}" height="1" fill="{color}"/>')
-    for x, y, w, h, color, cls in animated_px:
-        out.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{color}" class="{cls}"/>')
-    out.append('<g class="shooter">'
-               '<rect x="60" y="14" width="1" height="1" fill="#fff"/>'
-               '<rect x="59" y="13" width="1" height="1" fill="#cfd8ff"/>'
-               '<rect x="58" y="12" width="1" height="1" fill="#8a9cff"/>'
-               '<rect x="57" y="11" width="1" height="1" fill="#5a6bd6"/></g>')
-    out.append("</svg>")
-    return "\n".join(out) + "\n"
+def shooting_star(x, y):
+    """A small shooting star that streaks across now and then (class 'shooter')."""
+    return (f'<g class="shooter"><rect x="{x}" y="{y}" width="1" height="1" fill="#fff"/>'
+            f'<rect x="{x - 1}" y="{y - 1}" width="1" height="1" fill="#cfd8ff"/>'
+            f'<rect x="{x - 2}" y="{y - 2}" width="1" height="1" fill="#8a9cff"/>'
+            f'<rect x="{x - 3}" y="{y - 3}" width="1" height="1" fill="#5a6bd6"/></g>')
 
 
-def starfield_svg(size=360, seed=7):
+# ===========================================================================
+# Painters shared by both scenes
+# ===========================================================================
+def paint_sky(c, horizon):
+    """Banded night-sky gradient down to the horizon, dithered at each seam."""
+    band_h = horizon / len(SKY)
+    for y in range(horizon):
+        i = min(int(y / band_h), len(SKY) - 1)
+        progress = y / band_h - i
+        nxt = SKY[min(i + 1, len(SKY) - 1)]
+        for x in range(c.w):
+            if progress > 0.8 and (x + y) % 2 == 0:
+                c.put(x, y, nxt)
+            elif progress > 0.6 and (x + 2 * y) % 4 == 0:
+                c.put(x, y, nxt)
+            else:
+                c.put(x, y, SKY[i])
+
+
+def paint_milky_way(c, start, end, bottom):
+    """A dusty band of stars running from `start` to `end` (x, y)."""
+    (x1, y1), (x2, y2) = start, end
+    length = math.hypot(x2 - x1, y2 - y1)
+    for y in range(bottom):
+        for x in range(c.w):
+            width = 6 + 3 * math.sin(x / 13.0) + 2 * math.sin(x / 5.3)
+            d = abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / length
+            if d < width:
+                core = 1 - d / width          # 1 at the center of the band
+                if c.rng.random() < 0.18 + 0.55 * core:
+                    c.put(x, y, MILKY_WAY[min(3, int(core * 4))])
+                if c.rng.random() < 0.06 * core:
+                    c.put(x, y, c.rng.choice(BRIGHT_DUST))
+
+
+def paint_cloud(c, cx, cy, radius, colors, density=0.55):
+    """A soft, dithered nebula cloud. `colors` go from the edge to the core."""
+    for y in range(cy - radius, cy + radius + 1):
+        for x in range(cx - radius * 2, cx + radius * 2 + 1):
+            d = math.hypot((x - cx) / 2.0, y - cy) / radius
+            if d < 1 and c.rng.random() < density * (1 - d) ** 1.2:
+                c.put(x, y, colors[min(len(colors) - 1, int((1 - d) * len(colors)))])
+
+
+def paint_galaxy(c, gx, gy):
+    """A tiny two-armed spiral galaxy."""
+    for t in range(60):
+        angle, radius = t * 0.35, 0.12 * t
+        for arm in (0, math.pi):
+            color = "#b9a8ff" if t < 25 else "#6d5bc4"
+            c.put(int(gx + radius * math.cos(angle + arm) * 1.8), int(gy + radius * math.sin(angle + arm) * 0.8), color)
+
+
+def paint_stars(c, count, bottom, sparkles):
+    """Random stars (about a third twinkle) plus bright four-point sparkles."""
+    for _ in range(count):
+        x, y = c.rng.randrange(c.w), c.rng.randrange(bottom)
+        color = c.rng.choice(STAR_COLORS)
+        if c.rng.random() < 0.35:
+            c.animate(x, y, color, "tw" + str(c.rng.randrange(3)))
+        else:
+            c.put(x, y, color)
+    for x, y in sparkles:
+        for dx, dy in [(0, -1), (-1, 0), (1, 0), (0, 1)]:
+            c.animate(x + dx, y + dy, "#9fb0ff", "tw1")
+        c.animate(x, y, "#ffffff", "tw1")
+
+
+def paint_moon(c, mx, my, r):
+    """A crescent moon with a faint halo."""
+    for y in range(my - r - 3, my + r + 4):
+        for x in range(mx - r - 3, mx + r + 4):
+            if r < math.hypot(x - mx, y - my) < r + 3 and c.rng.random() < 0.35:
+                c.put(x, y, "#2c2462")
+    for y in range(my - r, my + r + 1):
+        for x in range(mx - r, mx + r + 1):
+            inside = math.hypot(x - mx, y - my) <= r
+            bite = math.hypot(x - (mx + 4), y - (my - 2)) <= r - 0.5
+            if inside and not bite:
+                c.put(x, y, "#fff3c4" if math.hypot(x - mx + 2, y - my) < r - 2 else "#f2d98a")
+
+
+def paint_ocean(c, horizon, moon_x, islands, wave_from_x=0, wave_count=70, bottom=None):
+    """Ocean bands, small islands on the horizon, waves, and the moon's reflection.
+    `bottom` limits the waves and moonlight to the water that is actually visible."""
+    bottom = bottom or c.h
+    for y in range(horizon, c.h):
+        i = min((y - horizon) * len(SEA) // max(1, c.h - horizon), len(SEA) - 1)
+        c.rect(0, y, c.w, 1, SEA[i])
+    c.rect(0, horizon, c.w, 1, "#2a2a6a")                     # horizon line
+
+    for x0, w, h in islands:
+        for i in range(w):
+            hh = max(1, int(h * math.sin(math.pi * i / w)))
+            c.rect(x0 + i, horizon - hh, 1, hh, "#120f33")
+
+    for _ in range(wave_count):
+        x, y = c.rng.randrange(wave_from_x, c.w), c.rng.randrange(horizon + 2, bottom)
+        w, color = c.rng.randrange(2, 6), c.rng.choice(WAVES)
+        if c.rng.random() < 0.3:
+            c.animate(x, y, color, "wave" + str(c.rng.randrange(2)), w)
+        else:
+            c.rect(x, y, w, 1, color)
+
+    for y in range(horizon + 1, bottom, 2):                    # moonlight on the water
+        spread = 1 + (y - horizon) // 6
+        for _ in range(2):
+            x = moon_x - spread + c.rng.randrange(2 * spread + 1)
+            c.animate(x, y, c.rng.choice(MOON_GLINT), "glint" + str(c.rng.randrange(3)), c.rng.randrange(1, 4))
+
+
+def paint_sword(c, x, ground_y):
+    """A sword planted in the ground at (x, ground_y)."""
+    for y in range(ground_y - 13, ground_y + 1):
+        c.put(x, y, "#e3eaff")                                 # blade
+    c.rect(x + 1, ground_y - 12, 1, 10, "#9aa6d6")             # blade shadow
+    c.rect(x - 2, ground_y - 14, 5, 1, "#e0b65a")              # crossguard
+    c.rect(x, ground_y - 17, 1, 3, "#5a3a1c")                  # grip
+    c.put(x, ground_y - 18, "#e0b65a")                         # pommel
+    c.animate(x, ground_y - 11, "#ffffff", "tw2")              # glint
+
+
+def paint_lantern(c, x, ground_y):
+    """A small lantern with a flickering glow."""
+    c.rect(x, ground_y - 5, 4, 5, "#3a2618")
+    c.rect(x + 1, ground_y - 6, 2, 1, "#2a1a10")
+    c.animate(x + 1, ground_y - 4, "#ffd27a", "lamp", 2, 3)
+
+
+def paint_fireflies(c, spots):
+    for i, (x, y) in enumerate(spots):
+        c.animate(x, y, FIREFLY, "ff f" + str(i % 3))
+
+
+def paint_tree(c, x, ground_y, leaf="#1f4d34", light="#2f6e48", shadow="#163a27", trunk="#3a2618", trunk_light="#4f3523"):
+    c.rect(x + 4, ground_y - 16, 3, 15, trunk)
+    c.rect(x + 4, ground_y - 16, 1, 15, trunk_light)
+    for dx, dy, w, h, color in [(0, -30, 11, 5, leaf), (-3, -26, 17, 6, leaf), (-1, -21, 14, 5, leaf),
+                                (1, -29, 6, 2, light), (-2, -25, 7, 2, light), (9, -20, 4, 1, shadow)]:
+        c.rect(x + dx, ground_y + dy, w, h, color)
+
+
+# ===========================================================================
+# Scene 1: homepage banner (side view)
+# ===========================================================================
+BANNER_W, BANNER_H = 200, 90
+BANNER_HORIZON = 64      # y of the ocean surface
+BANNER_CLIFF_TOP = 54    # y of the grass on the cliff
+BANNER_EDGE = 74         # x where the cliff top ends (the hero sits here)
+BANNER_MOON = (160, 14, 7)
+
+
+def banner_cliff_edge(y):
+    """x of the cliff's right edge at height y: juts out, then slopes into the sea."""
+    t = y - BANNER_CLIFF_TOP
+    return BANNER_EDGE + (1 if 4 < t < 9 else 0) + (2 if 9 <= t < 14 else 0) + max(0, (t - 12) // 2)
+
+
+def build_banner():
+    c = Canvas(BANNER_W, BANNER_H, seed=26)
+    top, edge = BANNER_CLIFF_TOP, BANNER_EDGE
+
+    # sky
+    paint_sky(c, BANNER_HORIZON)
+    paint_milky_way(c, (0, 4), (200, 46), BANNER_HORIZON - 6)
+    paint_cloud(c, 46, 14, 10, ["#4a2463", "#5c2c75", "#7a3a8c"])
+    paint_cloud(c, 128, 30, 9, ["#1d3f66", "#235078", "#2f6a8c"])
+    paint_cloud(c, 178, 40, 7, ["#47245f", "#5c2c75"])
+    paint_galaxy(c, 30, 40)
+    paint_stars(c, 150, BANNER_HORIZON - 4, [(22, 30), (84, 22), (112, 46), (150, 54), (190, 18), (64, 6), (140, 4)])
+    paint_moon(c, *BANNER_MOON)
+
+    # ocean
+    paint_ocean(c, BANNER_HORIZON, BANNER_MOON[0], [(118, 14, 3), (128, 6, 5), (184, 16, 2)], wave_from_x=edge + 6)
+
+    # cliff face
+    for y in range(top, c.h):
+        right = banner_cliff_edge(y)
+        for x in range(right):
+            depth = right - x
+            c.put(x, y, ROCK[min(3, depth // 6)] if depth < 24 else ROCK[3])
+        c.put(right - 1, y, "#3a3156")                          # moonlit rim
+    for _ in range(60):                                         # cracks
+        x, y = c.rng.randrange(4, edge + 4), c.rng.randrange(top + 4, c.h)
+        if c.get(x, y) in ROCK:
+            c.rect(x, y, c.rng.randrange(2, 5), 1, c.rng.choice(["#352d4f", "#14111f"]))
+    for y in range(BANNER_HORIZON, c.h, 3):                     # surf at the base
+        x = banner_cliff_edge(y) + 2
+        c.animate(x, y, "#c8d6ff", "foam" + str(y % 2), 2)
+        c.animate(x + 2, y + 1, "#7f93d6", "foam" + str((y + 1) % 2), 2)
+
+    # grass, flowers, tree
+    c.rect(0, top - 1, edge + 1, 2, GRASS["top"])
+    c.rect(0, top + 1, edge, 2, GRASS["mid"])
+    c.rect(0, top + 3, edge - 1, 1, GRASS["dark"])
+    for x in range(edge + 1):
+        if c.rng.random() < 0.5:
+            c.put(x, top - 2, GRASS["rim"])
+        if c.rng.random() < 0.18:
+            c.put(x, top - 3, GRASS["rim"])
+    for x, color in zip([10, 19, 31, 40], FLOWERS + FLOWERS[:1]):
+        c.put(x, top - 3, GRASS["mid"])
+        c.put(x, top - 4, color)
+    paint_tree(c, 12, top)
+
+    # the hero and his gear
+    hx = edge - HERO_SIDE_LEG_COLUMN
+    c.sprite(HERO_SIDE, hx, top - HERO_SIDE_SEAT_ROW + 1, HERO_PALETTE)
+    paint_sword(c, hx - 4, top)
+    c.sprite(SHIELD, hx - 14, top - 7, SHIELD_PALETTE)
+    paint_lantern(c, hx - 20, top)
+    paint_fireflies(c, [(56, 44), (84, 40), (34, 46), (92, 50), (26, 38), (68, 32)])
+
+    return c.to_svg("Homepage banner (side view).", SCENE_CSS, shooting_star(60, 14))
+
+
+# ===========================================================================
+# Scene 2: contact section (back view: looking out over his shoulders)
+# ===========================================================================
+CONTACT_W, CONTACT_H = 160, 72   # smaller grid = bigger pixels, so he reads clearly
+CONTACT_HORIZON = 44     # the horizon sits at his eye level
+CONTACT_LEDGE = 60       # y of the grassy ledge he sits on (foreground)
+CONTACT_MOON = (130, 13, 6)
+CONTACT_HERO_X = 70      # left edge of the back-view sprite (centered)
+
+
+def contact_ledge_y(x):
+    """Top of the grass in the foreground, column by column (gently uneven)."""
+    bump = round(1.2 * math.sin(x / 15.0) + 0.8 * math.sin(x / 6.0))
+    return CONTACT_LEDGE + bump
+
+
+def build_contact_scene():
+    c = Canvas(CONTACT_W, CONTACT_H, seed=58)
+
+    # the same night he is looking at in the banner
+    paint_sky(c, CONTACT_HORIZON)
+    paint_milky_way(c, (0, 6), (160, 28), CONTACT_HORIZON - 4)
+    paint_cloud(c, 30, 16, 8, ["#4a2463", "#5c2c75", "#7a3a8c"])
+    paint_cloud(c, 96, 10, 7, ["#1d3f66", "#235078", "#2f6a8c"])
+    paint_cloud(c, 150, 32, 6, ["#47245f", "#5c2c75"])
+    paint_galaxy(c, 14, 34)
+    paint_stars(c, 130, CONTACT_HORIZON - 3, [(12, 10), (48, 24), (78, 6), (112, 32), (152, 8), (62, 38), (102, 40)])
+    paint_moon(c, *CONTACT_MOON)
+
+    paint_ocean(c, CONTACT_HORIZON, CONTACT_MOON[0], [(22, 13, 2), (33, 5, 3), (140, 12, 2)],
+                wave_count=45, bottom=CONTACT_LEDGE - 2)
+
+    # the grassy ledge in the foreground, darker the closer it is to us
+    for x in range(c.w):
+        ground = contact_ledge_y(x)
+        c.put(x, ground - 1, GRASS["rim"])                      # moonlit edge
+        for y in range(ground, c.h):
+            depth = y - ground
+            color = (GRASS["top"] if depth < 2 else GRASS["mid"] if depth < 4 else
+                     GRASS["dark"] if depth < 7 else GRASS["deep"] if depth < 10 else GRASS["deepest"])
+            c.put(x, y, color)
+        if c.rng.random() < 0.45:                               # blades above the edge
+            c.put(x, ground - 2, GRASS["rim"])
+    for _ in range(70):                                         # grass texture
+        x = c.rng.randrange(c.w)
+        y = c.rng.randrange(contact_ledge_y(x) + 2, c.h)
+        c.put(x, y, c.rng.choice([GRASS["mid"], GRASS["dark"], GRASS["top"]]))
+    for x in [16, 28, 46, 112, 122, 136, 150]:                  # flowers
+        c.put(x, contact_ledge_y(x) + c.rng.randrange(1, 5), c.rng.choice(FLOWERS))
+
+    # a dark tree framing the left side, close to us
+    paint_tree(c, 1, contact_ledge_y(6) + 2, leaf="#123124", light="#1c4733", shadow="#0b2117",
+               trunk="#24170f", trunk_light="#33221a")
+
+    # the hero from behind, with his sword, shield, and lantern
+    hx = CONTACT_HERO_X
+    c.sprite(HERO_BACK, hx, CONTACT_LEDGE - len(HERO_BACK) + 2, HERO_PALETTE)
+    paint_sword(c, hx + 23, contact_ledge_y(hx + 23))
+    c.sprite(SHIELD, hx - 11, contact_ledge_y(hx - 8) - 6, SHIELD_PALETTE)
+    paint_lantern(c, hx - 19, contact_ledge_y(hx - 17))
+    paint_fireflies(c, [(54, 48), (102, 46), (42, 40), (116, 52), (64, 36), (92, 34)])
+
+    return c.to_svg("Contact section (back view).", SCENE_CSS, shooting_star(110, 5))
+
+
+# ===========================================================================
+# Background art: star tile and nebulae
+# ===========================================================================
+def build_starfield(size=360, seed=7):
     """A seamless tile of pixel stars and sparkles for the page background."""
     r = random.Random(seed)
     out = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 {size} {size}" shape-rendering="crispEdges">',
-        "<!-- Generated by tools/generate_art.py. Repeats as the page background. -->",
+        "<!-- Page background star tile. Generated by tools/generate_art.py. -->",
     ]
     for _ in range(70):                       # tiny dim stars
         x, y = r.randrange(size), r.randrange(size)
@@ -439,24 +549,44 @@ def starfield_svg(size=360, seed=7):
     return "\n".join(out) + "\n"
 
 
-def main():
-    draw_sky()
-    draw_milky_way()
-    draw_nebulae()
-    draw_galaxy()
-    draw_stars()
-    draw_moon()
-    draw_ocean()
-    draw_cliff()
-    draw_hero()
+NEBULAE = {
+    # name: (colors from faint edge to bright core, seed)
+    "violet": (["#1d1240", "#2a1a52", "#3d2470", "#58308f", "#7a45b0", "#a066d0"], 11),
+    "teal":   (["#0e2236", "#12304a", "#18465f", "#216178", "#2f8296", "#4fb0c0"], 12),
+    "rose":   (["#26112f", "#3a1a46", "#56245e", "#7a3478", "#a24d93", "#d07ab8"], 13),
+}
 
-    os.makedirs(os.path.dirname(OUT_SCENE), exist_ok=True)
-    with open(OUT_SCENE, "w") as f:
-        f.write(scene_svg())
-    with open(OUT_STARS, "w") as f:
-        f.write(starfield_svg())
-    print(f"wrote {os.path.relpath(OUT_SCENE, ROOT)} ({os.path.getsize(OUT_SCENE) // 1024} KB)")
-    print(f"wrote {os.path.relpath(OUT_STARS, ROOT)} ({os.path.getsize(OUT_STARS) // 1024} KB)")
+
+def build_nebula(colors, seed, w=120, h=80):
+    """A cloud of overlapping dithered blobs with a few stars caught inside."""
+    c = Canvas(w, h, seed)
+    for _ in range(5):
+        cx = w // 2 + c.rng.randrange(-24, 25)
+        cy = h // 2 + c.rng.randrange(-14, 15)
+        paint_cloud(c, cx, cy, c.rng.randrange(12, 22), colors, density=0.5)
+    for _ in range(14):
+        c.put(c.rng.randrange(w), c.rng.randrange(h), c.rng.choice(STAR_COLORS))
+    return c.to_svg("Decorative nebula behind the project cards.")
+
+
+# ===========================================================================
+def write(name, svg):
+    path = os.path.join(ASSETS, name)
+    with open(path, "w") as f:
+        f.write(svg)
+    print(f"wrote assets/{name} ({os.path.getsize(path) // 1024} KB)")
+
+
+def main():
+    for rows in (HERO_SIDE, HERO_BACK, SHIELD):        # catch typos in the sprites
+        assert len({len(r) for r in rows}) == 1, "every sprite row must be the same width"
+
+    os.makedirs(ASSETS, exist_ok=True)
+    write("hero-scene.svg", build_banner())
+    write("contact-scene.svg", build_contact_scene())
+    write("starfield.svg", build_starfield())
+    for name, (colors, seed) in NEBULAE.items():
+        write(f"nebula-{name}.svg", build_nebula(colors, seed))
 
 
 if __name__ == "__main__":
