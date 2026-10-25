@@ -8,6 +8,8 @@ Writes these files into assets/:
 
     hero-scene.svg      Homepage banner. The armored hero sits on a cliff above
                         the ocean at night, seen from the side.
+    project-scene.svg   Project page banner. The hero stands facing us in a night
+                        meadow, hands resting on a sword planted in the ground.
     contact-scene.svg   Contact section. The same hero seen from behind, looking
                         out at what he sees: the ocean, the moon, the stars.
     starfield.svg       Small repeating tile of stars for the page background.
@@ -63,6 +65,7 @@ HERO_PALETTE = {
     "T": "#e0b65a",                   # gold trim
     "C": "#7b3fc4", "c": "#4e2585",   # violet cape + shadow
     "K": "#5a3a1c", "k": "#3d2612",   # leather belt / boots
+    "E": "#e3eaff", "e": "#9aa6d6",   # sword blade + its shadow (front view)
 }
 
 
@@ -138,6 +141,49 @@ SHIELD = [
     "..TTTT..",
 ]
 SHIELD_PALETTE = {"T": "#e0b65a", "B": "#2c4a8c", "Y": "#f2d98a"}
+
+
+def mirror(left_halves):
+    """Build a symmetric sprite from its left halves (the last column is the center)."""
+    return [row + row[:-1][::-1] for row in left_halves]
+
+
+# Front view: standing guard, facing us. Both gauntlets rest on the pommel of
+# a sword planted point-down between his boots; the violet cape hangs behind.
+# Only the left half is written out; mirror() copies it to the right.
+HERO_FRONT = mirror([
+    ".......hHhHh",   # big curly hair
+    ".....hHHhHHH",
+    "....hHhHHhHH",
+    "....HHHHHHHH",
+    "....hHHHSSSS",   # forehead
+    "....HHHGGGGS",   # sunglasses (nose bridge in the middle)
+    "....hHHGgGGS",
+    ".....hHSSSSS",   # cheeks
+    "......HsSSSS",
+    ".......hsSSs",   # chin
+    "..........sS",   # neck
+    "...cPPPPTTTT",   # pauldrons + gold collar, cape behind the shoulders
+    "..cCPLPPAAAT",   # breastplate with a gold center line
+    "..cCPPPAALAT",
+    "..cCaAaAAAAT",
+    "..cC.aAaAAAT",   # arms angle in toward the sword
+    "..cC..aAaAAA",
+    "..cC...aAa.T",   # gold pommel between the forearms
+    "..cC....LAak",   # gauntlets gripping the leather hilt
+    "..cC....aAak",
+    "..cC..aAAAak",
+    "..cC.TTTTTTT",   # crossguard
+    "..cC..AAAAaE",   # armored skirt; blade runs down the middle
+    "..cC..AAAAaE",
+    "..cC..aAA..E",   # legs apart, blade between them
+    "..cC..aAA..E",
+    ".cCC..aLA..E",
+    ".cCC..aAA..E",
+    "cCCC..TTT..E",   # gold knee trim
+    "cCC..kKKK..E",   # boots
+    "cC..kKKKK..e",   # blade tip in the grass
+])
 
 
 # ===========================================================================
@@ -514,6 +560,76 @@ def build_contact_scene():
 
 
 # ===========================================================================
+# Scene 3: project page banner (front view, standing guard in a meadow)
+# ===========================================================================
+PROJECT_W, PROJECT_H = 160, 72   # extra meadow below his feet so the fade never reaches him
+PROJECT_HORIZON = 44     # where the sky meets the far mountains
+PROJECT_GROUND = 50      # top of the meadow in front of him
+PROJECT_FEET = 60        # y of his boots
+PROJECT_MOON = (132, 12, 6)
+
+
+def build_project_banner():
+    c = Canvas(PROJECT_W, PROJECT_H, seed=91)
+    cx = c.w // 2
+
+    # sky: the same night, from a new angle
+    paint_sky(c, PROJECT_HORIZON)
+    paint_milky_way(c, (0, 30), (160, 2), PROJECT_HORIZON - 2)
+    paint_cloud(c, 34, 12, 8, ["#4a2463", "#5c2c75", "#7a3a8c"])
+    paint_cloud(c, 104, 26, 7, ["#1d3f66", "#235078", "#2f6a8c"])
+    paint_galaxy(c, 146, 32)
+    paint_stars(c, 120, PROJECT_HORIZON - 2, [(14, 8), (52, 22), (90, 6), (118, 30), (150, 16), (24, 34), (70, 36)])
+    paint_moon(c, *PROJECT_MOON)
+
+    # far mountains, then rolling hills
+    for x in range(c.w):
+        peak = 6 + 4 * math.sin(x / 11.0) + 3 * math.sin(x / 5.3 + 1) + 2 * math.sin(x / 23.0)
+        top = int(PROJECT_HORIZON - peak)
+        c.rect(x, top, 1, c.h - top, "#21183f")
+        c.put(x, top, "#2e2457")                                # moonlit ridge
+    for x in range(c.w):
+        top = int(PROJECT_GROUND - 4 - 3 * math.sin(x / 14.0 + 0.5) - 2 * math.sin(x / 7.0))
+        c.rect(x, top, 1, c.h - top, "#132a2a")
+        c.put(x, top, "#1d3f37")
+    for x0 in [8, 17, 30, 128, 139, 151]:                       # small pines on the hills
+        base = int(PROJECT_GROUND - 4 - 3 * math.sin(x0 / 14.0 + 0.5) - 2 * math.sin(x0 / 7.0))
+        for i in range(5):
+            c.rect(x0 - i // 2, base - 5 + i, 1 + (i // 2) * 2, 1, "#0f2420")
+        c.put(x0, base - 6, "#0f2420")
+
+    # the meadow, darker the closer it is to us; the last rows sink into the
+    # page's night color so the banner melts into the page below
+    meadow = [(2, GRASS["top"]), (5, GRASS["mid"]), (9, GRASS["dark"]), (12, GRASS["deep"]),
+              (15, GRASS["deepest"]), (18, "#0b1a17"), (99, "#0a0f1c")]
+    for x in range(c.w):
+        ground = PROJECT_GROUND + round(math.sin(x / 9.0))
+        c.put(x, ground - 1, GRASS["rim"])
+        for y in range(ground, c.h):
+            depth = y - ground
+            c.put(x, y, next(color for limit, color in meadow if depth < limit))
+        if c.rng.random() < 0.45:
+            c.put(x, ground - 2, GRASS["rim"])
+    for _ in range(80):                                         # grass texture
+        x = c.rng.randrange(c.w)
+        c.put(x, c.rng.randrange(PROJECT_GROUND + 2, PROJECT_FEET + 4), c.rng.choice([GRASS["mid"], GRASS["dark"], GRASS["top"]]))
+    for x in [12, 26, 44, 58, 104, 118, 134, 148]:              # flowers
+        c.put(x, PROJECT_GROUND + c.rng.randrange(2, 12), c.rng.choice(FLOWERS))
+
+    # the hero, centered, with a soft shadow at his feet
+    c.rect(cx - 9, PROJECT_FEET, 19, 1, GRASS["deep"])
+    c.rect(cx - 6, PROJECT_FEET + 1, 13, 1, GRASS["deep"])
+    width = len(HERO_FRONT[0])
+    c.sprite(HERO_FRONT, cx - width // 2, PROJECT_FEET - len(HERO_FRONT) + 1, HERO_PALETTE)
+    c.animate(cx - width // 2 + 8, PROJECT_FEET - len(HERO_FRONT) + 7, "#ffffff", "tw2")   # glint on his lens (sprite row 6)
+    c.sprite(SHIELD, cx - 19, PROJECT_FEET - 6, SHIELD_PALETTE)    # shield resting beside him
+    paint_lantern(c, cx + 14, PROJECT_FEET)
+    paint_fireflies(c, [(cx - 30, 46), (cx + 26, 42), (cx - 46, 52), (cx + 40, 54), (cx - 18, 36), (cx + 20, 32)])
+
+    return c.to_svg("Project page banner (front view).", SCENE_CSS, shooting_star(40, 6))
+
+
+# ===========================================================================
 # Background art: star tile
 # ===========================================================================
 def build_starfield(size=360, seed=7):
@@ -557,11 +673,12 @@ def write(name, svg):
 
 
 def main():
-    for rows in (HERO_SIDE, HERO_BACK, SHIELD):        # catch typos in the sprites
+    for rows in (HERO_SIDE, HERO_BACK, HERO_FRONT, SHIELD):        # catch typos in the sprites
         assert len({len(r) for r in rows}) == 1, "every sprite row must be the same width"
 
     os.makedirs(ASSETS, exist_ok=True)
     write("hero-scene.svg", build_banner())
+    write("project-scene.svg", build_project_banner())
     write("contact-scene.svg", build_contact_scene())
     write("starfield.svg", build_starfield())
 

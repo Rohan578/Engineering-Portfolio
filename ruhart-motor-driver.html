@@ -7,17 +7,28 @@
   <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
-  <main class="project">
-    <!-- This page extends the RU HART LiDAR bot page -->
-    <nav class="breadcrumbs">
+
+  <!-- ===================================================================
+       BANNER
+       The hero standing guard (assets/project-scene.svg, drawn by
+       tools/generate_art.py) with this page's title in the sky above him.
+         This page extends the RU HART LiDAR bot page, so it links back to both.
+       =================================================================== -->
+  <header class="page-hero">
+    <img class="page-hero__scene" src="assets/project-scene.svg"
+         alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
+    <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
       <a class="back-link" href="ruhart-lidar-bot.html">← RU HART LiDAR Bot</a>
     </nav>
-
-    <header class="project__header">
+    <div class="page-hero__title">
       <h1 class="project__title">RU-HART Motor Driver V1</h1>
       <p class="project__subtitle">Tank-Drive Motor Controller · RU HART Extension</p>
-    </header>
+    </div>
+  </header>
+
+
+  <main class="project">
 
     <!-- Proof of concept: photo left, text right -->
     <section class="section panel">
@@ -39,7 +50,40 @@
       <p>The V1 schematic turns the proof of concept into a full tank-drive controller. An RP2040 handles control, and a dedicated gate driver switches power MOSFETs for each motor channel. An MCP2515 CAN controller with a CAN transceiver lets the board take commands over the robot's CAN bus. Onboard regulation provides the logic rails, and XT60 connectors handle battery and motor power.</p>
     </section>
 
-    <footer class="project__footer">Rohan Shrivastava | <a href="index.html">Return to Home</a></footer>
   </main>
+
+
+  <!-- ===================================================================
+       CONTACT (same block as on the homepage)
+       Full-width scene: the same hero, now seen from behind, looking out
+       at the ocean and the night sky (assets/contact-scene.svg).
+       "Email Me" opens a Gmail draft addressed to me; "Copy" copies the
+       address (handled in js/main.js).
+       =================================================================== -->
+  <footer class="contact" id="contact">
+    <img class="contact__scene" src="assets/contact-scene.svg"
+         alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
+
+    <div class="contact__card panel">
+      <h2 class="contact__title">Get in Touch</h2>
+      <p class="contact__text">Have a question or an opportunity? I’d love to hear from you.</p>
+
+      <div class="contact__buttons">
+        <a class="button button--solid"
+           href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=srohanshri@gmail.com&amp;su=Hello%20from%20your%20portfolio"
+           target="_blank" rel="noopener">✉ Email Me</a>
+        <a class="button" href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <div class="contact__email">
+        <span class="contact__address">srohanshri@gmail.com</span>
+        <button class="contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy</button>
+      </div>
+      <a class="contact__alt" href="mailto:srohanshri@gmail.com">or open in another mail app</a>
+      <span class="visually-hidden" id="copy-status" aria-live="polite"></span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>

@@ -55,6 +55,18 @@
   --font-pixel: "Pixelify Sans", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
+  /* Fades used where a pixel scene meets the page. Many small steps make the
+     fade ease in and out, so there is no visible edge. */
+  --fade-out-bottom: linear-gradient(180deg,
+    #000 0%, #000 40%, rgba(0, 0, 0, 0.94) 48%, rgba(0, 0, 0, 0.84) 56%, rgba(0, 0, 0, 0.68) 64%,
+    rgba(0, 0, 0, 0.5) 72%, rgba(0, 0, 0, 0.32) 80%, rgba(0, 0, 0, 0.17) 88%, rgba(0, 0, 0, 0.06) 95%, transparent 100%);
+  /* project banners: the hero stands near the bottom, so fade only the meadow below him */
+  --fade-out-bottom-late: linear-gradient(180deg,
+    #000 0%, #000 84%, rgba(0, 0, 0, 0.8) 88%, rgba(0, 0, 0, 0.5) 92%, rgba(0, 0, 0, 0.22) 96%, transparent 100%);
+  --fade-in-top: linear-gradient(0deg,
+    #000 0%, #000 40%, rgba(0, 0, 0, 0.94) 48%, rgba(0, 0, 0, 0.84) 56%, rgba(0, 0, 0, 0.68) 64%,
+    rgba(0, 0, 0, 0.5) 72%, rgba(0, 0, 0, 0.32) 80%, rgba(0, 0, 0, 0.17) 88%, rgba(0, 0, 0, 0.06) 95%, transparent 100%);
+
   /* stepped "pixel" corners used on panels and buttons */
   --pixel-corners: polygon(
     6px 0, calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px,
@@ -204,8 +216,8 @@ img { max-width: 100%; }
 /* Fade the bottom of the scene to transparent, so the page's stars and
    nebula glow show through and the banner melts into the rest of the page */
 .hero__scene {
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
-          mask-image: linear-gradient(180deg, #000 0%, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
+  -webkit-mask-image: var(--fade-out-bottom);
+          mask-image: var(--fade-out-bottom);
 }
 
 .hero__title {
@@ -422,8 +434,8 @@ img { max-width: 100%; }
   height: 100%;
   object-fit: cover;
   object-position: 50% 100%;
-  -webkit-mask-image: linear-gradient(0deg, #000 0%, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
-          mask-image: linear-gradient(0deg, #000 0%, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
+  -webkit-mask-image: var(--fade-in-top);
+          mask-image: var(--fade-in-top);
 }
 
 /* The contact card floats in the sky, above the hero */
@@ -482,25 +494,79 @@ img { max-width: 100%; }
 
 
 /* 9. Project pages ------------------------------------------------------- */
+
+/* Banner: the hero standing guard (assets/project-scene.svg), with the page
+   title in the sky above him and the back link in the top-left corner. */
+.page-hero {
+  position: relative;
+  z-index: 1;
+  height: clamp(460px, 46vw, 900px);
+  overflow: hidden;
+}
+.page-hero__scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  -webkit-mask-image: var(--fade-out-bottom-late);
+          mask-image: var(--fade-out-bottom-late);
+}
+.page-hero__nav {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.page-hero__title {
+  position: absolute;
+  top: 11%;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 0 16px;
+  text-align: center;
+}
+/* dark glow behind the title so it stays readable over the stars */
+.page-hero__title::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: min(820px, 98vw);
+  height: 220%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(5, 4, 15, 0.75) 0%, rgba(5, 4, 15, 0.45) 45%, rgba(5, 4, 15, 0) 72%);
+}
+
+/* "← Back to the Quest Log": a small pixel tab so it reads over the sky */
+.back-link {
+  display: inline-block;
+  padding: 6px 12px;
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--color-sky);
+  background: rgba(8, 6, 26, 0.72);
+  border: 1px solid var(--color-border);
+  clip-path: var(--pixel-corners);
+}
+.back-link:hover { color: var(--color-gold); border-color: var(--color-gold); text-decoration: none; }
+
+/* Page content below the banner */
 .project {
   position: relative;
   z-index: 1;
   max-width: 900px;
   margin: 0 auto;
-  padding: 36px 20px 30px;
+  padding: 8px 20px 10px;
 }
 
-.back-link {
-  display: inline-block;
-  margin-bottom: 26px;
-  font-family: var(--font-pixel);
-  font-weight: 500;
-  font-size: 1.05rem;
-  color: var(--color-sky);
-}
-.back-link:hover { color: var(--color-gold); text-decoration: none; }
-
-.project__header { margin-bottom: 40px; text-align: center; }
 .project__title {
   margin: 0 0 10px;
   font-family: var(--font-pixel);
@@ -508,9 +574,9 @@ img { max-width: 100%; }
   font-size: clamp(2rem, 4.6vw, 3.2rem);
   line-height: 1.15;
   color: var(--color-heading);
-  text-shadow: 0 3px 0 #2a1d57;
+  text-shadow: 0 3px 0 #2a1d57, 0 0 24px rgba(242, 217, 138, 0.25);
 }
-.project__subtitle { margin: 0; font-size: 1.05rem; color: var(--color-sky); }
+.project__subtitle { margin: 0; font-size: 1.1rem; color: #cfe2f7; text-shadow: 0 2px 0 #05040f; }
 
 /* One content section on a project page */
 .section { margin-bottom: 28px; padding: 26px; }
@@ -577,15 +643,6 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   border-color: transparent transparent transparent var(--color-gold);
 }
 
-.project__footer {
-  margin-top: 50px;
-  padding-top: 20px;
-  text-align: center;
-  font-size: 0.95rem;
-  color: var(--color-muted);
-  border-top: 2px dashed var(--color-border);
-}
-
 
 /* 10. RU HART extension link -------------------------------------------
    On the LiDAR bot page, a card that leads to the motor driver page. */
@@ -612,9 +669,6 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 .extension__text { display: block; color: var(--color-text-soft); }
 .extension__cta { display: inline-block; margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; color: var(--color-sky); }
 
-/* Breadcrumb row of back links at the top of a project page */
-.breadcrumbs { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 26px; }
-.breadcrumbs .back-link { margin-bottom: 0; }
 
 
 /* 11. Responsive layout --------------------------------------------------- */
@@ -624,6 +678,20 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .intro { flex-direction: column; text-align: center; }
 }
 @media (max-width: 700px) {
+  /* On phones the links and title sit above the scene instead of over it,
+     and the scene (faded at both ends) fills the space underneath. */
+  .page-hero { height: auto; padding: 12px 12px 0; }
+  .page-hero::after { content: ""; display: block; height: 250px; }
+  .page-hero__nav { position: relative; top: auto; left: auto; }
+  .page-hero__nav .back-link { font-size: 0.95rem; }
+  .page-hero__title { position: relative; top: auto; margin-top: 22px; padding: 0; }
+  .page-hero__scene {
+    top: auto;
+    bottom: 0;
+    height: 380px;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 80%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 80%, transparent 100%);
+  }
   .contact { height: 600px; min-height: 0; }
   .contact__card { top: 3%; padding: 22px 18px 18px; }
   .hero { height: 400px; min-height: 0; }
