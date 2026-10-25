@@ -6,7 +6,7 @@
   <title>Rohan Shrivastava | Engineering Portfolio</title>
   <meta name="description" content="Engineering portfolio of Rohan Shrivastava, Electrical &amp; Computer Engineering student at Rutgers: hardware design, embedded systems, and robotics.">
   <link rel="preload" href="fonts/pixelify-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/theme.css?v=20261025-1942">
+  <link rel="stylesheet" href="css/theme.css?v=20261025-1957">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
        tools/generate_art.py and run it (see README.md).
        =================================================================== -->
   <header class="hero">
-    <img class="hero__scene" src="assets/hero-scene.svg?v=20261025-1942"
+    <img class="hero__scene" src="assets/hero-scene.svg?v=20261025-1957"
          alt="Pixel art of an armored hero sitting on a cliff above the ocean at night, looking up at the stars and a crescent moon">
 
     <div class="hero__title">
@@ -47,58 +47,107 @@
 
     <!-- ===================================================================
          GUILD RECORD (past experience)
-         One <article class="experience panel"> per role. To add a role,
-         copy the article and change the title, company, dates, and points.
+         One <article class="experience panel"> per role, with the company
+         logo on the left (media/experience/). To add a role, copy the
+         article and change the logo, title, company, dates, and points.
          =================================================================== -->
     <section class="experience-section">
       <h2 class="section-title">Guild Record</h2>
       <p class="section-subtitle">Past Experience &amp; Internships</p>
 
       <article class="experience panel">
-        <header class="experience__header">
-          <div>
-            <h3 class="experience__role">Automation QA &amp; AI Systems Intern</h3>
-            <div class="experience__org pixel">Accelirate</div>
-          </div>
-          <span class="experience__dates pixel">May 2026 – July 2026</span>
-        </header>
-        <ul class="experience__points">
-          <li>Engineered test suites for an agentic-framework-driven QA application (Accel QA), using custom SQL datasets to simulate edge-case scenarios and accelerate testing cycles.</li>
-          <li>Isolated and debugged application-level issues across backend services, improving system reliability and fault tolerance.</li>
-        </ul>
+        <img class="experience__logo" src="media/experience/accelirate-logo.png" alt="Accelirate logo">
+        <div class="experience__body">
+          <header class="experience__header">
+            <div>
+              <h3 class="experience__role">Automation QA &amp; AI Systems Intern</h3>
+              <div class="experience__org pixel">Accelirate</div>
+            </div>
+            <span class="experience__dates pixel">May 2026 – July 2026</span>
+          </header>
+          <ul class="experience__points">
+            <li>Engineered test suites for an agentic-framework-driven QA application (Accel QA), using custom SQL datasets to simulate edge-case scenarios and accelerate testing cycles.</li>
+            <li>Isolated and debugged application-level issues across backend services, improving system reliability and fault tolerance.</li>
+          </ul>
+        </div>
       </article>
     </section>
 
 
     <!-- ===================================================================
+         HALL OF HONORS (awards)
+         Each award is a link: clicking anywhere on it opens the post.
+         Put the LinkedIn post's URL in the href below.
+         =================================================================== -->
+    <section class="honors-section">
+      <h2 class="section-title">Hall of Honors</h2>
+      <p class="section-subtitle">Awards &amp; Recognition</p>
+
+      <a class="honor panel" href="https://www.linkedin.com/in/rohan-shrivastava456/recent-activity/all/" target="_blank" rel="noopener">
+        <img class="honor__icon" src="assets/trophy.svg?v=20261025-1957" alt="">
+        <span class="honor__body">
+          <span class="honor__header">
+            <span>
+              <span class="honor__title">Best Use of Presage</span>
+              <span class="honor__event pixel">HackRU Fall 2026</span>
+            </span>
+            <span class="honor__date pixel">October 2026</span>
+          </span>
+          <span class="honor__text">Won with Breathe.exe, an interview simulator disguised as a horror game that uses Presage’s camera-based vital sensing to react to the player’s stress in real time.</span>
+          <span class="honor__cta pixel">View the LinkedIn post →</span>
+        </span>
+      </a>
+    </section>
+
+
+    <!-- ===================================================================
          QUEST LOG (projects)
-         Three cards per row. Each card: tag, title link (makes the whole
-         card clickable), description, image, skills. To add a project,
-         copy a card; it fills the next open spot in the grid.
+         Three cards per row, newest quest first. Each card: tag, title link
+         (makes the whole card clickable), dates, description, image,
+         skills. To add a project, copy a card and put it where it belongs.
          =================================================================== -->
     <section class="quests">
       <h2 class="section-title">Quest Log</h2>
       <p class="section-subtitle">Engineering Projects &amp; Technical Work</p>
 
       <div class="quest-grid">
-        <!-- Quest I: RU HART LiDAR bot -->
+        <!-- Quest IV: Soil Node -->
         <article class="quest-card panel">
-          <span class="quest-card__tag pixel">Quest I · Team Quest</span>
-          <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-lidar-bot.html">RU HART</a></h3>
-          <h4 class="quest-card__subtitle">LiDAR Mapping Bot (Maxbot)</h4>
-          <p class="quest-card__desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
-          <div class="quest-card__image"><img src="media/ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot"></div>
+          <span class="quest-card__tag pixel">Quest IV · In Progress</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="soilnode.html">Soil Node</a></h3>
+          <h4 class="quest-card__subtitle">IoT Plant Monitor</h4>
+          <p class="quest-card__dates">Started <time datetime="2026-08">Aug 2026</time><br><span class="quest-card__ongoing">In progress</span></p>
+          <p class="quest-card__desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
+          <div class="quest-card__image"><img src="media/soilnode/pcb-3d-view.png" alt="Soil Node PCB 3D view"></div>
           <span class="quest-card__skills-label">Skills Used</span>
           <div class="chip-list">
             <span class="chip">Python</span>
             <span class="chip">VS Code</span>
             <span class="chip">KiCad</span>
             <span class="chip">Arduino IDE</span>
-            <span class="chip">ESP32-S3</span>
             <span class="chip">ESP32-C3</span>
-            <span class="chip">ESP-NOW</span>
             <span class="chip">Embedded C++</span>
             <span class="chip">I²C</span>
+            <span class="chip">Git / GitHub</span>
+          </div>
+        </article>
+
+        <!-- Quest III: RU HART motor driver -->
+        <article class="quest-card panel">
+          <span class="quest-card__tag pixel">Quest III · Team Quest</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-motor-driver.html">RU HART</a></h3>
+          <h4 class="quest-card__subtitle">Motor Driver V1</h4>
+          <p class="quest-card__dates">Started <time datetime="2026-07">Jul 2026</time><br>Completed <time datetime="2026-09">Sep 2026</time></p>
+          <p class="quest-card__desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
+          <div class="quest-card__image"><img src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
+          <span class="quest-card__skills-label">Skills Used</span>
+          <div class="chip-list">
+            <span class="chip">RP2040</span>
+            <span class="chip">RP2350</span>
+            <span class="chip">SPI</span>
+            <span class="chip">Embedded C++</span>
+            <span class="chip">KiCad</span>
+            <span class="chip">Arduino IDE</span>
             <span class="chip">Git / GitHub</span>
           </div>
         </article>
@@ -108,6 +157,7 @@
           <span class="quest-card__tag pixel">Quest II · Completed</span>
           <h3 class="quest-card__title"><a class="quest-card__link" href="breathe.html">Breathe.exe</a></h3>
           <div class="quest-card__award pixel">★ HackRU26 · Best Use of Presage Winner</div>
+          <p class="quest-card__dates">Started <time datetime="2026-10-10">Oct 10, 2026</time><br>Completed <time datetime="2026-10-11">Oct 11, 2026</time></p>
           <p class="quest-card__desc quest-card__desc--short">Co-developed an interview simulator disguised as a horror game, designing custom glove interface devices and other immersive elements of the game.</p>
           <div class="quest-card__image"><img src="media/breathe/interview-scary.jpg" alt="Breathe.exe interview scene"></div>
           <span class="quest-card__skills-label">Skills Used</span>
@@ -127,38 +177,23 @@
           </div>
         </article>
 
-        <!-- Quest III: RU HART motor driver -->
+        <!-- Quest I: RU HART LiDAR bot -->
         <article class="quest-card panel">
-          <span class="quest-card__tag pixel">Quest III · Team Quest</span>
-          <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-motor-driver.html">RU HART</a></h3>
-          <h4 class="quest-card__subtitle">Motor Driver V1</h4>
-          <p class="quest-card__desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
-          <div class="quest-card__image"><img src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
-          <span class="quest-card__skills-label">Skills Used</span>
-          <div class="chip-list">
-            <span class="chip">RP2040</span>
-            <span class="chip">RP2350</span>
-            <span class="chip">SPI</span>
-            <span class="chip">Embedded C++</span>
-            <span class="chip">KiCad</span>
-            <span class="chip">Arduino IDE</span>
-            <span class="chip">Git / GitHub</span>
-          </div>
-        </article>
-
-        <!-- Quest IV: Soil Node (second row, under the LiDAR bot) -->
-        <article class="quest-card panel">
-          <span class="quest-card__tag pixel">Quest IV · In Progress</span>
-          <h3 class="quest-card__title"><a class="quest-card__link" href="soilnode.html">Soil Node</a></h3>
-          <p class="quest-card__desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
-          <div class="quest-card__image"><img src="media/soilnode/pcb-3d-view.png" alt="Soil Node PCB 3D view"></div>
+          <span class="quest-card__tag pixel">Quest I · Team Quest</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-lidar-bot.html">RU HART</a></h3>
+          <h4 class="quest-card__subtitle">LiDAR Mapping Bot (Maxbot)</h4>
+          <p class="quest-card__dates">Started <time datetime="2026-03-03">Mar 3, 2026</time><br>Completed <time datetime="2026-03-27">Mar 27, 2026</time></p>
+          <p class="quest-card__desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
+          <div class="quest-card__image"><img src="media/ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot"></div>
           <span class="quest-card__skills-label">Skills Used</span>
           <div class="chip-list">
             <span class="chip">Python</span>
             <span class="chip">VS Code</span>
             <span class="chip">KiCad</span>
             <span class="chip">Arduino IDE</span>
+            <span class="chip">ESP32-S3</span>
             <span class="chip">ESP32-C3</span>
+            <span class="chip">ESP-NOW</span>
             <span class="chip">Embedded C++</span>
             <span class="chip">I²C</span>
             <span class="chip">Git / GitHub</span>
@@ -174,11 +209,11 @@
        CONTACT
        Full-width scene: the same hero, now seen from behind, looking out
        at the ocean and the night sky (assets/contact-scene.svg).
-       "Email Me" opens a Gmail draft addressed to me; "Copy" copies the
-       address (handled in js/main.js).
+       The email button opens a Gmail draft addressed to me; "Copy" copies
+       the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261025-1942"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261025-1957"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -188,19 +223,14 @@
       <div class="contact__buttons">
         <a class="button button--solid"
            href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=srohanshri@gmail.com"
-           target="_blank" rel="noopener">✉ Email Me</a>
+           target="_blank" rel="noopener">✉ srohanshri@gmail.com</a>
+        <button class="button contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy</button>
         <a class="button" href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" rel="noopener">LinkedIn</a>
       </div>
-
-      <div class="contact__email">
-        <span class="contact__address">srohanshri@gmail.com</span>
-        <button class="contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy</button>
-      </div>
-      <a class="contact__alt" href="mailto:srohanshri@gmail.com">or open in another mail app</a>
       <span class="visually-hidden" id="copy-status" aria-live="polite"></span>
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261025-1942"></script>
+  <script src="js/main.js?v=20261025-1957"></script>
 </body>
 </html>

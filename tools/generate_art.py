@@ -13,6 +13,7 @@ Writes these files into assets/:
     contact-scene.svg   Contact section. The same hero seen from behind, looking
                         out at what he sees: the ocean, the moon, the stars.
     starfield.svg       Small repeating tile of stars for the page background.
+    trophy.svg          Pixel trophy for the Hall of Honors (awards) section.
 
 How drawing works
 -----------------
@@ -640,6 +641,33 @@ def build_project_banner():
 
 
 # ===========================================================================
+# Trophy icon for the Hall of Honors
+# ===========================================================================
+TROPHY = mirror([
+    "..TTTTTT",   # rim
+    "TTTYYYYY",   # handles + cup
+    "T.TYLYYY",
+    "T.TYLYYY",
+    ".TTYLYYY",
+    "...TYYYY",
+    "....TYYY",
+    ".....TYY",
+    "......TY",   # stem
+    "......TY",
+    ".....TTT",   # base
+    "....KKKK",
+    "....KKKK",
+])
+TROPHY_PALETTE = {"T": "#c99a2e", "Y": "#f2d98a", "L": "#fff3c4", "K": "#5a3a1c"}
+
+
+def build_trophy():
+    c = Canvas(len(TROPHY[0]), len(TROPHY), seed=1)
+    c.sprite(TROPHY, 0, 0, TROPHY_PALETTE)
+    return c.to_svg("Trophy icon.")
+
+
+# ===========================================================================
 # Background art: star tile
 # ===========================================================================
 def build_starfield(size=360, seed=7):
@@ -683,7 +711,7 @@ def write(name, svg):
 
 
 def main():
-    for rows in (HERO_SIDE, HERO_BACK, HERO_FRONT, SHIELD):        # catch typos in the sprites
+    for rows in (HERO_SIDE, HERO_BACK, HERO_FRONT, SHIELD, TROPHY):        # catch typos in the sprites
         assert len({len(r) for r in rows}) == 1, "every sprite row must be the same width"
 
     os.makedirs(ASSETS, exist_ok=True)
@@ -691,6 +719,7 @@ def main():
     write("project-scene.svg", build_project_banner())
     write("contact-scene.svg", build_contact_scene())
     write("starfield.svg", build_starfield())
+    write("trophy.svg", build_trophy())
 
 
 if __name__ == "__main__":

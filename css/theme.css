@@ -8,7 +8,7 @@
      3. Base page + starry background
      4. Shared building blocks (panels, buttons, chips, framed images)
      5. Homepage: hero banner
-     6. Homepage: intro panel (6b: Guild Record / past experience)
+     6. Homepage: intro panel (6b: Guild Record, 6c: Hall of Honors)
      7. Homepage: Quest Log cards
      8. Homepage: contact scene
      9. Project pages
@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261025-1942") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1957") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261025-1942") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1957") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -311,10 +311,25 @@ img { max-width: 100%; }
    Same width and style as the intro panel. */
 .experience-section { margin-bottom: 48px; }
 .experience {
+  display: flex;
+  align-items: flex-start;
+  gap: 26px;
   max-width: 940px;
   margin: 0 auto 20px;
   padding: 24px 30px;
 }
+/* company logo on a light tile (most logos are made for white backgrounds) */
+.experience__logo {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  padding: 10px;
+  object-fit: contain;
+  background: #ffffff;
+  border: 2px solid var(--color-border);
+  clip-path: var(--pixel-corners);
+}
+.experience__body { flex: 1; min-width: 0; }
 .experience__header {
   display: flex;
   flex-wrap: wrap;
@@ -361,6 +376,51 @@ img { max-width: 100%; }
   background: var(--color-gold);
   transform: rotate(45deg);
 }
+
+
+/* 6c. Homepage: Hall of Honors (awards) -----------------------------------
+   Each award is one big link to its post. */
+.honors-section { margin-bottom: 48px; }
+.honor {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  max-width: 940px;
+  margin: 0 auto 20px;
+  padding: 22px 30px;
+  color: inherit;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.honor:hover { border-color: var(--color-gold); transform: translateY(-3px); text-decoration: none; }
+.honor__icon { flex-shrink: 0; width: 84px; height: auto; }
+.honor__body { display: block; flex: 1; min-width: 0; }
+.honor__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 20px;
+  margin-bottom: 8px;
+}
+.honor__title {
+  display: block;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  color: var(--color-gold);
+}
+.honor__event { display: block; margin-top: 2px; font-size: 1.05rem; color: var(--color-sky); }
+.honor__date {
+  padding: 3px 10px;
+  font-size: 0.95rem;
+  color: var(--color-rose);
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.honor__text { display: block; line-height: 1.7; color: var(--color-text-soft); }
+.honor__cta { display: inline-block; margin-top: 10px; font-size: 1.05rem; color: var(--color-sky); }
+.honor:hover .honor__cta { color: var(--color-gold); }
 
 
 /* 7. Homepage: Quest Log cards ------------------------------------------- */
@@ -416,6 +476,17 @@ img { max-width: 100%; }
   color: var(--color-text);
 }
 .quest-card__award { font-size: 0.9rem; color: var(--color-sky); }
+/* "Started ..." / "Completed ..." lines */
+.quest-card__dates {
+  margin: 8px 0 0;
+  line-height: 1.5;
+  font-family: var(--font-pixel);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+}
+.quest-card__dates time { color: var(--color-text); }
+.quest-card__ongoing { color: #9be3a8; }
 .quest-card__desc { margin: 10px 0 14px; min-height: 4.8em; font-size: 0.94rem; line-height: 1.6; color: var(--color-text-soft); }
 .quest-card__desc--short { min-height: 3.2em; }
 
@@ -492,35 +563,11 @@ img { max-width: 100%; }
 }
 .contact__text { margin: 8px 0 18px; color: var(--color-text); }
 .contact__buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
-.contact__buttons .button { font-size: 1.1rem; padding: 12px 22px; }
+.contact__buttons .button { font-size: 1.1rem; padding: 12px 20px; }
 
-/* Email address with a copy button */
-.contact__email {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 18px;
-  padding: 6px 6px 6px 14px;
-  background: rgba(143, 187, 232, 0.07);
-  border: 1px solid var(--color-border);
-}
-.contact__address { font-weight: 600; letter-spacing: 0.01em; color: var(--color-text); user-select: all; }
-.contact__copy {
-  padding: 5px 12px;
-  font-family: var(--font-pixel);
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: var(--color-sky);
-  background: transparent;
-  border: 1px solid var(--color-sky);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.contact__copy:hover { background: var(--color-sky); color: #0b0922; }
+/* "Copy" turns green for a moment after copying */
+.contact__copy { cursor: pointer; }
 .contact__copy.is-copied { color: #0b0922; background: #9be3a8; border-color: #9be3a8; }
-
-.contact__alt { display: block; margin-top: 10px; font-size: 0.85rem; color: var(--color-muted); }
-.contact__alt:hover { color: var(--color-sky); }
 
 
 /* 9. Project pages ------------------------------------------------------- */
@@ -746,6 +793,9 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .hero__scene { object-position: 36% 100%; }
 }
 @media (max-width: 650px) {
+  .experience, .honor { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px 20px; }
+  .experience__logo { width: 72px; height: 72px; padding: 8px; }
+  .honor__icon { width: 64px; }
   .split, .split--reverse { flex-direction: column; }
   .split__media, .split__media--wide { width: 100%; }
   .image-pair { flex-direction: column; }
