@@ -167,6 +167,93 @@
         max-width: 100%;
       }
     }
+
+    /* Soil Node page layout */
+    .card-split-content.reverse { flex-direction: row-reverse; }
+    .card-image-wrapper.wide { max-width: 52%; }
+    .image-pair {
+      display: flex;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .image-pair figure {
+      flex: 1;
+      margin: 0;
+      text-align: center;
+    }
+    .image-pair img {
+      width: 100%;
+      height: 340px;
+      object-fit: contain;
+      background: rgba(1, 4, 9, 0.6);
+      border-radius: 8px;
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      display: block;
+    }
+    figcaption {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #8b949e;
+      font-style: italic;
+    }
+    .zoom-link { display: block; transition: opacity 0.2s; }
+    .zoom-link:hover { opacity: 0.85; }
+    .video-placeholder {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      border: 2px dashed rgba(121, 192, 255, 0.4);
+      border-radius: 8px;
+      background: rgba(1, 4, 9, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #8b949e;
+      margin-bottom: 18px;
+    }
+    .play-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 2px solid #79c0ff;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.7;
+    }
+    .play-icon::after {
+      content: "";
+      border-style: solid;
+      border-width: 12px 0 12px 20px;
+      border-color: transparent transparent transparent #79c0ff;
+      margin-left: 5px;
+    }
+    .demo-video { width: 100%; border-radius: 8px; margin-bottom: 18px; display: block; }
+    @media (max-width: 650px) {
+      .card-split-content.reverse { flex-direction: column; }
+      .card-image-wrapper.wide { max-width: 100%; }
+      .image-pair { flex-direction: column; }
+      .image-pair img { height: auto; max-height: 360px; }
+    }
+    .image-stack {
+      flex-shrink: 0;
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .image-stack figure { margin: 0; text-align: center; }
+    .image-stack figcaption { margin-top: 4px; }
+    .controller-img {
+      display: block;
+      max-width: 380px;
+      width: 100%;
+      margin: 0 auto 18px auto;
+      border-radius: 8px;
+      border: 1px solid rgba(48, 54, 61, 0.8);
+    }
+    @media (max-width: 650px) {
+      .image-stack { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -179,29 +266,55 @@
       <p class="subtitle">HackRU26 | Best Use of Presage Winner</p>
     </div>
 
+    <!-- Title screen (image left, blurb right) -->
     <div class="content-card">
-      <h2>Project Overview</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <h2>A Perfectly Normal Interview</h2>
+      <div class="card-split-content">
+        <div class="card-image-wrapper wide">
+          <a href="breathe/title-screen.jpg" target="_blank" class="zoom-link">
+            <img src="breathe/title-screen.jpg" alt="Breathe.exe title screen" class="project-img-side">
+          </a>
+        </div>
+        <p class="card-text">Breathe.exe is a horror game built at HackRU26 that plays out as a job interview. Instead of a keyboard alone, the game reads your body: a webcam measures your pulse, sensor gloves track your hands, and a microphone listens to your voice. Stay calm and the interview goes smoothly. Panic, and the game notices.</p>
+      </div>
     </div>
 
+    <!-- Blurb left, two interview images right -->
     <div class="content-card">
-      <h2>The Idea</h2>
+      <h2>Keep Your Composure</h2>
       <div class="card-split-content">
-        <p class="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <div class="card-image-wrapper">
-          <img src="placeholder.svg" alt="Placeholder image" class="project-img-side">
+        <p class="card-text">The interviewer, Mr. Vale, asks a series of questions while the game monitors your stress in real time. As long as your vitals stay steady, the office stays bright and ordinary. When your heart rate spikes or your hands start shaking, the room decays, Mr. Vale's face turns monstrous, and you're forced to restart the question. Our use of Presage's camera-based vital sensing to drive this mechanic won the Best Use of Presage award.</p>
+        <div class="image-stack">
+          <figure>
+            <a href="breathe/interview-normal.jpg" target="_blank" class="zoom-link">
+              <img src="breathe/interview-normal.jpg" alt="Interview, calm state" class="project-img-side">
+            </a>
+            <figcaption>Calm</figcaption>
+          </figure>
+          <figure>
+            <a href="breathe/interview-scary.jpg" target="_blank" class="zoom-link">
+              <img src="breathe/interview-scary.jpg" alt="Interview, panicked state" class="project-img-side">
+            </a>
+            <figcaption>Caught panicking</figcaption>
+          </figure>
         </div>
       </div>
     </div>
 
+    <!-- Controller: picture with blurb underneath -->
     <div class="content-card">
-      <h2>Tech Stack</h2>
-      <div class="card-split-content">
-        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <div class="card-image-wrapper">
-          <img src="placeholder.svg" alt="Placeholder image" class="project-img-side">
-        </div>
-      </div>
+      <h2>Controller</h2>
+      <a href="breathe/controller.jpeg" target="_blank" class="zoom-link">
+        <img src="breathe/controller.jpeg" alt="Breathe.exe sensor glove controllers" class="controller-img">
+      </a>
+      <p>The controllers are a pair of gloves fitted with sensors and a small breadboard circuit on the back of each hand. They stream hand movement to the game, so a shaky or tense grip feeds into the player's stress level alongside the webcam pulse reading and the microphone.</p>
+    </div>
+
+    <!-- Demo video -->
+    <div class="content-card">
+      <h2>Demo</h2>
+      <video src="breathe/breathe-demo.mp4" poster="breathe/breathe-demo-poster.jpg" class="demo-video" controls playsinline preload="metadata"></video>
+      <p>A full playthrough of Breathe.exe, showing the interview, the live stress readings, and what happens when the player loses their cool.</p>
     </div>
 
     <footer>
