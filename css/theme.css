@@ -8,7 +8,7 @@
      3. Base page + starry background
      4. Shared building blocks (panels, buttons, chips, framed images)
      5. Homepage: hero banner
-     6. Homepage: intro panel
+     6. Homepage: intro panel (6b: Guild Record / past experience)
      7. Homepage: Quest Log cards
      8. Homepage: contact scene
      9. Project pages
@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261025-1933") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1942") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261025-1933") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1942") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -305,6 +305,62 @@ img { max-width: 100%; }
 }
 .intro__label { display: block; margin-top: 10px; font-size: 0.85rem; color: var(--color-gold); }
 .intro p { margin: 0 0 14px; font-size: 1.05rem; line-height: 1.75; }
+
+
+/* 6b. Homepage: Guild Record (past experience) ----------------------------
+   Same width and style as the intro panel. */
+.experience-section { margin-bottom: 48px; }
+.experience {
+  max-width: 940px;
+  margin: 0 auto 20px;
+  padding: 24px 30px;
+}
+.experience__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 20px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 2px dashed var(--color-border);
+}
+.experience__role {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  color: var(--color-gold);
+}
+.experience__org { margin-top: 2px; font-size: 1.05rem; color: var(--color-sky); }
+.experience__dates {
+  padding: 3px 10px;
+  font-size: 0.95rem;
+  color: var(--color-rose);
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.experience__points { margin: 0; padding: 0; list-style: none; }
+.experience__points li {
+  position: relative;
+  margin-bottom: 10px;
+  padding-left: 22px;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+}
+.experience__points li:last-child { margin-bottom: 0; }
+/* small gold pixel diamond as the bullet */
+.experience__points li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  background: var(--color-gold);
+  transform: rotate(45deg);
+}
 
 
 /* 7. Homepage: Quest Log cards ------------------------------------------- */

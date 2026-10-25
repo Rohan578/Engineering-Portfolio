@@ -6,7 +6,7 @@ Push to `main` and the site updates in about a minute.
 ## Folder layout
 
 ```
-index.html                 Homepage: hero banner, intro, Quest Log cards, contact
+index.html                 Homepage: hero banner, intro, Guild Record (experience), Quest Log cards, contact
 soilnode.html              Soil Node project page
 ruhart-lidar-bot.html      RU HART: LiDAR bot
 ruhart-motor-driver.html   RU HART extension: motor driver
@@ -32,6 +32,9 @@ comment above it describing what it is.
 
 **Change colors or fonts** – edit the variables in section 2 of
 `css/theme.css` (e.g. `--color-gold`).
+
+**Add a job or internship** – in `index.html`, copy the `<article class="experience panel">`
+block inside the GUILD RECORD section and change the role, company, dates, and points.
 
 **Add a project card** – in `index.html`, copy one `<article class="quest-card panel">`
 block inside the Quest Log, change the tag, link, description, image, and skills.
