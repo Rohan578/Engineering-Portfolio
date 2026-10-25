@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subpage Overview | Rohan Shrivastava</title>
+  <title>RU-HART Motor Driver V1 | Rohan Shrivastava</title>
   <style>
     /* Starry Night Sky Background */
     body {
@@ -167,6 +167,73 @@
         max-width: 100%;
       }
     }
+
+    /* Soil Node page layout */
+    .card-split-content.reverse { flex-direction: row-reverse; }
+    .card-image-wrapper.wide { max-width: 52%; }
+    .image-pair {
+      display: flex;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .image-pair figure {
+      flex: 1;
+      margin: 0;
+      text-align: center;
+    }
+    .image-pair img {
+      width: 100%;
+      height: 340px;
+      object-fit: contain;
+      background: rgba(1, 4, 9, 0.6);
+      border-radius: 8px;
+      border: 1px solid rgba(48, 54, 61, 0.8);
+      display: block;
+    }
+    figcaption {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #8b949e;
+      font-style: italic;
+    }
+    .zoom-link { display: block; transition: opacity 0.2s; }
+    .zoom-link:hover { opacity: 0.85; }
+    .video-placeholder {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      border: 2px dashed rgba(121, 192, 255, 0.4);
+      border-radius: 8px;
+      background: rgba(1, 4, 9, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #8b949e;
+      margin-bottom: 18px;
+    }
+    .play-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 2px solid #79c0ff;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.7;
+    }
+    .play-icon::after {
+      content: "";
+      border-style: solid;
+      border-width: 12px 0 12px 20px;
+      border-color: transparent transparent transparent #79c0ff;
+      margin-left: 5px;
+    }
+    .demo-video { width: 100%; border-radius: 8px; margin-bottom: 18px; display: block; }
+    @media (max-width: 650px) {
+      .card-split-content.reverse { flex-direction: column; }
+      .card-image-wrapper.wide { max-width: 100%; }
+      .image-pair { flex-direction: column; }
+      .image-pair img { height: auto; max-height: 360px; }
+    }
   </style>
 </head>
 <body>
@@ -176,38 +243,29 @@
 
     <div class="header-section">
       <h1>RU-HART Motor Driver V1</h1>
-      <p class="subtitle">Hardware Overview & System Architecture</p>
+      <p class="subtitle">Tank-Drive Motor Controller</p>
     </div>
 
+    <!-- Proof of concept photo (left) + blurb (right) -->
     <div class="content-card">
-      <h2>Project Overview</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-
-    <div class="content-card">
-      <h2>Hardware & Architecture</h2>
+      <h2>Proof of Concept</h2>
       <div class="card-split-content">
-        <p class="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <div class="card-image-wrapper">
-          <img src="Motor Driver Official.png" alt="Motor Driver Official Diagram" class="project-img-side">
+        <div class="card-image-wrapper wide">
+          <a href="ruhart/motordriver-poc.jpeg" target="_blank" class="zoom-link">
+            <img src="ruhart/motordriver-poc.jpeg" alt="Motor driver proof of concept on a breadboard" class="project-img-side">
+          </a>
         </div>
+        <p class="card-text">Before designing a board, I built a breadboard proof of concept: a Raspberry Pi Pico driving a discrete MOSFET H-bridge, powered through a boost converter, spinning a small DC motor. This validated the switching circuit and the control logic, and showed the motor could be driven in both directions at variable speed.</p>
       </div>
     </div>
 
+    <!-- Schematic + blurb -->
     <div class="content-card">
-      <h2>Model/Demo</h2>
-      <div class="card-split-content">
-        <div class="card-text">
-          <ul>
-            <li><strong>Microcontroller:</strong> Dummy ESP32 / STM32 Module</li>
-            <li><strong>Communication:</strong> LoRa, Wi-Fi, and SPI Protocol</li>
-            <li><strong>Power Efficiency:</strong> Low-power sleep modes active</li>
-          </ul>
-        </div>
-        <div class="card-image-wrapper">
-          <img src="Demo mdriver.jpeg" alt="Motor Driver Demo" class="project-img-side">
-        </div>
-      </div>
+      <h2>Schematic</h2>
+      <a href="ruhart/motordriver-schematic.png" target="_blank" class="zoom-link">
+        <img src="ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic" class="project-img-side" style="margin-bottom:18px">
+      </a>
+      <p>The V1 schematic turns the proof of concept into a full tank-drive controller. An RP2040 handles control, and a dedicated gate driver switches power MOSFETs for each motor channel. An MCP2515 CAN controller with a CAN transceiver lets the board take commands over the robot's CAN bus. Onboard regulation provides the logic rails, and XT60 connectors handle battery and motor power.</p>
     </div>
 
     <footer>
