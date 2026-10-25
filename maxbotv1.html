@@ -234,6 +234,38 @@
       .image-pair { flex-direction: column; }
       .image-pair img { height: auto; max-height: 360px; }
     }
+    .pager {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0 26px 0;
+    }
+    .pager-btn {
+      padding: 9px 16px;
+      border: 1px solid #79c0ff;
+      border-radius: 8px;
+      color: #79c0ff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .pager-btn:hover {
+      text-decoration: none;
+      background: rgba(121, 192, 255, 0.12);
+      box-shadow: 0 0 12px rgba(121, 192, 255, 0.3);
+    }
+    .pager-btn.disabled { visibility: hidden; }
+    .pager > :first-child { justify-self: start; }
+    .pager > :last-child { justify-self: end; }
+    .pager-status { color: #8b949e; font-size: 0.9rem; text-align: center; }
+    .pager-dots { display: flex; gap: 6px; justify-content: center; margin-top: 4px; }
+    .pager-dots a {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: rgba(121, 192, 255, 0.25);
+      display: block;
+    }
+    .pager-dots a.active { background: #79c0ff; }
   </style>
 </head>
 <body>
@@ -245,6 +277,12 @@
       <h1>RU-HART Prototype Version 1</h1>
       <p class="subtitle">LiDAR Bot (Maxbot)</p>
     </div>
+
+    <nav class="pager" aria-label="RU HART pages">
+      <span class="pager-btn disabled">←</span>
+      <div class="pager-status">RU HART · Page 1 of 2<div class="pager-dots"><a href="maxbotv1.html" class="active" aria-label="Page 1"></a><a href="motordriver.html" class="" aria-label="Page 2"></a></div></div>
+      <a href="motordriver.html" class="pager-btn">Motor Driver →</a>
+    </nav>
 
     <!-- LiDAR bot photo (left) + blurb (right) -->
     <div class="content-card">
@@ -265,6 +303,12 @@
       <video src="ruhart/lidarbot-demo.mp4" poster="ruhart/lidarbot-demo-poster.jpg" class="demo-video" controls playsinline preload="metadata"></video>
       <p>The LiDAR bot running in the lab, scanning its environment and driving under its own control.</p>
     </div>
+
+    <nav class="pager" aria-label="RU HART pages">
+      <span class="pager-btn disabled">←</span>
+      <div class="pager-status">RU HART · Page 1 of 2<div class="pager-dots"><a href="maxbotv1.html" class="active" aria-label="Page 1"></a><a href="motordriver.html" class="" aria-label="Page 2"></a></div></div>
+      <a href="motordriver.html" class="pager-btn">Motor Driver →</a>
+    </nav>
 
     <footer>
       <p>Rohan Shrivastava | <a href="index.html">Return to Home</a></p>
