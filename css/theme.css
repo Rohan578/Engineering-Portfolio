@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261025-1923") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1933") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261025-1923") repeat;
+  background: url("../assets/starfield.svg?v=20261025-1933") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -318,11 +318,12 @@ img { max-width: 100%; }
 }
 .section-subtitle { margin: 0 0 32px; text-align: center; color: var(--color-muted); }
 
+/* Three cards per row; cards in the same row stretch to the same height */
 .quest-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 26px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .quest-card {
@@ -386,30 +387,6 @@ img { max-width: 100%; }
   text-align: center;
   color: var(--color-muted);
 }
-
-/* RU HART: "View the Motor Driver" extension. Sits above the card link so it can be clicked. */
-.quest-card__more { position: relative; z-index: 2; flex-shrink: 0; margin-top: 12px; }
-.quest-card__more summary {
-  padding: 8px;
-  list-style: none;
-  cursor: pointer;
-  text-align: center;
-  font-size: 0.95rem;
-  color: var(--color-sky);
-  border: 2px solid var(--color-border-soft);
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-.quest-card__more summary::-webkit-details-marker { display: none; }
-.quest-card__more summary:hover { border-color: var(--color-sky); background: rgba(143, 187, 232, 0.08); }
-.quest-card__more .arrow { display: inline-block; transition: transform 0.2s ease; }
-.quest-card__more[open] .arrow { transform: rotate(180deg); }
-.quest-card__more .when-open { display: none; }
-.quest-card__more[open] .when-open { display: inline; }
-.quest-card__more[open] .when-closed { display: none; }
-.quest-card__more-link { display: block; color: inherit; }
-.quest-card__more-link:hover { text-decoration: none; }
-.quest-card__more-link:hover .quest-card__image { border-color: var(--color-gold); }
-
 
 /* 8. Homepage: contact scene -------------------------------------------- */
 .contact {

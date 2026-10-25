@@ -6,7 +6,7 @@
   <title>Rohan Shrivastava | Engineering Portfolio</title>
   <meta name="description" content="Engineering portfolio of Rohan Shrivastava, Electrical &amp; Computer Engineering student at Rutgers: hardware design, embedded systems, and robotics.">
   <link rel="preload" href="fonts/pixelify-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/theme.css?v=20261025-1923">
+  <link rel="stylesheet" href="css/theme.css?v=20261025-1933">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
        tools/generate_art.py and run it (see README.md).
        =================================================================== -->
   <header class="hero">
-    <img class="hero__scene" src="assets/hero-scene.svg?v=20261025-1923"
+    <img class="hero__scene" src="assets/hero-scene.svg?v=20261025-1933"
          alt="Pixel art of an armored hero sitting on a cliff above the ocean at night, looking up at the stars and a crescent moon">
 
     <div class="hero__title">
@@ -47,31 +47,22 @@
 
     <!-- ===================================================================
          QUEST LOG (projects)
-         Each card: tag, title link (makes the whole card clickable),
-         description, image, skills. To add a project, copy a card.
+         Three cards per row. Each card: tag, title link (makes the whole
+         card clickable), description, image, skills. To add a project,
+         copy a card; it fills the next open spot in the grid.
          =================================================================== -->
     <section class="quests">
       <h2 class="section-title">Quest Log</h2>
       <p class="section-subtitle">Engineering Projects &amp; Technical Work</p>
 
       <div class="quest-grid">
-        <!-- Quest I: RU HART (LiDAR bot, with an expandable extension for the motor driver) -->
+        <!-- Quest I: RU HART LiDAR bot -->
         <article class="quest-card panel">
           <span class="quest-card__tag pixel">Quest I · Team Quest</span>
           <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-lidar-bot.html">RU HART</a></h3>
           <h4 class="quest-card__subtitle">LiDAR Mapping Bot (Maxbot)</h4>
           <p class="quest-card__desc">Co-developed a LiDAR mapping robot that maps an enclosed space and streams its relative outline to a web server.</p>
           <div class="quest-card__image"><img src="media/ruhart/lidarbot.jpeg" alt="RU-HART LiDAR bot"></div>
-
-          <details class="quest-card__more">
-            <summary class="pixel"><span class="arrow" aria-hidden="true">▾</span> <span class="when-closed">View the Motor Driver</span><span class="when-open">Hide the Motor Driver</span></summary>
-            <a class="quest-card__more-link" href="ruhart-motor-driver.html">
-              <h4 class="quest-card__subtitle">RU-HART Motor Driver V1</h4>
-              <p class="quest-card__desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
-              <div class="quest-card__image"><img src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
-            </a>
-          </details>
-
           <span class="quest-card__skills-label">Skills Used</span>
           <div class="chip-list">
             <span class="chip">HTML</span>
@@ -83,9 +74,6 @@
             <span class="chip">ESP-NOW</span>
             <span class="chip">Embedded C++</span>
             <span class="chip">I²C</span>
-            <span class="chip">SPI</span>
-            <span class="chip">RP2040</span>
-            <span class="chip">RP2350</span>
             <span class="chip">Git / GitHub</span>
           </div>
         </article>
@@ -114,9 +102,27 @@
           </div>
         </article>
 
-        <!-- Quest III: Soil Node -->
+        <!-- Quest III: RU HART motor driver -->
         <article class="quest-card panel">
-          <span class="quest-card__tag pixel">Quest III · In Progress</span>
+          <span class="quest-card__tag pixel">Quest III · Team Quest</span>
+          <h3 class="quest-card__title"><a class="quest-card__link" href="ruhart-motor-driver.html">RU HART</a></h3>
+          <h4 class="quest-card__subtitle">Motor Driver V1</h4>
+          <p class="quest-card__desc">Developed a custom motor driver capable of driving two motors synchronously at 20&nbsp;A and 12&nbsp;V using the DRV8701 and RP2040.</p>
+          <div class="quest-card__image"><img src="media/ruhart/motordriver-schematic.png" alt="RU-HART motor driver schematic"></div>
+          <span class="quest-card__skills-label">Skills Used</span>
+          <div class="chip-list">
+            <span class="chip">RP2040</span>
+            <span class="chip">RP2350</span>
+            <span class="chip">SPI</span>
+            <span class="chip">KiCad</span>
+            <span class="chip">Arduino IDE</span>
+            <span class="chip">Git / GitHub</span>
+          </div>
+        </article>
+
+        <!-- Quest IV: Soil Node (second row, under the LiDAR bot) -->
+        <article class="quest-card panel">
+          <span class="quest-card__tag pixel">Quest IV · In Progress</span>
           <h3 class="quest-card__title"><a class="quest-card__link" href="soilnode.html">Soil Node</a></h3>
           <p class="quest-card__desc">Developed a battery-powered IoT device that monitors soil moisture, along with environmental temperature and humidity, to help your plants grow.</p>
           <div class="quest-card__image"><img src="media/soilnode/pcb-3d-view.png" alt="Soil Node PCB 3D view"></div>
@@ -146,7 +152,7 @@
        address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261025-1923"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261025-1933"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -169,6 +175,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261025-1923"></script>
+  <script src="js/main.js?v=20261025-1933"></script>
 </body>
 </html>
