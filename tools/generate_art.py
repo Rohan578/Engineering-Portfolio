@@ -63,7 +63,7 @@ GRASS = {"top": "#2f7d4a", "mid": "#235f3a", "dark": "#1a462c", "blade": "#3f9a5
 # The hero. Each letter below is a color; "." is transparent.
 # He sits on the cliff edge facing the sea (right), head tilted up at the moon.
 # Curly dark hair + sunglasses (Rohan), steel plate armor with gold trim,
-# a red cape draped on the grass behind him, armored legs over the edge.
+# a violet cape draped on the grass behind him, armored legs over the edge.
 HERO = [
     "....hHH.Hh.H........",
     "...HHhHHHHhHH.......",
@@ -97,7 +97,7 @@ HERO_PALETTE = {
     "L": "#eef3ff",                   # armor highlight (moonlight)
     "P": "#9aa6c2",                   # pauldron (shoulder plate)
     "T": "#e0b65a",                   # gold trim
-    "C": "#b8323f", "c": "#7e1f2b",   # red cape + shadow
+    "C": "#7b3fc4", "c": "#4e2585",   # violet cape + shadow
     "K": "#5a3a1c", "k": "#3d2612",   # leather belt / boots
 }
 HERO_SEAT_ROW = 17     # sprite row that sits level with the grass

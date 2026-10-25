@@ -8,25 +8,16 @@
 </head>
 <body>
   <main class="project">
-    <a class="back-link" href="index.html">← Back to the Quest Log</a>
+    <!-- This page extends the RU HART LiDAR bot page -->
+    <nav class="breadcrumbs">
+      <a class="back-link" href="index.html">← Back to the Quest Log</a>
+      <a class="back-link" href="ruhart-lidar-bot.html">← RU HART LiDAR Bot</a>
+    </nav>
 
     <header class="project__header">
       <h1 class="project__title">RU-HART Motor Driver V1</h1>
-      <p class="project__subtitle">Tank-Drive Motor Controller</p>
+      <p class="project__subtitle">Tank-Drive Motor Controller · RU HART Extension</p>
     </header>
-
-    <!-- RU HART page switcher (page 2 of 2) -->
-    <nav class="pager" aria-label="RU HART pages">
-      <a class="button pager__prev" href="ruhart-lidar-bot.html">← LiDAR Bot</a>
-      <div class="pager__status">
-        RU HART · Page 2 of 2
-        <div class="pager__dots">
-          <a href="ruhart-lidar-bot.html" aria-label="Page 1: LiDAR Bot"></a>
-          <a href="ruhart-motor-driver.html" aria-current="page" aria-label="Page 2: Motor Driver"></a>
-        </div>
-      </div>
-      <span class="pager__next"></span>
-    </nav>
 
     <!-- Proof of concept: photo left, text right -->
     <section class="section panel">
@@ -47,13 +38,6 @@
       </a>
       <p>The V1 schematic turns the proof of concept into a full tank-drive controller. An RP2040 handles control, and a dedicated gate driver switches power MOSFETs for each motor channel. An MCP2515 CAN controller with a CAN transceiver lets the board take commands over the robot's CAN bus. Onboard regulation provides the logic rails, and XT60 connectors handle battery and motor power.</p>
     </section>
-
-    <!-- page switcher again at the bottom -->
-    <nav class="pager" aria-label="RU HART pages">
-      <a class="button pager__prev" href="ruhart-lidar-bot.html">← LiDAR Bot</a>
-      <div class="pager__status">RU HART · Page 2 of 2</div>
-      <span class="pager__next"></span>
-    </nav>
 
     <footer class="project__footer">Rohan Shrivastava | <a href="index.html">Return to Home</a></footer>
   </main>

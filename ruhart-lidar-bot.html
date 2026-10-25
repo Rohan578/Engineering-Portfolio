@@ -12,21 +12,8 @@
 
     <header class="project__header">
       <h1 class="project__title">RU-HART Prototype Version 1</h1>
-      <p class="project__subtitle">LiDAR Bot (Maxbot)</p>
+      <p class="project__subtitle">LiDAR Mapping Bot (Maxbot)</p>
     </header>
-
-    <!-- RU HART page switcher (page 1 of 2) -->
-    <nav class="pager" aria-label="RU HART pages">
-      <span class="pager__prev"></span>
-      <div class="pager__status">
-        RU HART · Page 1 of 2
-        <div class="pager__dots">
-          <a href="ruhart-lidar-bot.html" aria-current="page" aria-label="Page 1: LiDAR Bot"></a>
-          <a href="ruhart-motor-driver.html" aria-label="Page 2: Motor Driver"></a>
-        </div>
-      </div>
-      <a class="button pager__next" href="ruhart-motor-driver.html">Motor Driver →</a>
-    </nav>
 
     <!-- LiDAR bot: photo left, text right -->
     <section class="section panel">
@@ -46,12 +33,16 @@
       <p>The LiDAR bot running in the lab, scanning its environment and driving under its own control.</p>
     </section>
 
-    <!-- page switcher again at the bottom -->
-    <nav class="pager" aria-label="RU HART pages">
-      <span class="pager__prev"></span>
-      <div class="pager__status">RU HART · Page 1 of 2</div>
-      <a class="button pager__next" href="ruhart-motor-driver.html">Motor Driver →</a>
-    </nav>
+    <!-- Extension: link to the motor driver built for this robot -->
+    <a class="extension panel" href="ruhart-motor-driver.html">
+      <img class="extension__thumb" src="media/ruhart/motordriver-schematic.png" alt="">
+      <span>
+        <span class="extension__label">RU HART · Extension</span>
+        <span class="extension__title">Motor Driver V1</span>
+        <span class="extension__text">The custom 20&nbsp;A, 12&nbsp;V tank-drive controller designed for this robot, built around the DRV8701 and RP2040.</span>
+        <span class="extension__cta">View the Motor Driver →</span>
+      </span>
+    </a>
 
     <footer class="project__footer">Rohan Shrivastava | <a href="index.html">Return to Home</a></footer>
   </main>

@@ -3,7 +3,8 @@
  *
  * Equal-height Quest Log cards:
  * The three cards should line up at the same height. The RU HART card has a
- * "Page 2" section that expands, and only that card should grow when it does.
+ * "View the Motor Driver" extension that expands, and only that card should
+ * grow when it does.
  * So we measure the cards with every expander closed, set that height as each
  * card's minimum, then restore any expanders the visitor had open.
  */

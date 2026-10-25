@@ -12,7 +12,7 @@
      7. Homepage: Quest Log cards
      8. Homepage: contact footer
      9. Project pages
-    10. RU HART page switcher
+    10. RU HART extension link
     11. Responsive layout
     12. Reduced motion
 
@@ -333,7 +333,6 @@ img { max-width: 100%; }
   line-height: 1.3;
   color: var(--color-text);
 }
-.quest-card__page { display: block; font-size: 0.75rem; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; }
 .quest-card__award { font-size: 0.9rem; color: var(--color-sky); }
 .quest-card__desc { margin: 10px 0 14px; min-height: 4.8em; font-size: 0.94rem; line-height: 1.6; color: var(--color-text-soft); }
 .quest-card__desc--short { min-height: 3.2em; }
@@ -363,7 +362,7 @@ img { max-width: 100%; }
   color: var(--color-muted);
 }
 
-/* RU HART: "Page 2" expander. Sits above the card link so it can be clicked. */
+/* RU HART: "View the Motor Driver" extension. Sits above the card link so it can be clicked. */
 .quest-card__more { position: relative; z-index: 2; flex-shrink: 0; margin-top: 12px; }
 .quest-card__more summary {
   padding: 8px;
@@ -379,6 +378,9 @@ img { max-width: 100%; }
 .quest-card__more summary:hover { border-color: var(--color-sky); background: rgba(143, 187, 232, 0.08); }
 .quest-card__more .arrow { display: inline-block; transition: transform 0.2s ease; }
 .quest-card__more[open] .arrow { transform: rotate(180deg); }
+.quest-card__more .when-open { display: none; }
+.quest-card__more[open] .when-open { display: inline; }
+.quest-card__more[open] .when-closed { display: none; }
 .quest-card__more-link { display: block; color: inherit; }
 .quest-card__more-link:hover { text-decoration: none; }
 .quest-card__more-link:hover .quest-card__image { border-color: var(--color-gold); }
@@ -497,20 +499,34 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 }
 
 
-/* 10. RU HART page switcher ---------------------------------------------- */
-.pager {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+/* 10. RU HART extension link -------------------------------------------
+   On the LiDAR bot page, a card that leads to the motor driver page. */
+.extension {
+  display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 6px 0 30px;
+  gap: 22px;
+  margin-bottom: 28px;
+  padding: 18px 22px;
+  color: inherit;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
-.pager__prev { justify-self: start; }
-.pager__next { justify-self: end; }
-.pager__status { font-family: var(--font-pixel); font-weight: 500; font-size: 0.95rem; text-align: center; color: var(--color-muted); }
-.pager__dots { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }
-.pager__dots a { display: block; width: 10px; height: 10px; background: var(--color-border); }
-.pager__dots a[aria-current="page"] { background: var(--color-gold); }
+.extension:hover { border-color: var(--color-gold); transform: translateY(-3px); text-decoration: none; }
+.extension__thumb {
+  flex-shrink: 0;
+  width: 180px;
+  height: 120px;
+  object-fit: contain;
+  background: var(--color-image-bg);
+  border: 2px solid var(--color-border-soft);
+}
+.extension__label { display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-rose); }
+.extension__title { display: block; margin: 2px 0 6px; font-family: var(--font-pixel); font-weight: 700; font-size: 1.35rem; color: var(--color-gold); }
+.extension__text { display: block; color: var(--color-text-soft); }
+.extension__cta { display: inline-block; margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; color: var(--color-sky); }
+
+/* Breadcrumb row of back links at the top of a project page */
+.breadcrumbs { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 26px; }
+.breadcrumbs .back-link { margin-bottom: 0; }
 
 
 /* 11. Responsive layout --------------------------------------------------- */
@@ -528,8 +544,8 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .split__media, .split__media--wide { width: 100%; }
   .image-pair { flex-direction: column; }
   .image-pair .framed { height: auto; max-height: 360px; }
-  .pager { grid-template-columns: 1fr 1fr; }
-  .pager__status { grid-column: 1 / -1; grid-row: 1; }
+  .extension { flex-direction: column; text-align: center; }
+  .extension__thumb { width: 100%; height: 160px; }
 }
 
 
