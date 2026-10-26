@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261025-2010") repeat;
+  background: url("../assets/starfield.svg?v=20261025-2028") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261025-2010") repeat;
+  background: url("../assets/starfield.svg?v=20261025-2028") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -529,6 +529,9 @@ img { max-width: 100%; }
   border: 2px solid var(--color-border-soft);
 }
 .post-card__image img { display: block; max-width: 100%; max-height: 100%; }
+/* white background for logos made for light pages */
+.post-card__image--light { background: #ffffff; }
+.post-card__image--light img { max-height: 70%; }
 .post-card__cta { margin-top: auto; font-size: 1.05rem; color: var(--color-sky); }
 .post-card:hover .post-card__cta { color: var(--color-gold); }
 /* the "See all my posts" card: centered */
