@@ -6,7 +6,8 @@ Push to `main` and the site updates in about a minute.
 ## Folder layout
 
 ```
-index.html                 Homepage: hero banner, intro, Guild Record (experience), Quest Log cards, contact
+index.html                 Homepage: banner, intro, Guild Record (experience), Hall of Honors (awards),
+                           Quest Log (projects), Chronicles (LinkedIn posts), contact
 soilnode.html              Soil Node project page
 ruhart-lidar-bot.html      RU HART: LiDAR bot
 ruhart-motor-driver.html   RU HART extension: motor driver
@@ -35,6 +36,11 @@ comment above it describing what it is.
 
 **Add a job or internship** – in `index.html`, copy the `<article class="experience panel">`
 block inside the GUILD RECORD section and change the role, company, dates, and points.
+
+**Add a LinkedIn post** – in `index.html`, copy one `<article class="post-card panel">`
+block in the CHRONICLES section (above the "See All My Posts" card) and change
+the link, date, title, excerpt, and image. Get the link from the post's "..."
+menu → "Copy link to post".
 
 **Add a project card** – in `index.html`, copy one `<article class="quest-card panel">`
 block inside the Quest Log, change the tag, link, description, image, and skills.

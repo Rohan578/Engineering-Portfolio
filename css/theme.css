@@ -9,7 +9,7 @@
      4. Shared building blocks (panels, buttons, chips, framed images)
      5. Homepage: hero banner
      6. Homepage: intro panel (6b: Guild Record, 6c: Hall of Honors)
-     7. Homepage: Quest Log cards
+     7. Homepage: Quest Log cards (7b: Chronicles / LinkedIn posts)
      8. Homepage: contact scene
      9. Project pages
     10. RU HART extension link
@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261025-1957") repeat;
+  background: url("../assets/starfield.svg?v=20261025-2003") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261025-1957") repeat;
+  background: url("../assets/starfield.svg?v=20261025-2003") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -515,6 +515,72 @@ img { max-width: 100%; }
   color: var(--color-muted);
 }
 
+/* 7b. Homepage: Chronicles (LinkedIn posts) ------------------------------
+   Same three-per-row grid and card style as the Quest Log. The title link
+   stretches over the whole card, so clicking anywhere opens the post. */
+.posts-section { margin-top: 64px; }
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  align-items: stretch;
+}
+.post-card {
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.post-card:hover { border-color: var(--color-gold); transform: translateY(-4px); }
+.post-card__meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+/* small square "in" badge in LinkedIn blue */
+.post-card__badge {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: #0a66c2;
+  clip-path: var(--pixel-corners);
+}
+.post-card__badge--big { width: 56px; height: 56px; font-size: 1.8rem; margin: 6px auto 12px; }
+.post-card__date { font-size: 0.95rem; color: var(--color-rose); }
+.post-card__title {
+  margin: 0 0 8px;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.25;
+  color: var(--color-gold);
+}
+.post-card__link { color: inherit; }
+.post-card__link:hover { text-decoration: none; }
+.post-card__link::after { content: ""; position: absolute; inset: 0; }
+.post-card__link:focus-visible { outline: none; }
+.post-card__link:focus-visible::after { outline: 2px solid var(--color-gold); outline-offset: -6px; }
+.post-card__excerpt { margin: 0 0 14px; font-size: 0.94rem; line-height: 1.6; color: var(--color-text-soft); }
+.post-card__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 180px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  background: var(--color-image-bg);
+  border: 2px solid var(--color-border-soft);
+}
+.post-card__image img { display: block; max-width: 100%; max-height: 100%; }
+.post-card__cta { margin-top: auto; font-size: 1.05rem; color: var(--color-sky); }
+.post-card:hover .post-card__cta { color: var(--color-gold); }
+/* the "See all my posts" card: centered */
+.post-card--all { justify-content: center; text-align: center; }
+.post-card--all .post-card__cta { margin-top: 4px; }
+
+
 /* 8. Homepage: contact scene -------------------------------------------- */
 .contact {
   position: relative;
@@ -766,7 +832,7 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 
 /* 11. Responsive layout --------------------------------------------------- */
 @media (max-width: 900px) {
-  .quest-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+  .quest-grid, .post-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
   .quest-card__desc { min-height: 0; }
   .intro { flex-direction: column; text-align: center; }
 }
