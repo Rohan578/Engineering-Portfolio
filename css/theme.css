@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261025-2028") repeat;
+  background: url("../assets/starfield.svg?v=20261026-0028") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261025-2028") repeat;
+  background: url("../assets/starfield.svg?v=20261026-0028") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -473,7 +473,7 @@ img { max-width: 100%; }
 /* 7b. Homepage: Chronicles (LinkedIn posts) ------------------------------
    Same three-per-row grid and card style as the Quest Log. The title link
    stretches over the whole card, so clicking anywhere opens the post. */
-.posts-section { margin-bottom: 48px; }
+.posts-section { margin-top: 64px; }
 .post-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -529,6 +529,19 @@ img { max-width: 100%; }
   border: 2px solid var(--color-border-soft);
 }
 .post-card__image img { display: block; max-width: 100%; max-height: 100%; }
+/* events without a LinkedIn post: not clickable, gold star badge */
+.post-card--event { cursor: default; }
+.post-card--event:hover { transform: none; border-color: var(--color-border); }
+.post-card__badge--event { color: #14102e; background: var(--color-gold); font-size: 0.85rem; }
+/* "photo coming soon" placeholder until a real image is added */
+.post-card__image--placeholder {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  border-style: dashed;
+  background:
+    repeating-linear-gradient(45deg, rgba(59, 52, 112, 0.18) 0 8px, transparent 8px 16px),
+    var(--color-image-bg);
+}
 /* white background for logos made for light pages */
 .post-card__image--light { background: #ffffff; }
 .post-card__image--light img { max-height: 70%; }
