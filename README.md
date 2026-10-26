@@ -6,8 +6,8 @@ Push to `main` and the site updates in about a minute.
 ## Folder layout
 
 ```
-index.html                 Homepage: banner, intro, Guild Record (experience), Hall of Honors (awards),
-                           Quest Log (projects), Chronicles (LinkedIn posts), contact
+index.html                 Homepage: banner, intro, Guild Record (experience),
+                           Chronicles (LinkedIn posts), Quest Log (projects), contact
 soilnode.html              Soil Node project page
 ruhart-lidar-bot.html      RU HART: LiDAR bot
 ruhart-motor-driver.html   RU HART extension: motor driver
@@ -94,5 +94,5 @@ layout (horizon, cliff, moon position) is in the constants above its
 ## Contact links
 
 The contact section is the same block at the bottom of every page (search for
-CONTACT). The "Email Me" button opens a Gmail draft addressed to me; "Copy" copies the address; the small
-"another mail app" link is a regular `mailto:` link.
+CONTACT). "Email Me" opens a Gmail draft addressed to me, "LinkedIn" opens my
+profile, and "Copy Email" (next to the typed-out address) copies the address.

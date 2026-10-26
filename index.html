@@ -6,7 +6,7 @@
   <title>Rohan Shrivastava | Engineering Portfolio</title>
   <meta name="description" content="Engineering portfolio of Rohan Shrivastava, Electrical &amp; Computer Engineering student at Rutgers: hardware design, embedded systems, and robotics.">
   <link rel="preload" href="fonts/pixelify-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/theme.css?v=20261025-2003">
+  <link rel="stylesheet" href="css/theme.css?v=20261025-2010">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
        tools/generate_art.py and run it (see README.md).
        =================================================================== -->
   <header class="hero">
-    <img class="hero__scene" src="assets/hero-scene.svg?v=20261025-2003"
+    <img class="hero__scene" src="assets/hero-scene.svg?v=20261025-2010"
          alt="Pixel art of an armored hero sitting on a cliff above the ocean at night, looking up at the stars and a crescent moon">
 
     <div class="hero__title">
@@ -75,28 +75,44 @@
 
 
     <!-- ===================================================================
-         HALL OF HONORS (awards)
-         Each award is a link: clicking anywhere on it opens the post.
-         Put the LinkedIn post's URL in the href below.
+         CHRONICLES (LinkedIn posts)
+         One <article class="post-card panel"> per post, newest first,
+         three per row. To add a post: copy a card, then change the link
+         (open the post on LinkedIn → "..." menu → "Copy link to post"),
+         the date, the title, the short excerpt, and optionally the image.
+         Clicking anywhere on a card opens the post in a new tab.
          =================================================================== -->
-    <section class="honors-section">
-      <h2 class="section-title">Hall of Honors</h2>
-      <p class="section-subtitle">Awards &amp; Recognition</p>
+    <section class="posts-section">
+      <h2 class="section-title">Chronicles</h2>
+      <p class="section-subtitle">Latest Posts on LinkedIn</p>
 
-      <a class="honor panel" href="https://www.linkedin.com/in/rohan-shrivastava456/recent-activity/all/" target="_blank" rel="noopener">
-        <img class="honor__icon" src="assets/trophy.svg?v=20261025-2003" alt="">
-        <span class="honor__body">
-          <span class="honor__header">
-            <span>
-              <span class="honor__title">Best Use of Presage</span>
-              <span class="honor__event pixel">HackRU Fall 2026</span>
-            </span>
-            <span class="honor__date pixel">October 2026</span>
-          </span>
-          <span class="honor__text">Won with Breathe.exe, an interview simulator disguised as a horror game that uses Presage’s camera-based vital sensing to react to the player’s stress in real time.</span>
-          <span class="honor__cta pixel">View the LinkedIn post →</span>
-        </span>
-      </a>
+      <div class="post-grid">
+
+        <!-- Post: HackRU Fall 2026 win -->
+        <article class="post-card panel">
+          <div class="post-card__meta">
+            <span class="post-card__badge">in</span>
+            <time class="post-card__date pixel" datetime="2026-10">October 2026</time>
+          </div>
+          <h3 class="post-card__title">
+            <a class="post-card__link" href="https://www.linkedin.com/in/rohan-shrivastava456/recent-activity/all/" target="_blank" rel="noopener">Best Use of Presage at HackRU Fall 2026</a>
+          </h3>
+          <p class="post-card__excerpt">Our team won Best Use of Presage with Breathe.exe, an interview simulator disguised as a horror game, built in 24 hours with custom glove controllers and live biometric stress tracking.</p>
+          <div class="post-card__image"><img src="media/breathe/title-screen.jpg" alt="Breathe.exe title screen"></div>
+          <span class="post-card__cta pixel">Read on LinkedIn →</span>
+        </article>
+
+        <!-- Always last: link to every post -->
+        <article class="post-card post-card--all panel">
+          <span class="post-card__badge post-card__badge--big">in</span>
+          <h3 class="post-card__title">
+            <a class="post-card__link" href="https://www.linkedin.com/in/rohan-shrivastava456/recent-activity/all/" target="_blank" rel="noopener">See All My Posts</a>
+          </h3>
+          <p class="post-card__excerpt">Project updates, hackathons, and what I’m building next.</p>
+          <span class="post-card__cta pixel">Follow along on LinkedIn →</span>
+        </article>
+
+      </div>
     </section>
 
 
@@ -203,46 +219,6 @@
     </section>
 
 
-    <!-- ===================================================================
-         CHRONICLES (LinkedIn posts)
-         One <article class="post-card panel"> per post, newest first,
-         three per row. To add a post: copy a card, then change the link
-         (open the post on LinkedIn → "..." menu → "Copy link to post"),
-         the date, the title, the short excerpt, and optionally the image.
-         Clicking anywhere on a card opens the post in a new tab.
-         =================================================================== -->
-    <section class="posts-section">
-      <h2 class="section-title">Chronicles</h2>
-      <p class="section-subtitle">Latest Posts on LinkedIn</p>
-
-      <div class="post-grid">
-
-        <!-- Post: HackRU Fall 2026 win -->
-        <article class="post-card panel">
-          <div class="post-card__meta">
-            <span class="post-card__badge">in</span>
-            <time class="post-card__date pixel" datetime="2026-10">October 2026</time>
-          </div>
-          <h3 class="post-card__title">
-            <a class="post-card__link" href="https://www.linkedin.com/in/rohan-shrivastava456/recent-activity/all/" target="_blank" rel="noopener">Best Use of Presage at HackRU Fall 2026</a>
-          </h3>
-          <p class="post-card__excerpt">Our team won Best Use of Presage with Breathe.exe, an interview simulator disguised as a horror game, built in 24 hours with custom glove controllers and live biometric stress tracking.</p>
-          <div class="post-card__image"><img src="media/breathe/title-screen.jpg" alt="Breathe.exe title screen"></div>
-          <span class="post-card__cta pixel">Read on LinkedIn →</span>
-        </article>
-
-        <!-- Always last: link to every post -->
-        <article class="post-card post-card--all panel">
-          <span class="post-card__badge post-card__badge--big">in</span>
-          <h3 class="post-card__title">
-            <a class="post-card__link" href="https://www.linkedin.com/in/rohan-shrivastava456/recent-activity/all/" target="_blank" rel="noopener">See All My Posts</a>
-          </h3>
-          <p class="post-card__excerpt">Project updates, hackathons, and what I’m building next.</p>
-          <span class="post-card__cta pixel">Follow along on LinkedIn →</span>
-        </article>
-
-      </div>
-    </section>
 
   </main>
 
@@ -255,7 +231,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261025-2003"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261025-2010"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -266,13 +242,17 @@
         <a class="button button--solid"
            href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=srohanshri@gmail.com"
            target="_blank" rel="noopener">✉ Email Me</a>
-        <button class="button contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy Email</button>
         <a class="button" href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <div class="contact__email">
+        <span class="contact__address">srohanshri@gmail.com</span>
+        <button class="contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy Email</button>
       </div>
       <span class="visually-hidden" id="copy-status" aria-live="polite"></span>
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261025-2003"></script>
+  <script src="js/main.js?v=20261025-2010"></script>
 </body>
 </html>
