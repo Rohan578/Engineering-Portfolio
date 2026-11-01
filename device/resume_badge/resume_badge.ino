@@ -52,7 +52,10 @@ const int           BOOT_BUTTON_PIN = 28;
 const unsigned long HOLD_TIME_MS    = 5000;
 
 const int SD_MISO = 8, SD_SCK = 6, SD_MOSI = 1, SD_CS = 0;
-const uint32_t SD_SPI_HZ = 20000000;
+// The SD card shares SPI with the screen. 4 MHz is the library default and is
+// reliable on breadboard wiring; faster clocks caused read errors that made the
+// card "disappear". Raise it (e.g. 10000000) only with short, solid wiring.
+const uint32_t SD_SPI_HZ = 4000000;
 #define TFT_CS  9
 #define TFT_DC  10
 #define TFT_RST 23
@@ -154,7 +157,16 @@ unsigned long lastFrame = 0, lastFlip = 0;
 const unsigned long FRAME_MS = 60;
 const int NUM_PAGES = 7;
 
-const char* currentImage = nullptr;    // scene on screen (used to repaint behind the shooting star)
+const char* currentImage = nullptr;    // scene on screen
+
+// The sky band of the current scene, kept in RAM so the shooting star can be
+// erased without touching the SD card during animation (no SD reads per frame).
+const int SKY_TOP = 16, SKY_ROWS = 144;  // rows 16-159, where shooting stars fly
+uint16_t* skyCache = nullptr;            // SKY_ROWS x 240 pixels (69 KB)
+bool skyValid = false;
+unsigned long lastRetry = 0;             // retry timer after an SD error
+
+bool remountSD();                        // defined in section 5, used by the web server
 
 // Animated pixels loaded from a scene's .anm file
 const int MAX_ANIM = 320;              // keep in sync with tools/device_art.py
@@ -184,6 +196,7 @@ const char* mimeFor(const String& path) {
 void sendSDFile(const char* path, bool cacheable) {
   if (!sdReady) { webServer.send(503, "text/plain", "SD card not mounted."); return; }
   File file = SD.open(path, FILE_READ);
+  if (!file && remountSD()) file = SD.open(path, FILE_READ);   // recover from an SD error
   if (!file) { webServer.send(404, "text/plain", "File not found on SD."); return; }
   const char* type = mimeFor(path);
   size_t size = file.size();
@@ -236,43 +249,62 @@ void handleOther() {                         // /web/* from SD, anything else ->
    ===================================================================== */
 static uint16_t blitBuf[240 * 8];            // 8 rows at a time (3.8 KB)
 
-// Draw a 240x320 .565 image. The SD card and screen share SPI, so each chunk
-// is read first, then written (never both at once).
-bool drawScene(const char* path) {
-  if (!sdReady || !path) return false;
+// Restart the SD card after an error (the card can get stuck after a bad read).
+bool remountSD() {
+  SD.end();
+  delay(20);
+  sdReady = SD.begin(SD_CS, SPI, SD_SPI_HZ);
+  Serial.println(sdReady ? "SD remounted." : "SD remount failed.");
+  return sdReady;
+}
+
+// One attempt at drawing a 240x320 .565 image. The SD card and screen share
+// SPI, so each chunk is read first, then written (never both at once).
+bool drawSceneOnce(const char* path) {
   File f = SD.open(path, FILE_READ);
   if (!f || f.size() != 240UL * 320 * 2) { if (f) f.close(); return false; }
   for (int y = 0; y < 320; y += 8) {
-    f.read((uint8_t*)blitBuf, sizeof(blitBuf));
+    if (f.read((uint8_t*)blitBuf, sizeof(blitBuf)) != (int)sizeof(blitBuf)) { f.close(); return false; }
     tft.startWrite();
     tft.setAddrWindow(0, y, 240, 8);
     tft.writePixels(blitBuf, 240 * 8);
     tft.endWrite();
+    if (skyCache) {                            // keep a copy of the sky rows
+      for (int r = 0; r < 8; r++) {
+        int row = y + r - SKY_TOP;
+        if (row >= 0 && row < SKY_ROWS) memcpy(skyCache + row * 240, blitBuf + r * 240, 480);
+      }
+    }
   }
   f.close();
-  currentImage = path;
   return true;
 }
 
-// Repaint one rectangle of the current scene from SD (erases the shooting star).
+// Draw a scene; if the SD card errors, remount it and try once more.
+bool drawScene(const char* path) {
+  skyValid = false;
+  currentImage = nullptr;
+  if (!path) return false;
+  bool ok = sdReady && drawSceneOnce(path);
+  if (!ok && remountSD()) ok = drawSceneOnce(path);
+  if (ok) { currentImage = path; skyValid = (skyCache != nullptr); }
+  return ok;
+}
+
+// Repaint a rectangle of the sky from RAM (erases the shooting star).
 void restoreRect(int x, int y, int w, int h) {
-  if (!currentImage || !sdReady) return;
+  if (!skyValid) return;
   if (x < 0) { w += x; x = 0; }
-  if (y < 0) { h += y; y = 0; }
   if (x + w > 240) w = 240 - x;
-  if (y + h > 320) h = 320 - y;
+  if (y < SKY_TOP) { h -= SKY_TOP - y; y = SKY_TOP; }
+  if (y + h > SKY_TOP + SKY_ROWS) h = SKY_TOP + SKY_ROWS - y;
   if (w <= 0 || h <= 0) return;
-  File f = SD.open(currentImage, FILE_READ);
-  if (!f) return;
+  tft.startWrite();
   for (int row = y; row < y + h; row++) {
-    f.seek(((uint32_t)row * 240 + x) * 2);
-    f.read((uint8_t*)blitBuf, w * 2);
-    tft.startWrite();
     tft.setAddrWindow(x, row, w, 1);
-    tft.writePixels(blitBuf, w);
-    tft.endWrite();
+    tft.writePixels(skyCache + (row - SKY_TOP) * 240 + x, w);
   }
-  f.close();
+  tft.endWrite();
 }
 
 // Load a .anm file: "ANM1", scale, count, then 12-byte records.
@@ -313,13 +345,14 @@ void stepAnims(bool force) {
 }
 
 void stepShootingStar() {
+  if (!skyValid) { shooting = false; return; }
   if (!shooting && random(0, 1000) < 6) {
     shooting = true; shX = random(10, 120); shY = random(24, 90); shLife = 22;
   }
   if (!shooting) return;
-  restoreRect(shX - 1, shY - 1, 9, 6);       // erase the last frame
+  restoreRect(shX - 1, shY - 1, 9, 6);       // erase the last frame (from RAM)
   shX += 7; shY += 3; shLife--;
-  if (shLife <= 0 || shX > 230 || shY > 150) { shooting = false; return; }
+  if (shLife <= 0 || shX > 230 || shY > SKY_TOP + SKY_ROWS - 8) { shooting = false; return; }
   tft.drawLine(shX, shY, shX + 6, shY + 3, WARM);
   tft.drawPixel(shX + 6, shY + 3, 0xC69F);
 }
@@ -380,9 +413,10 @@ void saverChrome(const char* caption) {
 
 void noCardScreen() {
   tft.fillScreen(BG);
-  tp(16, 130, 2, PARCH, "Add the art");
-  tp(16, 154, 2, PARCH, "to the SD card");
-  tp(16, 184, 1, MUTED, "Copy device/sd/ onto the card.");
+  tp(16, 130, 2, PARCH, "Can't read the");
+  tp(16, 154, 2, PARCH, "SD card art");
+  tp(16, 184, 1, MUTED, "Retrying... check the card and");
+  tp(16, 196, 1, MUTED, "that /scenes is on it.");
 }
 
 void enterSaver() {
@@ -414,6 +448,10 @@ void stepRelic() {
 }
 
 void saverStep() {
+  if (SAVERS[saverType].image && !currentImage) {      // scene failed to load
+    if (millis() - lastRetry > 3000) { lastRetry = millis(); remountSD(); enterSaver(); }
+    return;
+  }
   if (millis() - lastFrame < FRAME_MS) return;
   lastFrame = millis();
   if (SAVERS[saverType].image) { stepAnims(false); stepShootingStar(); }
@@ -473,7 +511,7 @@ void drawSkills() {
 }
 
 void drawResumePage(int p) {
-  currentImage = nullptr;
+  currentImage = nullptr; skyValid = false;
   switch (p) {
     case 0: drawCover(); break;
     case 1: questPage("GUILD",     IC_SHIELD, "Accelirate",  "QA & AI Intern - 2026",
@@ -517,7 +555,7 @@ void shutdownPortal() {
   dnsServer.stop(); webServer.stop();
   WiFi.softAPdisconnect(true); WiFi.mode(WIFI_OFF);
   portalActive = false;
-  currentImage = nullptr;
+  currentImage = nullptr; skyValid = false;
   tft.fillScreen(BG); drawFrame(); tp(44, 150, 2, MUTED, "Wi-Fi off");
 }
 
@@ -550,6 +588,8 @@ void setup() {
   tft.init(240, 320); tft.setRotation(0); tft.invertDisplay(true);
   tft.fillScreen(BG); tp(20, 150, 2, PARCH, "Loading...");
   initSD();
+  skyCache = (uint16_t*)malloc(SKY_ROWS * 240 * sizeof(uint16_t));
+  if (!skyCache) Serial.println("Not enough RAM for the sky cache: shooting stars off.");
 
   WiFi.mode(WIFI_AP);
   WiFi.setBandMode(AP_BAND_MODE);
