@@ -32,6 +32,7 @@
 #include <SD.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7789.h>
+#include "thumbs.h"          // project pictures (tools/device_thumbs.py)
 #include "scenes_flash.h"
 
 
@@ -420,11 +421,6 @@ void sparkle(int x, int y, uint16_t c) {
 
 // Small pixel icons for the resume pages
 const char* SPR_SWORD[] = {"  o  ","  o  ","  o  ","  o  ","  o  ","  o  "," ooo ","XoooX","  X  ","  X  ","  X  ","  X  "};
-const char* IC_SHIELD[] = {"XXXXXXX","XoXXXoX","XXXXXXX","XoXXXoX"," XXXXX "," XXXXX ","  XXX  ","   X   "};
-const char* IC_PLANT[]  = {"   o   ","  oXo  "," o XX o","   XX  ","  XXXX "," XXXXXX"," X XX X"," XXXXXX"};
-const char* IC_GEAR[]   = {" o X o ","oXXXXXo","XX o XX","Xo o oX","XX o XX","oXXXXXo"," o X o ","       "};
-const char* IC_TROPHY[] = {"XXXXXXX","oXXXXXo"," oXXXo ","  oXo  ","   X   ","  XXX  "," XXXXX ","       "};
-const char* IC_BOT[]    = {" oXXXo ","Xo o oX","X XXX X"," XXXXX ","  X X  "," XX XX ","       ","       "};
 const char* IC_BOOK[]   = {"XXX XXX","XoX XoX","XoX XoX","XoX XoX","XoX XoX","XXX XXX"," XX XX ","       "};
 
 
@@ -497,14 +493,17 @@ void drawCover() {
   for (int i = 0; i < COVER_TEXT_COUNT; i++) drawMask(COVER_TEXT[i]);
 }
 
-void questPage(const char* label, const char* const* icon, const char* title, const char* sub,
+// One resume page: label box, project picture in the top-right corner (same
+// size on every page), then the title and three bullets underneath.
+void questPage(const char* label, const uint16_t* thumb, const char* title, const char* sub,
                const char* b1, const char* b2, const char* b3) {
   tft.fillScreen(BG); drawFrame();
-  tft.drawRect(12, 12, 216, 28, GOLDDIM); sparkle(26, 26, GOLD); tp(40, 19, 2, GOLD, label);
-  drawSprite(icon, 8, 198, 16, 3, STEEL, GOLD);
-  tp(14, 50, 3, PARCH, title);
-  int y = 86;
-  tp(14, y, 1, MUTED, sub); y += 26;
+  tft.drawRect(12, 12, 158, 28, GOLDDIM); sparkle(26, 26, GOLD); tp(40, 19, 2, GOLD, label);
+  tft.drawRect(177, 11, THUMB + 2, THUMB + 2, GOLDDIM);          // picture border
+  tft.drawRGBBitmap(178, 12, thumb, THUMB, THUMB);
+  tp(14, 68, 3, PARCH, title);
+  int y = 100;
+  tp(14, y, 1, MUTED, sub); y += 24;
   y = wrapPrint(14, y, 17, 2, PARCH, b1, 20) + 8;
   y = wrapPrint(14, y, 17, 2, PARCH, b2, 20) + 8;
   wrapPrint(14, y, 17, 2, PARCH, b3, 20);
@@ -527,15 +526,15 @@ void drawResumePage(int p) {
   skyValid = false; shooting = false;
   switch (p) {
     case 0: drawCover(); break;
-    case 1: questPage("GUILD",     IC_SHIELD, "Accelirate",  "QA & AI Intern - 2026",
+    case 1: questPage("GUILD",     THUMB_ACCELIRATE, "Accelirate",  "QA & AI Intern - 2026",
                       "Agentic QA test suites", "Custom SQL edge cases", "Debugged backend"); break;
-    case 2: questPage("QUEST IV",  IC_PLANT,  "Soil Node",   "IoT Plant Monitor - 2026",
+    case 2: questPage("QUEST IV",  THUMB_SOILNODE,  "Soil Node",   "IoT Plant Monitor - 2026",
                       "Battery IoT soil monitor", "Temp, humidity, moisture", "ESP32-C3 + KiCad PCB"); break;
-    case 3: questPage("QUEST III", IC_GEAR,   "Motor V1",    "RU HART - 2026",
+    case 3: questPage("QUEST III", THUMB_MOTOR,   "Motor V1",    "RU HART - 2026",
                       "Dual motors 20A / 12V", "DRV8701 + RP2040", "Custom KiCad board"); break;
-    case 4: questPage("QUEST II",  IC_TROPHY, "Breathe.exe", "HackRU '26 Winner",
-                      "Horror interview sim", "Glove: ESP32-C3 ESP-NOW", "Unity+Gemini+Presage"); break;
-    case 5: questPage("QUEST I",   IC_BOT,    "Maxbot",      "RU HART LiDAR Bot",
+    case 4: questPage("QUEST II",  THUMB_BREATHE, "Breathe.exe", "HackRU '26 Winner",
+                      "Horror interview sim", "Glove: ESP32-C3 ESP-NOW", "Unity + Gemini + Presage"); break;
+    case 5: questPage("QUEST I",   THUMB_LIDAR,    "Maxbot",      "RU HART LiDAR Bot",
                       "Maps an enclosed space", "Streams outline to web", "ESP32-S3 + LiDAR"); break;
     case 6: drawSkills(); break;
   }
