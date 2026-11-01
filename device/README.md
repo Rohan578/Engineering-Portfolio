@@ -8,20 +8,37 @@ the PDF, and the screen flips through resume pages.
 ```
 device/
   resume_badge/resume_badge.ino   the firmware (open this folder in Arduino IDE)
+  resume_badge/scenes_flash.h     the screen art; must stay next to the .ino
   sd/                             copy everything in here onto the SD card
   previews/                       PNGs of each screen
 ```
 
+## What needs the SD card
+
+Every screen (all screensavers, the RESUME cover, and the resume pages) is
+built into the firmware, so the badge looks and works the same with or
+without a card. The card only holds what phones download:
+
+| | With SD card | Without SD card |
+| --- | --- | --- |
+| Badge screens | ✓ | ✓ |
+| Phone page | ✓ with hero art | ✓ plain night-sky version |
+| Resume download | ✓ | "not available" page linking the portfolio |
+
+If the card is pulled out and put back, the badge picks it up again within
+a few seconds.
+
 ## Setup
 
 1. **SD card:** format it FAT32 and copy the *contents* of `device/sd/` to the
-   root of the card (so the card has `Rohan_Shrivastava_Resume.pdf`,
-   `scenes/`, and `web/` at the top level).
+   root of the card (so the card has `Rohan_Shrivastava_Resume.pdf` and
+   `web/` at the top level).
 2. **Arduino IDE:** install "Adafruit ST7789 and ST7735 Library" and
    "Adafruit GFX Library". Board: **ESP32C5 Dev Module**, USB CDC On Boot:
    **Enabled**. The default partition scheme works (the sketch uses about
-   1.17 MB of the 1.25 MB app space, out of 4 MB of flash).
-3. Open `resume_badge/resume_badge.ino` and upload.
+   1.19 MB of the 1.31 MB app space, out of 4 MB of flash).
+3. Open `resume_badge/resume_badge.ino` (with `scenes_flash.h` in the same
+   folder) and upload.
 
 Wiring is listed at the top of the sketch.
 
@@ -48,6 +65,7 @@ python3 tools/generate_art.py
 python3 tools/device_art.py
 ```
 
-and copy `device/sd/` to the card again. No firmware change is needed.
+This rewrites `resume_badge/scenes_flash.h` and `sd/web/`; upload the sketch
+again and copy `device/sd/` to the card.
 
 **Updating the resume:** replace `Rohan_Shrivastava_Resume.pdf` on the card.

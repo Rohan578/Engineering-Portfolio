@@ -7,25 +7,31 @@ device_art.py — builds the art for the ESP32-C5 resume badge (device/ folder).
 
 Uses the SAME hero sprites, palette, and scene painters as the website
 (tools/generate_art.py), so the hero on the badge is identical to the one on
-the portfolio. Writes everything the SD card needs into device/sd/:
+the portfolio.
 
-    scenes/shore.565  + shore.anm    side view: on the cliff over the ocean
-    scenes/plains.565 + plains.anm   back view: sitting in a grassy plain
-    scenes/vigil.565  + vigil.anm    front view: standing guard in a meadow
-    scenes/cover.565                 "RESUME" start page (portrait homepage banner)
-    web/...                          art, fonts, and photo for the phone page
+Outputs
+-------
+  device/resume_badge/scenes_flash.h   all badge screens, compiled INTO the
+                                       firmware, so screensavers and resume
+                                       pages work with no SD card at all:
+      The Shore   side view on the cliff over the ocean
+      The Plains  from behind, sitting in a grassy plain
+      The Vigil   facing you, hands on his planted sword
+      Cover       the "RESUME" start page (portrait homepage banner)
+  device/sd/                           only what the phone page needs
+                                       (resume PDF, art, fonts, photo)
+  device/previews/*.png                exactly what the badge will draw
 
-and preview PNGs of each screen into device/previews/.
-
-File formats (read by device/resume_badge/resume_badge.ino)
------------------------------------------------------------
-  .565  240 x 320 raw RGB565, little-endian, row by row (153,600 bytes).
-        Blitted straight to the display, so no decoding on the ESP32.
-  .anm  The pixels that twinkle/glow, same as the website's animations:
-        "ANM1", scale (u8), count (u16), then per pixel:
-        x, y, w, h (u8, in art pixels), on, off (u16 RGB565),
-        period_ms, offset_ms (u16). The badge toggles each one between its
-        on and off color every half period.
+How the scenes are stored
+-------------------------
+Each scene is an 80 x 107 grid of art pixels (shown 3x3 on the 240x320 screen):
+  palette  up to 255 RGB565 colors
+  rle      (count, palette index) byte pairs, row by row
+  anim     the pixels that twinkle/glow, like the website's animations,
+           12 bytes each: x, y, w, h (art pixels), on, off (RGB565),
+           period_ms, offset_ms. The badge shows "on" for the first half
+           of each period and "off" for the second.
+The cover's title text is stored as 1-bit masks drawn on top in one color each.
 """
 
 import os
@@ -34,7 +40,7 @@ import struct
 import sys
 import tempfile
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -42,6 +48,7 @@ sys.path.insert(0, HERE)
 import generate_art as ga  # noqa: E402  (shared hero sprites + painters)
 
 OUT_SD = os.path.join(ROOT, "device", "sd")
+OUT_HEADER = os.path.join(ROOT, "device", "resume_badge", "scenes_flash.h")
 OUT_PREVIEW = os.path.join(ROOT, "device", "previews")
 
 SCREEN_W, SCREEN_H = 240, 320
@@ -76,37 +83,61 @@ def rgb565(hex_color):
     return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
 
 
-def canvas_image(c, include_animated):
-    """Render a Canvas to a full-size 240x320 PIL image."""
-    img = Image.new("RGB", (c.w, c.h), rgb(ga.SKY[0]))
-    px = img.load()
-    for (x, y), color in c.pixels.items():
-        px[x, y] = rgb(color)
+def art_grid(c, include_animated):
+    """The scene as a list of rows of hex colors (art pixels)."""
+    grid = [[c.get(x, y) or ga.SKY[min(y * len(ga.SKY) // c.h, 7)] for x in range(c.w)] for y in range(c.h)]
     if include_animated:
         for i, (x, y, w, h, color, _cls) in enumerate(c.animated):
             if i in c.covered:
                 continue
-            for yy in range(y, y + h):
-                for xx in range(x, x + w):
-                    if 0 <= xx < c.w and 0 <= yy < c.h:
-                        px[xx, yy] = rgb(color)
-    big = img.resize((c.w * SCALE, c.h * SCALE), Image.NEAREST)
-    return big.crop((0, 0, SCREEN_W, SCREEN_H))
+            for yy in range(y, min(y + h, c.h)):
+                for xx in range(x, min(x + w, c.w)):
+                    if xx >= 0 and yy >= 0:
+                        grid[yy][xx] = color
+    return grid
 
 
-def write_565(img, path):
-    raw = img.convert("RGB").tobytes()
-    data = bytearray()
-    for i in range(0, len(raw), 3):
-        r, g, b = raw[i], raw[i + 1], raw[i + 2]
-        data += struct.pack("<H", ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3))
-    assert len(data) == SCREEN_W * SCREEN_H * 2
-    with open(path, "wb") as f:
-        f.write(data)
+def darken_for_title(grid, bottom_row):
+    """Blocky version of the homepage's dark glow behind the title."""
+    out = []
+    for y, row in enumerate(grid):
+        new = []
+        for x, color in enumerate(row):
+            dx, dy = (x - ART_W / 2) / (ART_W * 0.8), y / bottom_row
+            a = max(0.0, 1 - (dx * dx + dy * dy) ** 0.5) * 0.75
+            r, g, b = rgb(color)
+            r, g, b = (round(v * (1 - a) + t * a) for v, t in zip((r, g, b), (5, 4, 15)))
+            # quantize so the palette stays small
+            new.append("#%02x%02x%02x" % (r & 0xF8, g & 0xFC, b & 0xF8))
+        out.append(new)
+    return out
 
 
-def write_anm(c, path, seed):
-    """Save the scene's animated pixels in the .anm format described above."""
+def grid_image(grid):
+    """Render an art grid to the 240x320 screen image, the same way the badge does."""
+    img = Image.new("RGB", (ART_W, ART_H))
+    img.putdata([rgb(v) for row in grid for v in row])
+    return img.resize((ART_W * SCALE, ART_H * SCALE), Image.NEAREST).crop((0, 0, SCREEN_W, SCREEN_H))
+
+
+def encode_scene(grid):
+    """Palette + run-length encoding of an art grid."""
+    flat = [v for row in grid for v in row]
+    palette = sorted(set(flat))
+    assert len(palette) <= 255, f"too many colors ({len(palette)})"
+    index = {v: i for i, v in enumerate(palette)}
+    rle, i = bytearray(), 0
+    while i < len(flat):
+        j = i
+        while j < len(flat) and flat[j] == flat[i] and j - i < 255:
+            j += 1
+        rle += bytes((j - i, index[flat[i]]))
+        i = j
+    return [rgb565(v) for v in palette], bytes(rle)
+
+
+def anim_records(c, seed):
+    """The scene's animated pixels as packed 12-byte records (see the docstring)."""
     r = random.Random(seed)
     records = []
     for i, (x, y, w, h, color, cls) in enumerate(c.animated):
@@ -123,10 +154,8 @@ def write_anm(c, path, seed):
         off = LAMP_GLOW if name == "lamp" else (c.get(x, y) or ga.SKY[min(y * len(ga.SKY) // c.h, 7)])
         offset = (delay + r.randrange(period)) % period   # de-sync identical stars
         records.append(struct.pack("<BBBBHHHH", x, y, w, h, rgb565(color), rgb565(off), period, offset))
-    assert len(records) <= MAX_ANIM, f"{path}: {len(records)} animated pixels > MAX_ANIM"
-    with open(path, "wb") as f:
-        f.write(b"ANM1" + struct.pack("<BH", SCALE, len(records)) + b"".join(records))
-    return len(records)
+    assert len(records) <= MAX_ANIM, f"{len(records)} animated pixels > MAX_ANIM"
+    return b"".join(records), len(records)
 
 
 # ---------------------------------------------------------------------------
@@ -331,52 +360,92 @@ def fit_font(path, text, max_w, start):
     return ImageFont.truetype(path, 6)
 
 
-def centered(draw, y, text, font, fill, shadow=None):
-    w = font.getlength(text)
-    x = (SCREEN_W - w) / 2
-    if shadow:
-        draw.text((x, y + 3), text, font=font, fill=shadow)
-    draw.text((x, y), text, font=font, fill=fill)
-    return w
+def text_mask(draw_fn):
+    """Draw something on a blank 240x320 1-bit canvas; return (x, y, w, h, packed bits)."""
+    m = Image.new("L", (SCREEN_W, SCREEN_H), 0)
+    d = ImageDraw.Draw(m)
+    d.fontmode = "1"                                   # crisp pixels, no anti-aliasing
+    draw_fn(d)
+    m = m.point(lambda v: 255 if v >= 128 else 0)
+    box = m.getbbox()
+    if not box:
+        return None
+    x0, y0, x1, y1 = box
+    w, h = x1 - x0, y1 - y0
+    bits = bytearray()
+    px = m.load()
+    for y in range(y0, y1):
+        for bx in range(0, w, 8):
+            byte = 0
+            for k in range(8):
+                if bx + k < w and px[x0 + bx + k, y]:
+                    byte |= 0x80 >> k
+            bits.append(byte)
+    return x0, y0, w, h, bytes(bits)
 
 
-def draw_cover_text(img, fonts):
-    # dark glow behind the title, like .hero__title::before
-    glow = Image.new("L", img.size, 0)
-    ImageDraw.Draw(glow).ellipse((-40, -60, SCREEN_W + 40, 158), fill=190)
-    glow = glow.filter(ImageFilter.GaussianBlur(28))
-    img.paste(Image.new("RGB", img.size, (5, 4, 15)), (0, 0), glow)
+def cover_layers(fonts):
+    """The cover's title as (mask, color) layers, drawn in order (shadows first)."""
+    gold, head, sky = "#f2d98a", "#fff3c4", "#8fbbe8"
+    shadow, dark = "#2a1d57", "#05040f"
 
-    d = ImageDraw.Draw(img)
-    gold, head = rgb("#f2d98a"), rgb("#fff3c4")
-
-    # "✦ RESUME ✦" ribbon (the homepage says "ENGINEERING PORTFOLIO" here)
     rib_font = ImageFont.truetype(fonts["pixelify-700"], 15)
     label = "R E S U M E"
-    w = rib_font.getlength(label) + 52
-    x0, y0, x1, y1 = (SCREEN_W - w) / 2, 14, (SCREEN_W + w) / 2, 40
-    d.rectangle((x0, y0, x1, y1), fill=(10, 8, 30))
-    d.rectangle((x0, y0, x1, y1), outline=(161, 146, 104), width=2)
-    for cx in (x0, x1):                                     # stepped pixel corners
-        for cy in (y0, y1):
-            d.rectangle((cx - 2, cy - 2, cx + 2, cy + 2), fill=(10, 8, 30))
-    centered(d, y0 + 4, label, rib_font, gold)
-    for sx in (x0 + 14, x1 - 14):                           # ✦ sparkles
-        cy = (y0 + y1) / 2
-        d.polygon([(sx, cy - 6), (sx + 2, cy - 2), (sx + 6, cy), (sx + 2, cy + 2),
-                   (sx, cy + 6), (sx - 2, cy + 2), (sx - 6, cy), (sx - 2, cy - 2)], fill=head)
+    rw = rib_font.getlength(label) + 52
+    ribbon = (int((SCREEN_W - rw) / 2), 14, int((SCREEN_W + rw) / 2), 40)
 
     name_font = fit_font(fonts["pixelify-700"], "Shrivastava", 214, 40)
-    centered(d, 50, "Rohan", name_font, head, shadow=(42, 29, 87))
-    centered(d, 50 + name_font.size, "Shrivastava", name_font, head, shadow=(42, 29, 87))
-
     tagline = "Hardware · Embedded · Robotics"
     tag_font = fit_font(fonts["pixelify-500"], tagline, 220, 15)
-    centered(d, 58 + 2 * name_font.size, tagline, tag_font, (230, 226, 248), shadow=(5, 4, 15))
-
     hint_font = ImageFont.truetype(fonts["pixelify-500"], 13)
-    centered(d, 276, "Tap BOOT to explore  >", hint_font, rgb("#8fbbe8"), shadow=(5, 4, 15))
+
+    def text(d, y, t, font, dy=0):
+        d.text(((SCREEN_W - font.getlength(t)) / 2, y + dy), t, font=font, fill=255)
+
+    def sparkles(d):
+        cy = (ribbon[1] + ribbon[3]) / 2
+        for sx in (ribbon[0] + 14, ribbon[2] - 14):
+            d.polygon([(sx, cy - 6), (sx + 2, cy - 2), (sx + 6, cy), (sx + 2, cy + 2),
+                       (sx, cy + 6), (sx - 2, cy + 2), (sx - 6, cy), (sx - 2, cy - 2)], fill=255)
+
+    y_name2 = 50 + name_font.size
+    y_tag = 58 + 2 * name_font.size
+    layers = [
+        (lambda d: (text(d, 50, "Rohan", name_font, 3), text(d, y_name2, "Shrivastava", name_font, 3)), shadow),
+        (lambda d: (text(d, 50, "Rohan", name_font), text(d, y_name2, "Shrivastava", name_font)), head),
+        (lambda d: text(d, y_tag, tagline, tag_font, 2), dark),
+        (lambda d: text(d, y_tag, tagline, tag_font), "#e6e2f8"),
+        (lambda d: text(d, ribbon[1] + 4, label, rib_font), gold),
+        (sparkles, head),
+        (lambda d: text(d, 276, "Tap BOOT to explore  >", hint_font, 2), dark),
+        (lambda d: text(d, 276, "Tap BOOT to explore  >", hint_font), sky),
+    ]
+    return ribbon, [(text_mask(fn), color) for fn, color in layers]
+
+
+def paint_layers(img, ribbon, layers):
+    """Draw the ribbon and text layers onto a preview image, like the badge does."""
+    d = ImageDraw.Draw(img)
+    x0, y0, x1, y1 = ribbon
+    d.rectangle(ribbon, fill=(10, 8, 30))
+    d.rectangle(ribbon, outline=(160, 144, 104), width=2)
+    for mask, color in layers:
+        if not mask:
+            continue
+        mx, my, w, h, bits = mask
+        stride = (w + 7) // 8
+        for y in range(h):
+            for x in range(w):
+                if bits[y * stride + x // 8] & (0x80 >> (x % 8)):
+                    img.putpixel((mx + x, my + y), rgb(color))
     return img
+
+
+def c_array(ctype, name, values, per_line=24):
+    """Format a C array; values are ints."""
+    fmt = "0x%04X" if "16" in ctype else "%d"
+    body = ",\n  ".join(",".join(fmt % v for v in values[i:i + per_line]) for i in range(0, len(values), per_line))
+    return f"static const {ctype} {name}[] = {{\n  {body}\n}};\n"
 
 
 # ---------------------------------------------------------------------------
@@ -399,23 +468,57 @@ def copy_web_assets():
 
 
 def main():
-    for d in (os.path.join(OUT_SD, "scenes"), OUT_PREVIEW):
-        os.makedirs(d, exist_ok=True)
+    os.makedirs(OUT_PREVIEW, exist_ok=True)
+    out = ["// AUTO-GENERATED by tools/device_art.py - edit that script, not this file.",
+           "// Badge screens stored in flash (see the docstring there for the format).",
+           "#pragma once", "#include <stdint.h>", "",
+           f"#define ART_W {ART_W}", f"#define ART_H {ART_H}", f"#define ART_SCALE {SCALE}", "",
+           "struct FlashScene { const uint16_t* palette; const uint8_t* rle; uint32_t rleLen;",
+           "                    const uint8_t* anim; uint16_t animCount; };",
+           "struct TextMask   { int16_t x, y, w, h; uint16_t color; const uint8_t* bits; };", ""]
+    total = 0
 
     for name, builder in (("shore", build_shore), ("plains", build_plains), ("vigil", build_vigil)):
         c = builder()
-        write_565(canvas_image(c, include_animated=False), os.path.join(OUT_SD, "scenes", name + ".565"))
-        n = write_anm(c, os.path.join(OUT_SD, "scenes", name + ".anm"), seed=len(name))
-        canvas_image(c, include_animated=True).save(os.path.join(OUT_PREVIEW, name + ".png"))
-        print(f"scenes/{name}.565 + .anm ({n} animated pixels)")
+        palette, rle = encode_scene(art_grid(c, include_animated=False))
+        anim, n = anim_records(c, seed=len(name))
+        out.append(c_array("uint16_t", f"{name}_palette", palette))
+        out.append(c_array("uint8_t", f"{name}_rle", list(rle)))
+        out.append(c_array("uint8_t", f"{name}_anim", list(anim)) if n else "")
+        anim_ref = f"{name}_anim" if n else "nullptr"
+        out.append(f"static const FlashScene SCENE_{name.upper()} = "
+                   f"{{ {name}_palette, {name}_rle, sizeof({name}_rle), {anim_ref}, {n} }};\n")
+        grid_image(art_grid(c, include_animated=True)).save(os.path.join(OUT_PREVIEW, name + ".png"))
+        total += len(palette) * 2 + len(rle) + len(anim)
+        print(f"{name}: {len(palette)} colors, {len(rle)} bytes of pixels, {n} animated pixels")
 
-    cover = draw_cover_text(canvas_image(build_cover_art(), include_animated=True), load_fonts())
-    write_565(cover, os.path.join(OUT_SD, "scenes", "cover.565"))
-    cover.save(os.path.join(OUT_PREVIEW, "cover.png"))
-    print("scenes/cover.565")
+    # cover: homepage banner in portrait, darkened behind the title, plus text masks
+    grid = darken_for_title(art_grid(build_cover_art(), include_animated=True), bottom_row=52)
+    palette, rle = encode_scene(grid)
+    out.append(c_array("uint16_t", "cover_palette", palette))
+    out.append(c_array("uint8_t", "cover_rle", list(rle)))
+    out.append("static const FlashScene SCENE_COVER = { cover_palette, cover_rle, sizeof(cover_rle), nullptr, 0 };\n")
+    ribbon, layers = cover_layers(load_fonts())
+    out.append(f"static const int16_t COVER_RIBBON[4] = {{ {', '.join(map(str, ribbon))} }};  // x0, y0, x1, y1\n")
+    entries = []
+    for i, (mask, color) in enumerate(layers):
+        if not mask:
+            continue
+        x, y, w, h, bits = mask
+        out.append(c_array("uint8_t", f"cover_text{i}", list(bits)))
+        entries.append(f"  {{ {x}, {y}, {w}, {h}, 0x{rgb565(color):04X}, cover_text{i} }},")
+        total += len(bits)
+    out.append("static const TextMask COVER_TEXT[] = {\n" + "\n".join(entries) + "\n};")
+    out.append("static const int COVER_TEXT_COUNT = sizeof(COVER_TEXT) / sizeof(COVER_TEXT[0]);\n")
+    paint_layers(grid_image(grid), ribbon, layers).save(os.path.join(OUT_PREVIEW, "cover.png"))
+    total += len(palette) * 2 + len(rle)
+
+    with open(OUT_HEADER, "w") as f:
+        f.write("\n".join(out))
+    print(f"wrote {os.path.relpath(OUT_HEADER, ROOT)} (~{total // 1024} KB of flash)")
 
     copy_web_assets()
-    print("web assets + resume copied to device/sd/")
+    print("phone-page files + resume copied to device/sd/")
 
 
 if __name__ == "__main__":

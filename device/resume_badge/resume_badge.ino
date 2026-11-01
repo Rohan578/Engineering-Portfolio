@@ -2,33 +2,27 @@
    ESP32-C5 RESUME BADGE - 5 GHz portal + 2" ST7789 TFT (GMT020-02-80)
    Pixel Fantasy edition: same hero and night scenes as the portfolio
    ---------------------------------------------------------------------
-   All art lives on the SD card (made by tools/device_art.py in the
-   portfolio repo), so the firmware stays small. Copy the whole
-   device/sd/ folder onto a FAT32 card:
+   The screens (screensavers + resume pages) are stored in the firmware
+   itself (scenes_flash.h, made by tools/device_art.py), so the screen
+   works with or without an SD card.
 
+   The SD card is only needed for what the phone downloads:
      /Rohan_Shrivastava_Resume.pdf
-     /scenes/shore.565  shore.anm    hero on the cliff over the ocean (side)
-     /scenes/plains.565 plains.anm   hero in a grassy plain (from behind)
-     /scenes/vigil.565  vigil.anm    hero standing guard (facing you)
-     /scenes/cover.565               "RESUME" start page
-     /web/...                        art, fonts, photo for the phone page
-
-   .565 = 240x320 raw RGB565 (blitted straight to the screen)
-   .anm = the pixels that twinkle/glow (stars, water, lantern, fireflies)
+     /web/...   art, fonts, and photo for the phone page
+   (copy the contents of device/sd/ onto a FAT32 card).
+   Without the card the phone page still opens, just without the art,
+   and the resume button explains that the PDF isn't available.
 
    BOOT BUTTON (GPIO28)
      tap         idle: next screensaver | connected: next resume page
      hold 5 s    turn Wi-Fi off and disconnect everyone
    Screensavers: The Shore, The Plains, The Vigil, Relic
-   Someone connects -> resume pages on the screen, portfolio-style
-   page with the PDF on their phone.
 
    LIBRARIES  "Adafruit ST7789 and ST7735 Library" + "Adafruit GFX Library"
    WIRING     SCK->6 MOSI->1 MISO->8 | SD CS->0 | TFT CS->9 DC->10 RST->23
               VCC->3V3 GND->GND BL->3V3
    ARDUINO    Board "ESP32C5 Dev Module", USB CDC On Boot "Enabled".
-              If the sketch is too big, Tools > Partition Scheme >
-              "Huge APP (3MB No OTA/1MB SPIFFS)".
+              Keep scenes_flash.h in the same folder as this file.
    ===================================================================== */
 
 #include <WiFi.h>
@@ -38,6 +32,7 @@
 #include <SD.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7789.h>
+#include "scenes_flash.h"
 
 
 /* =====================================================================
@@ -52,34 +47,33 @@ const int           BOOT_BUTTON_PIN = 28;
 const unsigned long HOLD_TIME_MS    = 5000;
 
 const int SD_MISO = 8, SD_SCK = 6, SD_MOSI = 1, SD_CS = 0;
-// The SD card shares SPI with the screen. 4 MHz is the library default and is
-// reliable on breadboard wiring; faster clocks caused read errors that made the
-// card "disappear". Raise it (e.g. 10000000) only with short, solid wiring.
+// The SD card shares SPI with the screen. 4 MHz (the library default) is
+// reliable on breadboard wiring.
 const uint32_t SD_SPI_HZ = 4000000;
 #define TFT_CS  9
 #define TFT_DC  10
 #define TFT_RST 23
 
 const char* RESUME_FILE = "/Rohan_Shrivastava_Resume.pdf";
-const char* COVER_FILE  = "/scenes/cover.565";
 
 const bool          AUTO_ADVANCE = false;     // flip resume pages on a timer
 const unsigned long PAGE_FLIP_MS = 5000;
 
-// Screensavers: scene image, its animation file, and the caption
-struct Saver { const char* image; const char* anim; const char* caption; };
+// Screensavers: a scene from flash (nullptr = drawn in code) and its caption
+struct Saver { const FlashScene* scene; const char* caption; };
 const Saver SAVERS[] = {
-  { "/scenes/shore.565",  "/scenes/shore.anm",  "// the shore"  },
-  { "/scenes/plains.565", "/scenes/plains.anm", "// the plains" },
-  { "/scenes/vigil.565",  "/scenes/vigil.anm",  "// the vigil"  },
-  { nullptr,              nullptr,              "// relic"      },   // drawn in code
+  { &SCENE_SHORE,  "// the shore"  },
+  { &SCENE_PLAINS, "// the plains" },
+  { &SCENE_VIGIL,  "// the vigil"  },
+  { nullptr,       "// relic"      },
 };
 const int NUM_SAVERS = sizeof(SAVERS) / sizeof(SAVERS[0]);
 
 
 /* =====================================================================
    2. PHONE PAGE (same look as the portfolio homepage, but for the resume)
-      Big files (art, fonts, photo) are served from /web on the SD card.
+      Art, fonts, and photo come from /web on the SD card. If the card
+      isn't readable, the images hide themselves and the page still works.
    ===================================================================== */
 const char PAGE_HTML[] PROGMEM = R"HTML(<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -92,7 +86,8 @@ const char PAGE_HTML[] PROGMEM = R"HTML(<!DOCTYPE html>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;font-family:I,system-ui,sans-serif;color:#e2def5;
  background:url(/web/stars.svg) repeat,linear-gradient(#07061a,#0e0b29);background-size:360px,auto}
-.hero{position:relative;height:clamp(470px,62vw,560px);overflow:hidden}
+.hero{position:relative;height:clamp(470px,62vw,560px);overflow:hidden;
+ background:linear-gradient(#05040f,#1a1442 70%,#07061a)}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:38% 100%;
  -webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
 .t{position:absolute;top:4%;left:0;right:0;padding:0 12px;text-align:center}
@@ -114,13 +109,13 @@ h1{margin:10px 0 0;font:700 clamp(32px,9vw,64px)/1.05 P,monospace;color:#fff3c4;
 .note{margin-top:14px;font-size:12px;color:#9896be}
 @media(max-width:560px){.card{flex-direction:column;text-align:center;margin:-40px 14px 28px}}
 </style></head><body>
-<header class="hero"><img src="/web/hero.svg" alt="">
+<header class="hero"><img src="/web/hero.svg" alt="" onerror="this.remove()">
  <div class="t"><div class="rib">&#10022; RESUME &#10022;</div>
  <h1>Rohan Shrivastava</h1>
  <div class="tag">Hardware &middot; Embedded Systems &middot; Robotics</div></div>
 </header>
 <section class="card">
- <div class="pic"><img src="/web/profile.jpg" alt="Rohan Shrivastava"><span>ECE &middot; Rutgers &rsquo;28</span></div>
+ <div class="pic"><img src="/web/profile.jpg" alt="Rohan Shrivastava" onerror="this.remove()"><span>ECE &middot; Rutgers &rsquo;28</span></div>
  <div>
   <p>Hi, I&rsquo;m Rohan &mdash; an Electrical &amp; Computer Engineering student at Rutgers University passionate about hardware design, embedded systems, and robotics. Always building, testing, and scaling new hardware projects.</p>
   <a class="btn" href="/resume.pdf" target="_blank" rel="noopener">&darr; View My Resume</a>
@@ -128,6 +123,18 @@ h1{margin:10px 0 0;font:700 clamp(32px,9vw,64px)/1.05 P,monospace;color:#fff3c4;
  </div>
 </section>
 </body></html>)HTML";
+
+// Shown instead of the PDF when the SD card can't be read
+const char NO_RESUME_HTML[] PROGMEM = R"HTML(<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resume unavailable</title>
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+text-align:center;font-family:system-ui,sans-serif;color:#e2def5;background:linear-gradient(#07061a,#1a1442)}
+h1{color:#fff3c4;font-size:22px}a{color:#f2d98a}</style></head><body><div>
+<h1>The resume download isn&rsquo;t available right now</h1>
+<p>This badge couldn&rsquo;t read its SD card. You can find my resume on my portfolio:</p>
+<p><a href="https://rohan578.github.io/Engineering-Portfolio/">rohan578.github.io/Engineering-Portfolio</a></p>
+<p><a href="/">&larr; Back</a></p></div></body></html>)HTML";
 
 
 /* =====================================================================
@@ -146,7 +153,7 @@ DNSServer dnsServer;
 WebServer webServer(80);
 IPAddress apIP(192, 168, 4, 1);
 
-bool portalActive = true, sdReady = false;
+bool portalActive = true;
 bool buttonWasDown = false, longFired = false;
 unsigned long buttonPressStart = 0;
 
@@ -157,33 +164,48 @@ unsigned long lastFrame = 0, lastFlip = 0;
 const unsigned long FRAME_MS = 60;
 const int NUM_PAGES = 7;
 
-const char* currentImage = nullptr;    // scene on screen
+// SD card: only used for phone downloads, mounted on demand
+bool sdReady = false;
+unsigned long lastMountTry = 0;
+const unsigned long MOUNT_RETRY_MS = 5000;   // don't keep retrying a missing card
 
-// The sky band of the current scene, kept in RAM so the shooting star can be
-// erased without touching the SD card during animation (no SD reads per frame).
-const int SKY_TOP = 16, SKY_ROWS = 144;  // rows 16-159, where shooting stars fly
-uint16_t* skyCache = nullptr;            // SKY_ROWS x 240 pixels (69 KB)
+// Sky band of the current scene, kept in RAM so a shooting star can be erased
+const int SKY_TOP = 16, SKY_ROWS = 144;      // rows 16-159, where shooting stars fly
+uint16_t* skyCache = nullptr;                // SKY_ROWS x 240 pixels (69 KB)
 bool skyValid = false;
-unsigned long lastRetry = 0;             // retry timer after an SD error
 
-bool remountSD();                        // defined in section 5, used by the web server
-
-// Animated pixels loaded from a scene's .anm file
-const int MAX_ANIM = 320;              // keep in sync with tools/device_art.py
+// Twinkling pixels of the current scene (read from flash)
+const int MAX_ANIM = 320;
 struct AnimPx { uint8_t x, y, w, h; uint16_t on, off, period, offset; bool lit; };
 AnimPx anims[MAX_ANIM];
-int animCount = 0, animScale = 3;
+int animCount = 0;
 
-// Shooting star
-bool shooting = false; int shX = 0, shY = 0, shLife = 0;
-
-// Relic screensaver
-float swBob = 0, swAng = 0; int swPrevY = -1;
+bool shooting = false; int shX = 0, shY = 0, shLife = 0;   // shooting star
+float swBob = 0, swAng = 0; int swPrevY = -1;              // relic sword
 
 
 /* =====================================================================
-   4. WEB SERVER
+   4. SD CARD + WEB SERVER
    ===================================================================== */
+// Mount (or remount) the card. Rate-limited so a missing card doesn't slow
+// every request down.
+bool ensureSD(bool forceRemount = false) {
+  if (sdReady && !forceRemount) return true;
+  if (millis() - lastMountTry < MOUNT_RETRY_MS && lastMountTry != 0) return sdReady;
+  lastMountTry = millis();
+  SD.end();
+  sdReady = SD.begin(SD_CS, SPI, SD_SPI_HZ);
+  Serial.println(sdReady ? "SD mounted." : "SD card not readable.");
+  return sdReady;
+}
+
+File openSD(const char* path) {
+  if (!ensureSD()) return File();
+  File f = SD.open(path, FILE_READ);
+  if (!f && ensureSD(true)) f = SD.open(path, FILE_READ);   // card glitched: remount once
+  return f;
+}
+
 const char* mimeFor(const String& path) {
   if (path.endsWith(".pdf"))   return "application/pdf";
   if (path.endsWith(".svg"))   return "image/svg+xml";
@@ -193,11 +215,10 @@ const char* mimeFor(const String& path) {
 }
 
 // Stream a file from SD, with Range support (phones ask for parts of the PDF).
-void sendSDFile(const char* path, bool cacheable) {
-  if (!sdReady) { webServer.send(503, "text/plain", "SD card not mounted."); return; }
-  File file = SD.open(path, FILE_READ);
-  if (!file && remountSD()) file = SD.open(path, FILE_READ);   // recover from an SD error
-  if (!file) { webServer.send(404, "text/plain", "File not found on SD."); return; }
+// Returns false if the file couldn't be opened (nothing is sent in that case).
+bool sendSDFile(const char* path, bool cacheable) {
+  File file = openSD(path);
+  if (!file) return false;
   const char* type = mimeFor(path);
   size_t size = file.size();
   if (cacheable) webServer.sendHeader("Cache-Control", "max-age=86400");
@@ -233,62 +254,86 @@ void sendSDFile(const char* path, bool cacheable) {
     webServer.streamFile(file, type);
   }
   file.close();
+  return true;
 }
 
-void handlePage()   { webServer.send_P(200, "text/html", PAGE_HTML); }
-void handleResume() { sendSDFile(RESUME_FILE, false); }
+void handlePage() { webServer.send_P(200, "text/html", PAGE_HTML); }
+
+void handleResume() {
+  if (!sendSDFile(RESUME_FILE, false)) webServer.send_P(503, "text/html", NO_RESUME_HTML);
+}
+
 void handleOther() {                         // /web/* from SD, anything else -> the page
   String uri = webServer.uri();
-  if (uri.startsWith("/web/") && uri.indexOf("..") < 0) sendSDFile(uri.c_str(), true);
-  else handlePage();
+  if (uri.startsWith("/web/") && uri.indexOf("..") < 0) {
+    if (!sendSDFile(uri.c_str(), true)) webServer.send(404, "text/plain", "Not available.");
+  } else {
+    handlePage();
+  }
 }
 
 
 /* =====================================================================
-   5. DRAWING: scenes from SD, animated pixels, text
+   5. DRAWING: scenes from flash, twinkles, text
    ===================================================================== */
-static uint16_t blitBuf[240 * 8];            // 8 rows at a time (3.8 KB)
+static uint16_t lineBuf[240 * ART_SCALE];    // one art row = 3 screen rows
 
-// Restart the SD card after an error (the card can get stuck after a bad read).
-bool remountSD() {
-  SD.end();
-  delay(20);
-  sdReady = SD.begin(SD_CS, SPI, SD_SPI_HZ);
-  Serial.println(sdReady ? "SD remounted." : "SD remount failed.");
-  return sdReady;
+// Decode a palette + run-length scene from flash straight to the screen.
+void drawFlashScene(const FlashScene& s) {
+  const uint8_t* p = s.rle;
+  const uint8_t* end = s.rle + s.rleLen;
+  uint8_t left = 0, idx = 0;
+  for (int ay = 0; ay < ART_H; ay++) {
+    for (int ax = 0; ax < ART_W; ax++) {
+      if (left == 0 && p + 1 < end) { left = p[0]; idx = p[1]; p += 2; }
+      if (left) left--;
+      uint16_t c = s.palette[idx];
+      lineBuf[ax * 3] = lineBuf[ax * 3 + 1] = lineBuf[ax * 3 + 2] = c;
+    }
+    memcpy(lineBuf + 240, lineBuf, 480);
+    memcpy(lineBuf + 480, lineBuf, 480);
+    int y = ay * ART_SCALE, rows = min(ART_SCALE, 320 - y);
+    if (rows <= 0) break;
+    tft.startWrite();
+    tft.setAddrWindow(0, y, 240, rows);
+    tft.writePixels(lineBuf, 240 * rows);
+    tft.endWrite();
+    if (skyCache)
+      for (int r = 0; r < rows; r++) {
+        int row = y + r - SKY_TOP;
+        if (row >= 0 && row < SKY_ROWS) memcpy(skyCache + row * 240, lineBuf, 480);
+      }
+  }
+  skyValid = (skyCache != nullptr);
 }
 
-// One attempt at drawing a 240x320 .565 image. The SD card and screen share
-// SPI, so each chunk is read first, then written (never both at once).
-bool drawSceneOnce(const char* path) {
-  File f = SD.open(path, FILE_READ);
-  if (!f || f.size() != 240UL * 320 * 2) { if (f) f.close(); return false; }
-  for (int y = 0; y < 320; y += 8) {
-    if (f.read((uint8_t*)blitBuf, sizeof(blitBuf)) != (int)sizeof(blitBuf)) { f.close(); return false; }
-    tft.startWrite();
-    tft.setAddrWindow(0, y, 240, 8);
-    tft.writePixels(blitBuf, 240 * 8);
-    tft.endWrite();
-    if (skyCache) {                            // keep a copy of the sky rows
-      for (int r = 0; r < 8; r++) {
-        int row = y + r - SKY_TOP;
-        if (row >= 0 && row < SKY_ROWS) memcpy(skyCache + row * 240, blitBuf + r * 240, 480);
-      }
+// Copy the scene's animated pixels out of flash.
+void loadAnim(const FlashScene& s) {
+  animCount = 0;
+  if (!s.anim) return;
+  for (int i = 0; i < s.animCount && i < MAX_ANIM; i++) {
+    const uint8_t* r = s.anim + i * 12;
+    AnimPx& a = anims[animCount++];
+    a.x = r[0]; a.y = r[1]; a.w = r[2]; a.h = r[3];
+    a.on     = r[4]  | (r[5]  << 8);
+    a.off    = r[6]  | (r[7]  << 8);
+    a.period = r[8]  | (r[9]  << 8);
+    a.offset = r[10] | (r[11] << 8);
+    a.lit = false;
+  }
+}
+
+// Twinkle: each pixel shows its "on" color for the first half of its period.
+void stepAnims(bool force) {
+  unsigned long now = millis();
+  for (int i = 0; i < animCount; i++) {
+    AnimPx& a = anims[i];
+    bool lit = ((now + a.offset) % a.period) < (a.period / 2);
+    if (lit != a.lit || force) {
+      a.lit = lit;
+      tft.fillRect(a.x * ART_SCALE, a.y * ART_SCALE, a.w * ART_SCALE, a.h * ART_SCALE, lit ? a.on : a.off);
     }
   }
-  f.close();
-  return true;
-}
-
-// Draw a scene; if the SD card errors, remount it and try once more.
-bool drawScene(const char* path) {
-  skyValid = false;
-  currentImage = nullptr;
-  if (!path) return false;
-  bool ok = sdReady && drawSceneOnce(path);
-  if (!ok && remountSD()) ok = drawSceneOnce(path);
-  if (ok) { currentImage = path; skyValid = (skyCache != nullptr); }
-  return ok;
 }
 
 // Repaint a rectangle of the sky from RAM (erases the shooting star).
@@ -307,54 +352,34 @@ void restoreRect(int x, int y, int w, int h) {
   tft.endWrite();
 }
 
-// Load a .anm file: "ANM1", scale, count, then 12-byte records.
-void loadAnim(const char* path) {
-  animCount = 0;
-  if (!sdReady || !path) return;
-  File f = SD.open(path, FILE_READ);
-  if (!f) return;
-  uint8_t head[7];
-  if (f.read(head, 7) == 7 && memcmp(head, "ANM1", 4) == 0) {
-    animScale = head[4];
-    int n = min((int)(head[5] | (head[6] << 8)), MAX_ANIM);
-    uint8_t r[12];
-    for (int i = 0; i < n && f.read(r, 12) == 12; i++) {
-      AnimPx& a = anims[animCount++];
-      a.x = r[0]; a.y = r[1]; a.w = r[2]; a.h = r[3];
-      a.on     = r[4]  | (r[5]  << 8);
-      a.off    = r[6]  | (r[7]  << 8);
-      a.period = r[8]  | (r[9]  << 8);
-      a.offset = r[10] | (r[11] << 8);
-      a.lit = false;
-    }
-  }
-  f.close();
-}
-
-// Twinkle: each pixel shows its "on" color for the first half of its period.
-void stepAnims(bool force) {
-  unsigned long now = millis();
-  for (int i = 0; i < animCount; i++) {
-    AnimPx& a = anims[i];
-    bool lit = ((now + a.offset) % a.period) < (a.period / 2);
-    if (lit != a.lit || force) {
-      a.lit = lit;
-      tft.fillRect(a.x * animScale, a.y * animScale, a.w * animScale, a.h * animScale, lit ? a.on : a.off);
-    }
-  }
-}
-
 void stepShootingStar() {
   if (!skyValid) { shooting = false; return; }
   if (!shooting && random(0, 1000) < 6) {
     shooting = true; shX = random(10, 120); shY = random(24, 90); shLife = 22;
   }
   if (!shooting) return;
-  restoreRect(shX - 1, shY - 1, 9, 6);       // erase the last frame (from RAM)
+  restoreRect(shX - 1, shY - 1, 9, 6);       // erase the last frame
   shX += 7; shY += 3; shLife--;
   if (shLife <= 0 || shX > 230 || shY > SKY_TOP + SKY_ROWS - 8) { shooting = false; return; }
   tft.drawLine(shX, shY, shX + 6, shY + 3, WARM);
   tft.drawPixel(shX + 6, shY + 3, 0xC69F);
+}
+
+// Draw a 1-bit text mask (from scenes_flash.h) in its color.
+void drawMask(const TextMask& m) {
+  int stride = (m.w + 7) / 8;
+  tft.startWrite();
+  for (int y = 0; y < m.h; y++) {
+    const uint8_t* row = m.bits + y * stride;
+    int x = 0;
+    while (x < m.w) {
+      while (x < m.w && !(row[x >> 3] & (0x80 >> (x & 7)))) x++;
+      int start = x;
+      while (x < m.w && (row[x >> 3] & (0x80 >> (x & 7)))) x++;
+      if (x > start) tft.writeFastHLine(m.x + start, m.y + y, x - start, m.color);
+    }
+  }
+  tft.endWrite();
 }
 
 void tp(int x, int y, uint8_t size, uint16_t col, const char* s) {
@@ -411,20 +436,12 @@ void saverChrome(const char* caption) {
   tp(10, 306, 1, MUTED, "Wi-Fi:"); tp(52, 306, 1, GOLD, AP_SSID);
 }
 
-void noCardScreen() {
-  tft.fillScreen(BG);
-  tp(16, 130, 2, PARCH, "Can't read the");
-  tp(16, 154, 2, PARCH, "SD card art");
-  tp(16, 184, 1, MUTED, "Retrying... check the card and");
-  tp(16, 196, 1, MUTED, "that /scenes is on it.");
-}
-
 void enterSaver() {
   const Saver& s = SAVERS[saverType];
-  shooting = false; animCount = 0; currentImage = nullptr;
-  if (s.image) {
-    if (!drawScene(s.image)) noCardScreen();
-    loadAnim(s.anim);
+  shooting = false; animCount = 0; skyValid = false;
+  if (s.scene) {
+    drawFlashScene(*s.scene);
+    loadAnim(*s.scene);
     stepAnims(true);
   } else {                                     // Relic: floating sword
     tft.fillScreen(BG);
@@ -448,13 +465,9 @@ void stepRelic() {
 }
 
 void saverStep() {
-  if (SAVERS[saverType].image && !currentImage) {      // scene failed to load
-    if (millis() - lastRetry > 3000) { lastRetry = millis(); remountSD(); enterSaver(); }
-    return;
-  }
   if (millis() - lastFrame < FRAME_MS) return;
   lastFrame = millis();
-  if (SAVERS[saverType].image) { stepAnims(false); stepShootingStar(); }
+  if (SAVERS[saverType].scene) { stepAnims(false); stepShootingStar(); }
   else stepRelic();
 }
 
@@ -474,14 +487,14 @@ void drawDots(int p) {
   for (int i = 0; i < NUM_PAGES; i++) tft.fillCircle(startX + i * gap, 302, 3, i == p ? GOLD : MUTED);
 }
 
-// Start page: the portfolio homepage banner, labeled RESUME (from SD)
+// Start page: the portfolio homepage banner, labeled RESUME (all from flash)
 void drawCover() {
-  if (drawScene(COVER_FILE)) return;
-  tft.fillScreen(BG); drawFrame();             // fallback without the SD art
-  sparkle(50, 70, GOLD); tp(66, 64, 2, GOLD, "RESUME"); sparkle(190, 70, GOLD);
-  tp(16, 110, 3, PARCH, "Rohan"); tp(16, 142, 3, PARCH, "Shrivastava");
-  tp(16, 180, 1, MUTED, "Hardware / Embedded / Robotics");
-  tp(16, 262, 1, PARCH, "Tap BOOT to explore ->");
+  drawFlashScene(SCENE_COVER);
+  int x0 = COVER_RIBBON[0], y0 = COVER_RIBBON[1], x1 = COVER_RIBBON[2], y1 = COVER_RIBBON[3];
+  tft.fillRect(x0, y0, x1 - x0 + 1, y1 - y0 + 1, tft.color565(10, 8, 30));
+  tft.drawRect(x0, y0, x1 - x0 + 1, y1 - y0 + 1, tft.color565(160, 144, 104));
+  tft.drawRect(x0 + 1, y0 + 1, x1 - x0 - 1, y1 - y0 - 1, tft.color565(160, 144, 104));
+  for (int i = 0; i < COVER_TEXT_COUNT; i++) drawMask(COVER_TEXT[i]);
 }
 
 void questPage(const char* label, const char* const* icon, const char* title, const char* sub,
@@ -511,7 +524,7 @@ void drawSkills() {
 }
 
 void drawResumePage(int p) {
-  currentImage = nullptr; skyValid = false;
+  skyValid = false; shooting = false;
   switch (p) {
     case 0: drawCover(); break;
     case 1: questPage("GUILD",     IC_SHIELD, "Accelirate",  "QA & AI Intern - 2026",
@@ -538,24 +551,14 @@ void resumeStep() {
 
 
 /* =====================================================================
-   8. SD CARD + BOOT BUTTON
+   8. BOOT BUTTON
    ===================================================================== */
-void initSD() {
-  sdReady = SD.begin(SD_CS, SPI, SD_SPI_HZ);
-  if (!sdReady) { Serial.println("SD card not found: no art or resume."); return; }
-  Serial.println("SD mounted.");
-  const char* needed[] = { RESUME_FILE, COVER_FILE, "/scenes/shore.565", "/web/hero.svg" };
-  for (const char* path : needed)
-    if (!SD.exists(path)) { Serial.print("Missing on SD: "); Serial.println(path); }
-}
-
 void shutdownPortal() {
   if (!portalActive) return;
   Serial.println("BOOT held 5 s: Wi-Fi off.");
   dnsServer.stop(); webServer.stop();
   WiFi.softAPdisconnect(true); WiFi.mode(WIFI_OFF);
-  portalActive = false;
-  currentImage = nullptr; skyValid = false;
+  portalActive = false; skyValid = false;
   tft.fillScreen(BG); drawFrame(); tp(44, 150, 2, MUTED, "Wi-Fi off");
 }
 
@@ -586,10 +589,16 @@ void setup() {
 
   SPI.begin(SD_SCK, SD_MISO, SD_MOSI, -1);
   tft.init(240, 320); tft.setRotation(0); tft.invertDisplay(true);
-  tft.fillScreen(BG); tp(20, 150, 2, PARCH, "Loading...");
-  initSD();
+  tft.fillScreen(BG);
   skyCache = (uint16_t*)malloc(SKY_ROWS * 240 * sizeof(uint16_t));
   if (!skyCache) Serial.println("Not enough RAM for the sky cache: shooting stars off.");
+
+  if (ensureSD()) {
+    if (!SD.exists(RESUME_FILE))     Serial.println("Missing on SD: resume PDF");
+    if (!SD.exists("/web/hero.svg")) Serial.println("Missing on SD: /web (phone page art)");
+  } else {
+    Serial.println("No SD card: screens work, but phones can't download the resume.");
+  }
 
   WiFi.mode(WIFI_AP);
   WiFi.setBandMode(AP_BAND_MODE);
