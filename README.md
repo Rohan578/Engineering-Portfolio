@@ -21,6 +21,8 @@ assets/contact-scene.svg   Contact scene on every page (from behind)   │ tools
 assets/starfield.svg       Background star tile                        ┘
 tools/generate_art.py      Draws the pixel art (edit this, then run it)
 tools/bump_version.py      Makes browsers load fresh CSS/JS/art after a change
+tools/device_art.py        Builds the art for the ESP32 resume badge (see device/README.md)
+device/                    Resume badge firmware, SD card files, and screen previews
 media/                     Photos, schematics, and videos, one folder per project
 files/                     Downloadable files (resume)
 fonts/                     Bundled fonts (Pixelify Sans, Inter)
