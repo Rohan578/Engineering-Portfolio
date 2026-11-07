@@ -43,7 +43,7 @@
       </div>
       <div class="fact-grid">
         <div class="fact"><span class="fact__value">0</span><span class="fact__label">cameras</span></div>
-        <div class="fact"><span class="fact__value">10</span><span class="fact__label">radio paths</span></div>
+        <div class="fact"><span class="fact__value">≤10</span><span class="fact__label">transmitters</span></div>
         <div class="fact"><span class="fact__value">52</span><span class="fact__label">subcarriers per packet</span></div>
         <div class="fact"><span class="fact__value">4×</span><span class="fact__label">updates per second</span></div>
       </div>
@@ -105,7 +105,7 @@
       <p class="lead">This simulation shows how the system should work in a real room.</p>
       <video class="video" src="media/clairvoyance/simulation-demo.mp4" poster="media/clairvoyance/simulation-demo-poster.jpg" controls playsinline preload="metadata"></video>
       <ol class="timeline">
-        <li><strong>Empty room:</strong> ten Wi-Fi paths run from the transmitters to the receiver.</li>
+        <li><strong>Up to 10 transmitters:</strong> each one sends its own Wi-Fi path across the room to the receiver.</li>
         <li><strong>A person walks in:</strong> the paths they cross light up.</li>
         <li><strong>Tracked by zone:</strong> they're followed around the room with no cameras, just Wi-Fi.</li>
         <li><strong>A second person enters:</strong> both are tracked at once.</li>
@@ -127,7 +127,7 @@
       <div class="spec-grid">
         <div class="spec">
           <span class="spec__label">Transmitters</span>
-          <p>Mostly ESP32 dev modules and Seeed Studio XIAO ESP32-S3 boards. The XIAO transmitters used wire antennas.</p>
+          <p>Six boards, mostly ESP32 dev modules and Seeed Studio XIAO ESP32-S3 boards. The XIAO transmitters used wire antennas.</p>
         </div>
         <div class="spec">
           <span class="spec__label">CSI receiver</span>
@@ -147,6 +147,7 @@
         <span class="disclaimer__label pixel">⚠ Disclaimer</span>
         <p>The map works with varying levels of success depending on the <strong>ESP32 board</strong>, <strong>Wi-Fi interference</strong> on the channel, and the <strong>number of transmitters</strong>.</p>
         <ul class="point-list">
+          <li><strong>Transmitters:</strong> our demo used 6, but the system works with up to 10. The more transmitters, the more accurate the map.</li>
           <li><strong>Best results:</strong> 5&nbsp;GHz transmitters and receivers using ESP32-C5 boards.</li>
           <li><strong>If you need 2.4&nbsp;GHz:</strong> use ESP32-C6 transmitters (or transmitters with dipole or wire antennas) and an ESP32-C6 receiver with a dipole or wire antenna.</li>
         </ul>
@@ -158,7 +159,7 @@
       <h2>Credits</h2>
       <p>Built by <strong>Team Mech Tech</strong>.</p>
       <div class="credit-grid">
-        <a class="credit credit--wide" href="https://github.com/espressif/esp-csi" target="_blank" rel="noopener">
+        <a class="credit" href="https://github.com/espressif/esp-csi" target="_blank" rel="noopener">
           <span class="credit__name">Espressif esp-csi</span>
           <span class="credit__text">Our firmware builds on its <code>csi_send</code>, <code>csi_recv</code>, and <code>csi_recv_router</code> examples.</span>
         </a>
@@ -169,14 +170,6 @@
         <a class="credit" href="https://github.com/scikit-learn/scikit-learn" target="_blank" rel="noopener">
           <span class="credit__name">scikit-learn</span>
           <span class="credit__text">The AI model.</span>
-        </a>
-        <a class="credit" href="https://github.com/pallets/flask" target="_blank" rel="noopener">
-          <span class="credit__name">Flask</span>
-          <span class="credit__text">The web server and live API.</span>
-        </a>
-        <a class="credit" href="https://github.com/numpy/numpy" target="_blank" rel="noopener">
-          <span class="credit__name">NumPy</span>
-          <span class="credit__text">The signal processing.</span>
         </a>
       </div>
       <div class="section__actions">
