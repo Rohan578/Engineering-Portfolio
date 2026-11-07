@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261107-1552") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1604") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261107-1552") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1604") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -948,8 +948,19 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 .rank__chip { font-family: var(--font-pixel); font-weight: 700; font-size: 1.05rem; color: var(--color-heading); }
 .rank__note { line-height: 1.55; color: var(--color-text-soft); }
 .section .source-note { margin: 4px 0 0; font-size: 0.88rem; color: var(--color-muted); }
+.section .spec-grid + .source-note { margin: -12px 0 20px; }
 
 .spec-grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Board pictures inside a hardware box */
+.board-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.board {
+  padding: 10px 8px 8px;
+  background: radial-gradient(ellipse at 50% 45%, rgba(143, 187, 232, 0.12), rgba(5, 4, 15, 0) 70%), var(--color-image-bg);
+  border: 1px solid var(--color-border-soft);
+}
+.board img { display: block; width: 100%; height: 150px; object-fit: contain; }
+.board figcaption { margin-top: 6px; font-size: 0.82rem; }
 
 /* Warning box (e.g. the Clairvoyance hardware disclaimer) */
 .disclaimer {

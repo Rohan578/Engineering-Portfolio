@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clairvoyance | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261107-1552">
+  <link rel="stylesheet" href="css/theme.css?v=20261107-1604">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1552"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1604"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -183,10 +183,30 @@
         <div class="spec">
           <span class="spec__label">Transmitters</span>
           <p>Six boards, mostly ESP32 dev modules and Seeed Studio XIAO ESP32-S3 boards. The XIAO transmitters used wire antennas.</p>
+          <div class="board-row">
+            <figure class="board">
+              <img src="media/clairvoyance/board-esp32-devkitc.webp" alt="3D view of an ESP32 dev module" loading="lazy">
+              <figcaption>ESP32 dev module</figcaption>
+            </figure>
+            <figure class="board">
+              <img src="media/clairvoyance/board-xiao-s3-wire.webp" alt="3D render of a XIAO ESP32-S3 with a wire antenna" loading="lazy">
+              <figcaption>XIAO ESP32-S3 + wire antenna</figcaption>
+            </figure>
+          </div>
         </div>
         <div class="spec">
-          <span class="spec__label">CSI receiver</span>
-          <p>An ESP32-S3 with a dipole antenna.</p>
+          <span class="spec__label">CSI receivers</span>
+          <p>A XIAO ESP32-S3 with a dipole antenna on 2.4&nbsp;GHz, and an ESP32-C5 dev board for 5&nbsp;GHz sensing.</p>
+          <div class="board-row">
+            <figure class="board">
+              <img src="media/clairvoyance/board-xiao-s3-dipole.webp" alt="3D render of a XIAO ESP32-S3 with a dipole antenna" loading="lazy">
+              <figcaption>XIAO ESP32-S3 + dipole</figcaption>
+            </figure>
+            <figure class="board">
+              <img src="media/clairvoyance/board-esp32-c5-devkitc.webp" alt="3D view of the ESP32-C5-DevKitC-1" loading="lazy">
+              <figcaption>ESP32-C5-DevKitC-1</figcaption>
+            </figure>
+          </div>
         </div>
         <div class="spec">
           <span class="spec__label">Server</span>
@@ -197,6 +217,8 @@
           <p>An industrial-grade enterprise access point hosted the Wi-Fi network on channel 11.</p>
         </div>
       </div>
+
+      <p class="source-note">ESP32 and ESP32-C5 board images: Espressif <a href="https://github.com/espressif/esp-dev-kits" target="_blank" rel="noopener">esp-dev-kits</a> docs (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; background removed). XIAO ESP32-S3 images are simplified 3D renders made for this page.</p>
 
       <div class="disclaimer">
         <span class="disclaimer__label pixel">⚠ Disclaimer</span>
@@ -243,7 +265,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1552"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1604"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -265,6 +287,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261107-1552"></script>
+  <script src="js/main.js?v=20261107-1604"></script>
 </body>
 </html>
