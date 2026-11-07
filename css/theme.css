@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261107-1457") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1526") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261107-1457") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1526") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -795,12 +795,127 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   border-color: transparent transparent transparent var(--color-gold);
 }
 
-/* Numbered or bulleted lists inside a section */
-.steps { margin: 0 0 1em; padding-left: 1.3em; color: var(--color-text-soft); line-height: 1.7; }
-.steps li { margin-bottom: 8px; padding-left: 4px; }
-.steps li::marker { color: var(--color-gold); font-family: var(--font-pixel); }
-.section strong { color: var(--color-text); }
+/* Reading helpers for long project pages (used on clairvoyance.html) */
+.section strong { color: var(--color-text); font-weight: 600; }
+.section em { color: var(--color-text); }
 .section code { font-size: 0.9em; color: var(--color-gold); }
+
+/* A one-sentence summary at the top of a section */
+.section .lead {
+  margin-bottom: 20px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--color-heading);
+}
+
+/* Smaller heading inside a section */
+.subhead {
+  margin: 28px 0 14px;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-gold);
+}
+
+/* Bullet list with gold square markers */
+.point-list { margin: 0; padding: 0; list-style: none; }
+.point-list li {
+  position: relative;
+  margin-bottom: 12px;
+  padding-left: 22px;
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+.point-list li:last-child { margin-bottom: 0; }
+.point-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  background: var(--color-gold);
+}
+
+/* Row of big numbers with short labels */
+.fact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 24px; }
+.fact {
+  padding: 14px 10px;
+  text-align: center;
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+}
+.fact__value { display: block; font-family: var(--font-pixel); font-weight: 700; font-size: 1.9rem; line-height: 1.1; color: var(--color-gold); }
+.fact__label { display: block; margin-top: 4px; font-size: 0.85rem; color: var(--color-muted); }
+
+/* Numbered step cards ("How It Works") */
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.step-card {
+  counter-increment: step;
+  padding: 16px 14px;
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+  border-top: 3px solid var(--color-gold);
+}
+.step-card::before {
+  content: counter(step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  color: #14102e;
+  background: var(--color-gold);
+}
+.step-card__title { display: block; margin-bottom: 6px; font-family: var(--font-pixel); font-weight: 700; font-size: 1.1rem; color: var(--color-heading); }
+.step-card__text { display: block; font-size: 0.95rem; line-height: 1.55; color: var(--color-text-soft); }
+
+/* Numbered "what you'll see" list under a video */
+.timeline { margin: 0; padding: 0; list-style: none; counter-reset: moment; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px; }
+.timeline li {
+  counter-increment: moment;
+  position: relative;
+  padding-left: 36px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+.timeline li::before {
+  content: counter(moment);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 24px;
+  text-align: center;
+  color: var(--color-gold);
+  border: 2px solid var(--color-gold);
+}
+
+/* Labeled boxes for hardware ("What We Used") */
+.spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
+.spec {
+  padding: 16px 18px;
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+  border-left: 4px solid var(--color-sky);
+}
+.spec__label { display: block; margin-bottom: 6px; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-sky); }
+.section .spec p { margin: 0; line-height: 1.6; }
 
 /* Warning box (e.g. the Clairvoyance hardware disclaimer) */
 .disclaimer {
@@ -809,13 +924,26 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   border: 2px solid var(--color-gold);
   border-left-width: 6px;
 }
-.disclaimer__label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 1.05rem; color: var(--color-gold); }
+.disclaimer__label { display: block; margin-bottom: 10px; font-weight: 700; font-size: 1.1rem; color: var(--color-gold); }
+.disclaimer p { margin-bottom: 12px; }
+
+/* Clickable credit cards */
+.credit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+.credit--wide { grid-column: span 2; }
+.credit {
+  display: block;
+  padding: 14px 16px;
+  color: inherit;
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.credit:hover { border-color: var(--color-gold); transform: translateY(-2px); text-decoration: none; }
+.credit__name { display: block; margin-bottom: 4px; font-family: var(--font-pixel); font-weight: 700; color: var(--color-sky); }
+.credit__text { display: block; font-size: 0.92rem; line-height: 1.5; color: var(--color-text-soft); }
 
 /* Centered button row at the end of a section */
-.section__actions { margin-top: 20px; text-align: center; }
-
-/* Tall phone screenshot beside text */
-.clairvoyance-phone { width: 30%; max-width: 240px; }
+.section__actions { margin-top: 24px; text-align: center; }
 
 
 /* 10. RU HART extension link -------------------------------------------
@@ -847,6 +975,8 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 
 /* 11. Responsive layout --------------------------------------------------- */
 @media (max-width: 900px) {
+  .step-grid { grid-template-columns: repeat(2, 1fr); }
+  .step-card:last-child { grid-column: 1 / -1; }
   .quest-grid, .post-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
   .quest-card__desc { min-height: 0; }
   .intro { flex-direction: column; text-align: center; }
@@ -878,7 +1008,12 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .experience__logo { width: 72px; height: 72px; padding: 8px; }
   .split, .split--reverse { flex-direction: column; }
   .split__media, .split__media--wide { width: 100%; }
-  .clairvoyance-phone { width: 60%; margin: 0 auto; }
+  .fact-grid { grid-template-columns: 1fr 1fr; }
+  .credit-grid { grid-template-columns: 1fr; }
+  .step-grid { grid-template-columns: 1fr; }
+  .credit--wide { grid-column: auto; }
+  .spec-grid, .timeline { grid-template-columns: 1fr; }
+  .split__text { width: 100%; }
   .image-pair { flex-direction: column; }
   .image-pair .framed { height: auto; max-height: 360px; }
   .extension { flex-direction: column; text-align: center; }
