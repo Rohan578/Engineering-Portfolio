@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261026-0028") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1457") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261026-0028") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1457") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -795,6 +795,28 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   border-color: transparent transparent transparent var(--color-gold);
 }
 
+/* Numbered or bulleted lists inside a section */
+.steps { margin: 0 0 1em; padding-left: 1.3em; color: var(--color-text-soft); line-height: 1.7; }
+.steps li { margin-bottom: 8px; padding-left: 4px; }
+.steps li::marker { color: var(--color-gold); font-family: var(--font-pixel); }
+.section strong { color: var(--color-text); }
+.section code { font-size: 0.9em; color: var(--color-gold); }
+
+/* Warning box (e.g. the Clairvoyance hardware disclaimer) */
+.disclaimer {
+  padding: 18px 20px;
+  background: rgba(242, 217, 138, 0.06);
+  border: 2px solid var(--color-gold);
+  border-left-width: 6px;
+}
+.disclaimer__label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 1.05rem; color: var(--color-gold); }
+
+/* Centered button row at the end of a section */
+.section__actions { margin-top: 20px; text-align: center; }
+
+/* Tall phone screenshot beside text */
+.clairvoyance-phone { width: 30%; max-width: 240px; }
+
 
 /* 10. RU HART extension link -------------------------------------------
    On the LiDAR bot page, a card that leads to the motor driver page. */
@@ -856,6 +878,7 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .experience__logo { width: 72px; height: 72px; padding: 8px; }
   .split, .split--reverse { flex-direction: column; }
   .split__media, .split__media--wide { width: 100%; }
+  .clairvoyance-phone { width: 60%; margin: 0 auto; }
   .image-pair { flex-direction: column; }
   .image-pair .framed { height: auto; max-height: 360px; }
   .extension { flex-direction: column; text-align: center; }

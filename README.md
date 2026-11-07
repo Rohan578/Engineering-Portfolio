@@ -8,6 +8,7 @@ Push to `main` and the site updates in about a minute.
 ```
 index.html                 Homepage: banner, intro, Guild Record (experience),
                            Quest Log (projects), Chronicles (posts & events), contact
+clairvoyance.html          Clairvoyance (Verizon, Team Mech Tech): Wi-Fi CSI room sensing
 soilnode.html              Soil Node project page
 ruhart-lidar-bot.html      RU HART: LiDAR bot
 ruhart-motor-driver.html   RU HART extension: motor driver

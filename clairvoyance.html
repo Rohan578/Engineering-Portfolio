@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clairvoyance | Rohan Shrivastava</title>
+  <link rel="stylesheet" href="css/theme.css?v=20261107-1457">
+</head>
+<body>
+
+  <!-- ===================================================================
+       BANNER
+       The hero standing guard (assets/project-scene.svg, drawn by
+       tools/generate_art.py) with this page's title in the sky above him.
+       =================================================================== -->
+  <header class="page-hero">
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1457"
+         alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
+    <nav class="page-hero__nav">
+      <a class="back-link" href="index.html">← Back to the Quest Log</a>
+    </nav>
+    <div class="page-hero__title">
+      <h1 class="project__title">Clairvoyance</h1>
+      <p class="project__subtitle">Verizon | Team Mech Tech</p>
+    </div>
+  </header>
+
+
+  <main class="project">
+
+    <!-- The concept: 3D view left, text right -->
+    <section class="section panel">
+      <h2>Seeing Through Wi-Fi</h2>
+      <div class="split">
+        <a class="split__media split__media--wide zoom" href="media/clairvoyance/room-3d-view.png" target="_blank">
+          <img class="framed" src="media/clairvoyance/room-3d-view.png" alt="3D room view showing transmitters, the receiver, radio paths, and a person located from Wi-Fi alone">
+        </a>
+        <p class="split__text">Clairvoyance finds people in a room using nothing but Wi-Fi. There are no cameras and no microphones. Small ESP32 boards around the room send radio packets to a receiver. A person's body absorbs and reflects those signals, and the Wi-Fi chip measures the change as <strong>Channel State Information (CSI)</strong>. By watching which radio paths get disturbed, the system works out roughly where each person is standing and shows them live in a 3D model of the room.</p>
+      </div>
+    </section>
+
+    <!-- How it works: text left, dashboard right -->
+    <section class="section panel">
+      <h2>How It Works</h2>
+      <div class="split">
+        <div class="split__text">
+          <ol class="steps">
+            <li><strong>Transmitters</strong> around the walls broadcast a tiny ESP-NOW packet 50 times a second.</li>
+            <li><strong>The receiver</strong> listens to every packet and measures its CSI: how strongly each of 52 Wi-Fi subcarrier frequencies arrived. It streams that data over UDP to the server.</li>
+            <li><strong>The server</strong> compares each radio path with a calibration of the empty room, filters out interference that hits every path at once, and finds the spot on the floor that best explains which paths changed.</li>
+            <li><strong>The AI model</strong>, once trained, takes over: it estimates which zone each person is in and how many people are there.</li>
+            <li><strong>The 3D view</strong> draws the room, the boards, the glowing radio paths, and each person, refreshed four times a second.</li>
+          </ol>
+        </div>
+        <a class="split__media split__media--wide zoom" href="media/clairvoyance/link-dashboard.png" target="_blank">
+          <img class="framed" src="media/clairvoyance/link-dashboard.png" alt="CSI sensing dashboard with signal strength, motion score, and CSI amplitude per subcarrier for each transmitter">
+        </a>
+      </div>
+    </section>
+
+    <!-- Training: image left, text right -->
+    <section class="section panel">
+      <h2>Teaching It the Room</h2>
+      <div class="split">
+        <a class="split__media split__media--wide zoom" href="media/clairvoyance/collect-running.png" target="_blank">
+          <img class="framed" src="media/clairvoyance/collect-running.png" alt="Guided data collection page telling volunteers which taped square to stand in">
+        </a>
+        <p class="split__text">Every room bends Wi-Fi differently, so the system learns each space. We taped a 3&nbsp;×&nbsp;3 grid on the floor, and a guided collection page told volunteers out loud which square to stand or walk in while it labeled the recordings automatically. Those sessions trained random forest models (scikit-learn) that predict each person's zone and the head count. In our simulator benchmark, the model placed one person in the exact square about 80% of the time, and it never showed a person in an empty room, even with heavy Wi-Fi interference.</p>
+      </div>
+    </section>
+
+    <!-- Demo hardware: text left, phone screenshot right -->
+    <section class="section panel">
+      <h2>Our Demo Setup</h2>
+      <div class="split">
+        <div class="split__text">
+          <p>The demo used a mix of microcontrollers:</p>
+          <ul class="steps">
+            <li><strong>Transmitters:</strong> mostly ESP32 dev modules and Seeed Studio XIAO ESP32-S3 boards. The XIAO transmitters used wire antennas.</li>
+            <li><strong>CSI receiver:</strong> an ESP32-S3 with a dipole antenna.</li>
+            <li><strong>Server:</strong> a Raspberry Pi 5 (8&nbsp;GB) hosted the AI model and the demo script.</li>
+            <li><strong>Network:</strong> an industrial-grade enterprise access point hosted the Wi-Fi network on channel 11.</li>
+          </ul>
+          <p>The 3D view runs in any browser on the same network, so visitors could watch it live on their phones.</p>
+        </div>
+        <a class="split__media zoom clairvoyance-phone" href="media/clairvoyance/room-3d-phone.png" target="_blank">
+          <img class="framed" src="media/clairvoyance/room-3d-phone.png" alt="The 3D room view on a phone">
+        </a>
+      </div>
+    </section>
+
+    <!-- Demo video + disclaimer -->
+    <section class="section panel">
+      <h2>Demo &amp; Disclaimer</h2>
+      <!-- To add the demo video: save it as media/clairvoyance/demo.mp4 and
+           replace this placeholder <div> with:
+           <video class="video" src="media/clairvoyance/demo.mp4" controls playsinline preload="metadata"></video> -->
+      <div class="video-placeholder">
+        <div class="video-placeholder__icon"></div>
+        <span>Demo video coming soon</span>
+      </div>
+      <div class="disclaimer">
+        <span class="disclaimer__label pixel">⚠ Disclaimer</span>
+        <p>The map works with varying levels of success depending on the ESP32 board, Wi-Fi interference on the channel, and the number of transmitters.</p>
+        <p>For the best chance of success, we recommend <strong>5&nbsp;GHz transmitters and receivers using ESP32-C5 boards</strong>. If you need to use 2.4&nbsp;GHz, use <strong>ESP32-C6 transmitters</strong> (or transmitters with dipole or wire antennas) and an <strong>ESP32-C6 receiver with a dipole or wire antenna</strong>.</p>
+      </div>
+    </section>
+
+    <!-- Credits + link to the repository -->
+    <section class="section panel">
+      <h2>Credits</h2>
+      <p>Built by <strong>Team Mech Tech</strong>. See everyone who contributed on the repository's <a href="https://github.com/Rohan578/RSSI-CSI-Demo-/graphs/contributors" target="_blank" rel="noopener">contributors page</a>.</p>
+      <ul class="steps">
+        <li><a href="https://github.com/espressif/esp-csi" target="_blank" rel="noopener">Espressif esp-csi</a>: our transmitter and receiver firmware builds on its <code>csi_send</code>, <code>csi_recv</code>, and <code>csi_recv_router</code> examples.</li>
+        <li><a href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener">three.js</a>: the 3D room view.</li>
+        <li><a href="https://github.com/pallets/flask" target="_blank" rel="noopener">Flask</a>, <a href="https://github.com/numpy/numpy" target="_blank" rel="noopener">NumPy</a>, and <a href="https://github.com/scikit-learn/scikit-learn" target="_blank" rel="noopener">scikit-learn</a>: the server, signal processing, and AI model.</li>
+      </ul>
+      <div class="section__actions">
+        <a class="button button--solid" href="https://github.com/Rohan578/RSSI-CSI-Demo-/tree/home-wifi-dual-band" target="_blank" rel="noopener">View the RSSI-CSI Demo on GitHub →</a>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ===================================================================
+       CONTACT (same block as on the homepage)
+       Full-width scene: the same hero, now seen from behind, looking out
+       at the ocean and the night sky (assets/contact-scene.svg).
+       The email button opens a Gmail draft addressed to me; "Copy" copies
+       the address (handled in js/main.js).
+       =================================================================== -->
+  <footer class="contact" id="contact">
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1457"
+         alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
+
+    <div class="contact__card panel">
+      <h2 class="contact__title">Get in Touch</h2>
+      <p class="contact__text">Have a question or an opportunity? I’d love to hear from you.</p>
+
+      <div class="contact__buttons">
+        <a class="button button--solid"
+           href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=srohanshri@gmail.com"
+           target="_blank" rel="noopener">✉ Email Me</a>
+        <a class="button" href="https://linkedin.com/in/rohan-shrivastava456" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <div class="contact__email">
+        <span class="contact__address">srohanshri@gmail.com</span>
+        <button class="contact__copy" type="button" data-copy="srohanshri@gmail.com">Copy Email</button>
+      </div>
+      <span class="visually-hidden" id="copy-status" aria-live="polite"></span>
+    </div>
+  </footer>
+
+  <script src="js/main.js?v=20261107-1457"></script>
+</body>
+</html>
