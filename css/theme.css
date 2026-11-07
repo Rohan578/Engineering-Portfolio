@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261107-1604") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1610") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261107-1604") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1610") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -945,7 +945,7 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 .rank:nth-child(n+2)::before { background: rgba(242, 217, 138, 0.7); }
 .rank:nth-child(n+3)::before { background: rgba(242, 217, 138, 0.5); }
 .rank:nth-child(n+4)::before { background: rgba(242, 217, 138, 0.32); }
-.rank__chip { font-family: var(--font-pixel); font-weight: 700; font-size: 1.05rem; color: var(--color-heading); }
+.rank__chip { font-family: var(--font-body); font-weight: 600; font-size: 1.05rem; color: var(--color-heading); }
 .rank__note { line-height: 1.55; color: var(--color-text-soft); }
 .section .source-note { margin: 4px 0 0; font-size: 0.88rem; color: var(--color-muted); }
 .section .spec-grid + .source-note { margin: -12px 0 20px; }
@@ -960,7 +960,7 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   border: 1px solid var(--color-border-soft);
 }
 .board img { display: block; width: 100%; height: 150px; object-fit: contain; }
-.board figcaption { margin-top: 6px; font-size: 0.82rem; }
+.board figcaption { margin-top: 6px; font-family: var(--font-body); font-size: 0.85rem; color: var(--color-text-soft); }
 
 /* Warning box (e.g. the Clairvoyance hardware disclaimer) */
 .disclaimer {
@@ -1076,4 +1076,46 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 /* 12. Reduced motion: respect the visitor's system setting ---------------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+
+/* 12. Readable labels ------------------------------------------------------
+   Board names (ESP32-C5, XIAO ESP32-S3, ...) use the plain body font, since
+   the pixel font makes letters like C, O and 5 hard to tell apart. */
+.part {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: #e6f0ff;
+  background: rgba(143, 187, 232, 0.12);
+  padding: 0 5px;
+  border-radius: 3px;
+}
+.rank__chip .part, .board figcaption .part { background: none; padding: 0; color: inherit; }
+.disclaimer__label .part { font-weight: 700; color: inherit; background: rgba(233, 120, 140, 0.15); }
+
+/* Verizon badge (Clairvoyance card, banner, and intro) */
+.verizon-badge {
+  display: inline-block;
+  padding: 1px 9px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #d52b1e;
+  border: 1px solid #ff6a5c;
+  vertical-align: 0.08em;
+}
+.quest-card__award .verizon-badge { margin-right: 4px; }
+.project__subtitle .verizon-badge { margin-right: 6px; font-size: 0.8em; }
+.section .event-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-weight: 600;
+  color: var(--color-text);
 }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clairvoyance | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261107-1604">
+  <link rel="stylesheet" href="css/theme.css?v=20261107-1610">
 </head>
 <body>
 
@@ -14,14 +14,14 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1604"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1610"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
     </nav>
     <div class="page-hero__title">
       <h1 class="project__title">Clairvoyance</h1>
-      <p class="project__subtitle">Verizon | Team Mech Tech</p>
+      <p class="project__subtitle"><span class="verizon-badge">Verizon</span> Smart MapUI · Round 1 · Team Mech Tech</p>
     </div>
   </header>
 
@@ -31,13 +31,14 @@
     <!-- The concept: short lead, 3D view, and four quick facts -->
     <section class="section panel">
       <h2>Seeing Through Wi-Fi</h2>
+      <p class="event-line"><span class="verizon-badge">Verizon</span> Built for Verizon's Smart MapUI competition (Round 1) as Team Mech Tech.</p>
       <p class="lead">Clairvoyance finds people in a room using nothing but Wi-Fi: no cameras, no microphones, nothing worn.</p>
       <div class="split">
         <a class="split__media split__media--wide zoom" href="media/clairvoyance/room-3d-view.png" target="_blank">
           <img class="framed" src="media/clairvoyance/room-3d-view.png" alt="3D room view showing transmitters, the receiver, radio paths, and a person located from Wi-Fi alone">
         </a>
         <div class="split__text">
-          <p>Small ESP32 boards around the room send radio packets to a receiver. A person's body absorbs and reflects those signals, and the Wi-Fi chip measures the change as <strong>Channel State Information (CSI)</strong>.</p>
+          <p>Small <span class="part">ESP32</span> boards around the room send radio packets to a receiver. A person's body absorbs and reflects those signals, and the Wi-Fi chip measures the change as <strong>Channel State Information (CSI)</strong>.</p>
           <p>By watching <em>which</em> radio paths get disturbed, the system works out where each person is standing and shows them live in a 3D model of the room.</p>
         </div>
       </div>
@@ -103,22 +104,22 @@
          antennas, and a warning about SuperMini boards -->
     <section class="section panel">
       <h2>Choosing the Right ESP32</h2>
-      <p class="lead">My part of the project was the ESP32 side: picking the boards and antennas, getting the transmitters talking over ESP-NOW, and making sure CSI sensing worked on the receivers before the data reached the Pi.</p>
+      <p class="lead">My part of the project was the <span class="part">ESP32</span> side: picking the boards and antennas, getting the transmitters talking over ESP-NOW, and making sure CSI sensing worked on the receivers before the data reached the Pi.</p>
 
       <h3 class="subhead">Which board is best for CSI sensing</h3>
       <ol class="rank-list">
-        <li class="rank"><span class="rank__chip">ESP32-C5</span><span class="rank__note">Best. Wi-Fi 6 on both 2.4&nbsp;GHz and 5&nbsp;GHz, so it can sense on the quieter 5&nbsp;GHz band.</span></li>
-        <li class="rank"><span class="rank__chip">ESP32-C6</span><span class="rank__note">Best 2.4&nbsp;GHz choice. Wi-Fi 6, but 2.4&nbsp;GHz only.</span></li>
-        <li class="rank"><span class="rank__chip">ESP32-S3 ≈ ESP32-C3</span><span class="rank__note">About equal on CSI. We used an S3 receiver because the XIAO ESP32-S3 has an antenna connector for a dipole.</span></li>
-        <li class="rank"><span class="rank__chip">ESP32</span><span class="rank__note">Oldest and weakest at CSI, but a reliable transmitter.</span></li>
+        <li class="rank"><span class="rank__chip"><span class="part">ESP32-C5</span></span><span class="rank__note">Best. Wi-Fi 6 on both 2.4&nbsp;GHz and 5&nbsp;GHz, so it can sense on the quieter 5&nbsp;GHz band.</span></li>
+        <li class="rank"><span class="rank__chip"><span class="part">ESP32-C6</span></span><span class="rank__note">Best 2.4&nbsp;GHz choice. Wi-Fi 6, but 2.4&nbsp;GHz only.</span></li>
+        <li class="rank"><span class="rank__chip"><span class="part">ESP32-S3</span> ≈ <span class="part">ESP32-C3</span></span><span class="rank__note">About equal on CSI. We used an S3 receiver because the <span class="part">XIAO ESP32-S3</span> has an antenna connector for a dipole.</span></li>
+        <li class="rank"><span class="rank__chip"><span class="part">ESP32</span></span><span class="rank__note">Oldest and weakest at CSI, but a reliable transmitter.</span></li>
       </ol>
-      <p class="source-note">Ranking from Espressif's <a href="https://docs.espressif.com/projects/esp-techpedia/en/latest/esp-friends/solution-introduction/esp-csi/esp-csi-solution.html" target="_blank" rel="noopener">ESP-CSI solution guide</a>: ESP32-C5 &gt; ESP32-C6 &gt; ESP32-C3 ≈ ESP32-S3 &gt; ESP32.</p>
+      <p class="source-note">Ranking from Espressif's <a href="https://docs.espressif.com/projects/esp-techpedia/en/latest/esp-friends/solution-introduction/esp-csi/esp-csi-solution.html" target="_blank" rel="noopener">ESP-CSI solution guide</a>: <span class="part">ESP32-C5</span> &gt; <span class="part">ESP32-C6</span> &gt; <span class="part">ESP32-C3</span> ≈ <span class="part">ESP32-S3</span> &gt; <span class="part">ESP32</span>.</p>
 
       <h3 class="subhead">Transmitters vs. receivers</h3>
       <div class="spec-grid">
         <div class="spec">
           <span class="spec__label">Transmitters</span>
-          <p>Only broadcast small ESP-NOW packets, so almost any ESP32 works. What matters most is a stable connection and a decent antenna, so every packet arrives on time.</p>
+          <p>Only broadcast small ESP-NOW packets, so almost any <span class="part">ESP32</span> works. What matters most is a stable connection and a decent antenna, so every packet arrives on time.</p>
         </div>
         <div class="spec">
           <span class="spec__label">Receivers</span>
@@ -143,7 +144,7 @@
       </div>
 
       <div class="disclaimer disclaimer--danger">
-        <span class="disclaimer__label pixel">⚠ Avoid ESP32-C3 and ESP32-C6 SuperMini boards</span>
+        <span class="disclaimer__label pixel">⚠ Avoid <span class="part">ESP32-C3</span> and <span class="part">ESP32-C6 SuperMini</span> boards</span>
         <p>These tiny boards squeeze a small ceramic antenna in right next to the crystal, the pin headers, and the power circuitry, with almost no clear space around it. In practice that means:</p>
         <ul class="point-list">
           <li><strong>Weak, unreliable Wi-Fi:</strong> they drop the connection or fail to connect, especially at full transmit power.</li>
@@ -182,29 +183,29 @@
       <div class="spec-grid">
         <div class="spec">
           <span class="spec__label">Transmitters</span>
-          <p>Six boards, mostly ESP32 dev modules and Seeed Studio XIAO ESP32-S3 boards. The XIAO transmitters used wire antennas.</p>
+          <p>Six boards, mostly <span class="part">ESP32</span> dev modules and <span class="part">Seeed Studio XIAO ESP32-S3</span> boards. The XIAO transmitters used wire antennas.</p>
           <div class="board-row">
             <figure class="board">
               <img src="media/clairvoyance/board-esp32-devkitc.webp" alt="3D view of an ESP32 dev module" loading="lazy">
-              <figcaption>ESP32 dev module</figcaption>
+              <figcaption><span class="part">ESP32</span> dev module</figcaption>
             </figure>
             <figure class="board">
               <img src="media/clairvoyance/board-xiao-s3-wire.webp" alt="3D render of a XIAO ESP32-S3 with a wire antenna" loading="lazy">
-              <figcaption>XIAO ESP32-S3 + wire antenna</figcaption>
+              <figcaption><span class="part">XIAO ESP32-S3</span> + wire antenna</figcaption>
             </figure>
           </div>
         </div>
         <div class="spec">
           <span class="spec__label">CSI receivers</span>
-          <p>A XIAO ESP32-S3 with a dipole antenna on 2.4&nbsp;GHz, and an ESP32-C5 dev board for 5&nbsp;GHz sensing.</p>
+          <p>A <span class="part">XIAO ESP32-S3</span> with a dipole antenna on 2.4&nbsp;GHz, and an <span class="part">ESP32-C5</span> dev board for 5&nbsp;GHz sensing.</p>
           <div class="board-row">
             <figure class="board">
               <img src="media/clairvoyance/board-xiao-s3-dipole.webp" alt="3D render of a XIAO ESP32-S3 with a dipole antenna" loading="lazy">
-              <figcaption>XIAO ESP32-S3 + dipole</figcaption>
+              <figcaption><span class="part">XIAO ESP32-S3</span> + dipole</figcaption>
             </figure>
             <figure class="board">
               <img src="media/clairvoyance/board-esp32-c5-devkitc.webp" alt="3D view of the ESP32-C5-DevKitC-1" loading="lazy">
-              <figcaption>ESP32-C5-DevKitC-1</figcaption>
+              <figcaption><span class="part">ESP32-C5-DevKitC-1</span></figcaption>
             </figure>
           </div>
         </div>
@@ -218,15 +219,15 @@
         </div>
       </div>
 
-      <p class="source-note">ESP32 and ESP32-C5 board images: Espressif <a href="https://github.com/espressif/esp-dev-kits" target="_blank" rel="noopener">esp-dev-kits</a> docs (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; background removed). XIAO ESP32-S3 images are simplified 3D renders made for this page.</p>
+      <p class="source-note"><span class="part">ESP32</span> and <span class="part">ESP32-C5</span> board images: Espressif <a href="https://github.com/espressif/esp-dev-kits" target="_blank" rel="noopener">esp-dev-kits</a> docs (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; background removed). <span class="part">XIAO ESP32-S3</span> images are simplified 3D renders made for this page.</p>
 
       <div class="disclaimer">
         <span class="disclaimer__label pixel">⚠ Disclaimer</span>
-        <p>The map works with varying levels of success depending on the <strong>ESP32 board</strong>, <strong>Wi-Fi interference</strong> on the channel, and the <strong>number of transmitters</strong>.</p>
+        <p>The map works with varying levels of success depending on the <strong><span class="part">ESP32</span> board</strong>, <strong>Wi-Fi interference</strong> on the channel, and the <strong>number of transmitters</strong>.</p>
         <ul class="point-list">
           <li><strong>Transmitters:</strong> our demo used 6, but the system works with up to 10. The more transmitters, the more accurate the map.</li>
-          <li><strong>Best results:</strong> 5&nbsp;GHz transmitters and receivers using ESP32-C5 boards.</li>
-          <li><strong>If you need 2.4&nbsp;GHz:</strong> use ESP32-C6 transmitters (or transmitters with dipole or wire antennas) and an ESP32-C6 receiver with a dipole or wire antenna.</li>
+          <li><strong>Best results:</strong> 5&nbsp;GHz transmitters and receivers using <span class="part">ESP32-C5</span> boards.</li>
+          <li><strong>If you need 2.4&nbsp;GHz:</strong> use <span class="part">ESP32-C6</span> transmitters (or transmitters with dipole or wire antennas) and an <span class="part">ESP32-C6</span> receiver with a dipole or wire antenna.</li>
         </ul>
       </div>
     </section>
@@ -265,7 +266,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1604"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1610"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -287,6 +288,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261107-1604"></script>
+  <script src="js/main.js?v=20261107-1610"></script>
 </body>
 </html>
