@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261107-1526") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1552") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261107-1526") repeat;
+  background: url("../assets/starfield.svg?v=20261107-1552") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -917,6 +917,40 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 .spec__label { display: block; margin-bottom: 6px; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-sky); }
 .section .spec p { margin: 0; line-height: 1.6; }
 
+/* Ranked list (e.g. best ESP32 for CSI) */
+.rank-list { margin: 0 0 10px; padding: 0; list-style: none; counter-reset: rank; }
+.rank {
+  counter-increment: rank;
+  display: grid;
+  grid-template-columns: 36px 200px 1fr;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+}
+.rank::before {
+  content: counter(rank);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  color: #14102e;
+  background: var(--color-gold);
+}
+.rank:nth-child(n+2)::before { background: rgba(242, 217, 138, 0.7); }
+.rank:nth-child(n+3)::before { background: rgba(242, 217, 138, 0.5); }
+.rank:nth-child(n+4)::before { background: rgba(242, 217, 138, 0.32); }
+.rank__chip { font-family: var(--font-pixel); font-weight: 700; font-size: 1.05rem; color: var(--color-heading); }
+.rank__note { line-height: 1.55; color: var(--color-text-soft); }
+.section .source-note { margin: 4px 0 0; font-size: 0.88rem; color: var(--color-muted); }
+
+.spec-grid--3 { grid-template-columns: repeat(3, 1fr); }
+
 /* Warning box (e.g. the Clairvoyance hardware disclaimer) */
 .disclaimer {
   padding: 18px 20px;
@@ -926,6 +960,11 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 }
 .disclaimer__label { display: block; margin-bottom: 10px; font-weight: 700; font-size: 1.1rem; color: var(--color-gold); }
 .disclaimer p { margin-bottom: 12px; }
+.disclaimer--danger { margin-top: 8px; background: rgba(233, 120, 140, 0.07); border-color: #e9788c; }
+.disclaimer--danger .disclaimer__label { color: #f29aa9; }
+.disclaimer--danger .point-list li::before { background: #e9788c; }
+.disclaimer .point-list { margin-bottom: 12px; }
+.disclaimer .point-list:last-child { margin-bottom: 0; }
 
 /* Clickable credit cards */
 .credit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
@@ -1012,7 +1051,9 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .credit-grid { grid-template-columns: 1fr; }
   .step-grid { grid-template-columns: 1fr; }
   .credit--wide { grid-column: auto; }
-  .spec-grid, .timeline { grid-template-columns: 1fr; }
+  .spec-grid, .spec-grid--3, .timeline { grid-template-columns: 1fr; }
+  .rank { grid-template-columns: 32px 1fr; }
+  .rank__note { grid-column: 2; }
   .split__text { width: 100%; }
   .image-pair { flex-direction: column; }
   .image-pair .framed { height: auto; max-height: 360px; }

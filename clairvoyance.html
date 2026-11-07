@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clairvoyance | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261107-1526">
+  <link rel="stylesheet" href="css/theme.css?v=20261107-1552">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1526"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261107-1552"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -96,6 +96,61 @@
           <li>Those sessions trained <strong>random forest models</strong> (scikit-learn) that predict each person's zone and the head count.</li>
           <li>In our simulator benchmark, the model placed one person in the exact square <strong>about 80%</strong> of the time and <strong>never</strong> showed a person in an empty room, even with heavy interference.</li>
         </ul>
+      </div>
+    </section>
+
+    <!-- Hardware research (my part of the project): board ranking, roles,
+         antennas, and a warning about SuperMini boards -->
+    <section class="section panel">
+      <h2>Choosing the Right ESP32</h2>
+      <p class="lead">My part of the project was the ESP32 side: picking the boards and antennas, getting the transmitters talking over ESP-NOW, and making sure CSI sensing worked on the receivers before the data reached the Pi.</p>
+
+      <h3 class="subhead">Which board is best for CSI sensing</h3>
+      <ol class="rank-list">
+        <li class="rank"><span class="rank__chip">ESP32-C5</span><span class="rank__note">Best. Wi-Fi 6 on both 2.4&nbsp;GHz and 5&nbsp;GHz, so it can sense on the quieter 5&nbsp;GHz band.</span></li>
+        <li class="rank"><span class="rank__chip">ESP32-C6</span><span class="rank__note">Best 2.4&nbsp;GHz choice. Wi-Fi 6, but 2.4&nbsp;GHz only.</span></li>
+        <li class="rank"><span class="rank__chip">ESP32-S3 ≈ ESP32-C3</span><span class="rank__note">About equal on CSI. We used an S3 receiver because the XIAO ESP32-S3 has an antenna connector for a dipole.</span></li>
+        <li class="rank"><span class="rank__chip">ESP32</span><span class="rank__note">Oldest and weakest at CSI, but a reliable transmitter.</span></li>
+      </ol>
+      <p class="source-note">Ranking from Espressif's <a href="https://docs.espressif.com/projects/esp-techpedia/en/latest/esp-friends/solution-introduction/esp-csi/esp-csi-solution.html" target="_blank" rel="noopener">ESP-CSI solution guide</a>: ESP32-C5 &gt; ESP32-C6 &gt; ESP32-C3 ≈ ESP32-S3 &gt; ESP32.</p>
+
+      <h3 class="subhead">Transmitters vs. receivers</h3>
+      <div class="spec-grid">
+        <div class="spec">
+          <span class="spec__label">Transmitters</span>
+          <p>Only broadcast small ESP-NOW packets, so almost any ESP32 works. What matters most is a stable connection and a decent antenna, so every packet arrives on time.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Receivers</span>
+          <p>Do the actual CSI sensing on every packet, so this is where the board ranking above matters. Use the best chip you can, with a dipole antenna.</p>
+        </div>
+      </div>
+
+      <h3 class="subhead">Antenna types</h3>
+      <div class="spec-grid spec-grid--3">
+        <div class="spec">
+          <span class="spec__label">PCB / ceramic</span>
+          <p>Built into the board. Small and cheap, but the weakest of the three, and easily detuned by nearby wires, metal, or hands.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Wire</span>
+          <p>A roughly 31&nbsp;mm wire soldered to the antenna feed. Cheap and a big step up from a tiny onboard antenna. Good for transmitters.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Dipole</span>
+          <p>An external rod antenna on an antenna connector. Highest gain, even coverage all around, and least affected by interference. Best for CSI receivers.</p>
+        </div>
+      </div>
+
+      <div class="disclaimer disclaimer--danger">
+        <span class="disclaimer__label pixel">⚠ Avoid ESP32-C3 and ESP32-C6 SuperMini boards</span>
+        <p>These tiny boards squeeze a small ceramic antenna in right next to the crystal, the pin headers, and the power circuitry, with almost no clear space around it. In practice that means:</p>
+        <ul class="point-list">
+          <li><strong>Weak, unreliable Wi-Fi:</strong> they drop the connection or fail to connect, especially at full transmit power.</li>
+          <li><strong>Interference:</strong> nearby wires, headers, and power traces detune the antenna.</li>
+          <li><strong>Unstable power:</strong> the small regulator struggles with Wi-Fi's current spikes, which can cause disconnects and resets.</li>
+        </ul>
+        <p>For CSI, where every lost packet hurts accuracy, use a board with a better antenna or an antenna connector instead.</p>
       </div>
     </section>
 
@@ -188,7 +243,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1526"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261107-1552"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -210,6 +265,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261107-1526"></script>
+  <script src="js/main.js?v=20261107-1552"></script>
 </body>
 </html>
