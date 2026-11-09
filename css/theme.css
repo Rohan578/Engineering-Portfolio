@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261107-1610") repeat;
+  background: url("../assets/starfield.svg?v=20261108-2208") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261107-1610") repeat;
+  background: url("../assets/starfield.svg?v=20261108-2208") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -771,6 +771,9 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 
 /* Videos */
 .video { display: block; width: 100%; margin-bottom: 18px; background: #000; border: 2px solid var(--color-border-soft); }
+.video--embed { position: relative; aspect-ratio: 16 / 9; margin-bottom: 8px; }
+.video--embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.section .video-link { margin: 0 0 6px; text-align: right; }
 .video-placeholder {
   display: flex;
   flex-direction: column;
