@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261108-2208") repeat;
+  background: url("../assets/starfield.svg?v=20261113-1823") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261108-2208") repeat;
+  background: url("../assets/starfield.svg?v=20261113-1823") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -1121,4 +1121,51 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   margin-bottom: 14px;
   font-weight: 600;
   color: var(--color-text);
+}
+
+/* Screenshot gallery (Soil Node demo) */
+.shot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 8px; }
+.shot { margin: 0; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot--wide { grid-column: 1 / -1; }
+.shot--tall img { height: 460px; object-fit: contain; background: var(--color-image-bg); }
+.shot figcaption { margin-top: 8px; font-size: 0.88rem; }
+
+/* Row of phone screenshots (setup steps) */
+.phone-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 8px; }
+.phone-row img { aspect-ratio: 739 / 1600; height: auto; object-fit: contain; background: #000; }
+.phone-row figcaption { font-size: 0.82rem; line-height: 1.4; }
+
+/* Project status list */
+.status-list { margin: 0; padding: 0; list-style: none; }
+.status-list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+}
+.status-pill {
+  flex-shrink: 0;
+  min-width: 96px;
+  padding: 3px 10px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-sky);
+  border: 1px solid var(--color-sky);
+}
+.status-pill--active { color: var(--color-gold); border-color: var(--color-gold); }
+
+@media (max-width: 700px) {
+  .shot-grid { grid-template-columns: 1fr; }
+  .shot--tall img { height: auto; max-height: 520px; }
+  .phone-row { grid-template-columns: 1fr 1fr; }
+  .status-list li { flex-direction: column; align-items: flex-start; gap: 8px; }
 }

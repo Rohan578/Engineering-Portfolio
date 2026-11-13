@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soil Node | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261108-2208">
+  <link rel="stylesheet" href="css/theme.css?v=20261113-1823">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261108-2208"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261113-1823"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -74,6 +74,7 @@
          To add the video: save it as media/soilnode/demo.mp4, delete the
          placeholder <div> below, and uncomment this line:
          <video class="video" src="media/soilnode/demo.mp4" controls playsinline preload="metadata"></video>
+         Screenshots live in media/soilnode/ (led-*, server-*, portal-*).
     -->
     <section class="section panel">
       <h2>Demo</h2>
@@ -81,7 +82,146 @@
         <div class="video-placeholder__icon"></div>
         <span>Demo video coming soon</span>
       </div>
-      <p>A demo of the assembled Soil Node is coming soon. It will show live soil moisture, temperature, and humidity readings, along with the RGB status LED and button interaction.</p>
+
+      <h3 class="subhead">LED Colour Switching</h3>
+      <p>Each node has an RGB LED so you can tell your plants apart at a glance. Pick a new colour on the dashboard, and the node picks it up the next time it wakes (within the hour, or right away if you press its button), then lights up in the new colour for 5 seconds.</p>
+      <div class="image-pair">
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/led-magenta.webp" target="_blank">
+            <img class="framed" src="media/soilnode/led-magenta.webp" alt="Node One dashboard with the LED colour set to magenta" loading="lazy">
+          </a>
+          <figcaption>Node colour: Magenta</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/led-orange.webp" target="_blank">
+            <img class="framed" src="media/soilnode/led-orange.webp" alt="Node One dashboard after switching the LED colour to orange" loading="lazy">
+          </a>
+          <figcaption>Switched to Orange</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="subhead">Server Dashboard</h3>
+      <p>Every node reports to a small web server that stores its readings, draws history charts, gives care recommendations for the plant type, and raises alerts when something drifts out of range.</p>
+      <div class="shot-grid">
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/server-all-plants.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-all-plants.webp" alt="Plant Monitor overview showing four plants with soil, temperature, humidity, battery, and recommendations" loading="lazy">
+          </a>
+          <figcaption>All plants at a glance, with status and tips</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/server-history.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-history.webp" alt="History charts of temperature, humidity, battery, and soil moisture over six hours" loading="lazy">
+          </a>
+          <figcaption>History charts: climate, battery, and soil moisture</figcaption>
+        </figure>
+        <figure class="shot shot--wide">
+          <a class="zoom" href="media/soilnode/server-plant-detail.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-plant-detail.webp" alt="Tomato plant page with live readings and a watering recommendation" loading="lazy">
+          </a>
+          <figcaption>Plant page: live readings and recommendations</figcaption>
+        </figure>
+        <figure class="shot shot--wide">
+          <a class="zoom" href="media/soilnode/server-alerts.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-alerts.webp" alt="Alert rules table with thresholds and recent alerts" loading="lazy">
+          </a>
+          <figcaption>Custom alert rules and recent alerts</figcaption>
+        </figure>
+        <figure class="shot shot--wide">
+          <a class="zoom" href="media/soilnode/server-settings.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-settings.webp" alt="Settings and soil calibration helper" loading="lazy">
+          </a>
+          <figcaption>Settings and one-tap soil calibration</figcaption>
+        </figure>
+        <figure class="shot shot--tall">
+          <a class="zoom" href="media/soilnode/server-led-picker.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-led-picker.webp" alt="Dropdown of LED colours" loading="lazy">
+          </a>
+          <figcaption>LED colour picker (11 colours)</figcaption>
+        </figure>
+        <figure class="shot shot--tall">
+          <a class="zoom" href="media/soilnode/server-mobile.webp" target="_blank">
+            <img class="framed" src="media/soilnode/server-mobile.webp" alt="Plant page on a phone screen" loading="lazy">
+          </a>
+          <figcaption>Works on phones too</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="subhead">Wi-Fi Setup (Captive Portal)</h3>
+      <p>No code changes are needed to set up a node. On first boot it opens its own hotspot, your phone shows a setup page, and you choose your Wi-Fi network, the server address, and a node ID. The node then saves the settings and joins your network.</p>
+      <div class="phone-row">
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-1-join.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-1-join.webp" alt="Phone Wi-Fi settings showing the PlantMonitor-D35A hotspot" loading="lazy">
+          </a>
+          <figcaption>1. Join the node's hotspot</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-2-menu.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-2-menu.webp" alt="Plant Monitor setup page with Configure WiFi button" loading="lazy">
+          </a>
+          <figcaption>2. Setup page opens</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-3-networks.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-3-networks.webp" alt="List of nearby Wi-Fi networks (names hidden)" loading="lazy">
+          </a>
+          <figcaption>3. Pick your network</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-4-settings.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-4-settings.webp" alt="Fields for server URL and node ID" loading="lazy">
+          </a>
+          <figcaption>4. Server URL and node ID</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-5-saving.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-5-saving.webp" alt="Saving credentials and connecting message" loading="lazy">
+          </a>
+          <figcaption>5. Saved, joining Wi-Fi</figcaption>
+        </figure>
+      </div>
+      <p class="source-note">Wi-Fi network names are blurred for privacy.</p>
+    </section>
+
+    <!-- Current progress: update the items as the build moves along -->
+    <section class="section panel">
+      <h2>Current Progress</h2>
+      <ul class="status-list">
+        <li><span class="status-pill">Waiting</span><span><strong>PCBs ordered:</strong> waiting for the boards to arrive for assembly and testing.</span></li>
+        <li><span class="status-pill status-pill--active">In progress</span><span><strong>Designing a casing</strong> for the node to protect the electronics in the pot.</span></li>
+      </ul>
+    </section>
+
+    <!-- Future improvements -->
+    <section class="section panel">
+      <h2>Future Improvements</h2>
+      <div class="spec-grid spec-grid--3">
+        <div class="spec">
+          <span class="spec__label">Upgrade to <span class="part">ESP32-C6</span></span>
+          <p>Lower power use and better Wi-Fi range, waking the node and sending it commands wirelessly, and smart home integration.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Soil nutrient detection</span>
+          <p>Measure the nutrients in the soil, not just moisture, so you know when to fertilize.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">AI plant-care assistant</span>
+          <p>Ask questions about how best to care for your plant and get recommendations and tips based on its live readings.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Plant data bank</span>
+          <p>A library of plant profiles, plus easy input fields for setting your own specific targets for each plant.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Mesh network support</span>
+          <p>Nodes relay each other's data, so sensors can reach plants beyond your router's range.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Photo diagnosis</span>
+          <p>Upload a photo of a sick plant and the AI assistant analyzes it for problems and recommends what to do.</p>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -95,7 +235,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261108-2208"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261113-1823"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -117,6 +257,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261108-2208"></script>
+  <script src="js/main.js?v=20261113-1823"></script>
 </body>
 </html>
