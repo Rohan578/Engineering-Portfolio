@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261126-2034") repeat;
+  background: url("../assets/starfield.svg?v=20261126-2050") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261126-2034") repeat;
+  background: url("../assets/starfield.svg?v=20261126-2050") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -993,7 +993,7 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .credit:hover { border-color: var(--color-gold); transform: translateY(-2px); text-decoration: none; }
-.credit__name { display: block; margin-bottom: 4px; font-family: var(--font-pixel); font-weight: 700; color: var(--color-sky); }
+.credit__name { display: block; margin-bottom: 4px; font-family: var(--font-body); font-weight: 700; color: var(--color-sky); }
 .credit__text { display: block; font-size: 0.92rem; line-height: 1.5; color: var(--color-text-soft); }
 
 /* Centered button row at the end of a section */
@@ -1213,3 +1213,16 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
 
 /* Breathing room after a side-by-side block */
 .section .split + p, .section .split + .disclaimer { margin-top: 22px; }
+
+/* Contributor names (Clairvoyance credits) */
+.contributor-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 8px; padding: 0; list-style: none; }
+.contributor-list li {
+  padding: 8px 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+}
+.contributor-list span { font-weight: 400; color: var(--color-muted); }
+.section .contributor-list + .subhead { margin-top: 22px; }
+.credit-grid { margin-top: 0; }

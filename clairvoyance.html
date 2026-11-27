@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clairvoyance | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261126-2034">
+  <link rel="stylesheet" href="css/theme.css?v=20261126-2050">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-2034"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-2050"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -52,12 +52,12 @@
       <p class="lead">Clairvoyance finds people in a room using nothing but Wi-Fi: no cameras, no microphones, nothing worn.</p>
       <p>Small <span class="part">ESP32</span> transmitters around the room send tiny ESP-NOW packets 50 times a second to a CSI receiver. A person's body blocks and reflects those radio signals, and the receiver's Wi-Fi chip measures the change as <strong>Channel State Information (CSI)</strong>. A Raspberry Pi 5 compares every radio path with the empty room, works out which paths a person is disturbing, and shows each person live in a 3D model of the room.</p>
       <div class="fact-grid">
-        <div class="fact"><span class="fact__value">6</span><span class="fact__label">transmitters on 2.4&nbsp;GHz</span></div>
+        <div class="fact"><span class="fact__value">~65%</span><span class="fact__label">overall accuracy</span></div>
         <div class="fact"><span class="fact__value">100%</span><span class="fact__label">empty rooms recognized</span></div>
         <div class="fact"><span class="fact__value">≥76%</span><span class="fact__label">one person counted correctly</span></div>
         <div class="fact"><span class="fact__value">1–1.3 m</span><span class="fact__label">position error</span></div>
       </div>
-      <p class="source-note">Results from our testing with 6 transmitters on 2.4&nbsp;GHz.</p>
+      <p class="source-note">Results from our testing with 6 transmitters on 2.4&nbsp;GHz. More transmitters mean more radio paths across the room and higher accuracy (the system supports up to 10).</p>
 
       <h3 class="subhead">What We Used</h3>
       <div class="spec-grid">
@@ -239,7 +239,7 @@
           <li><strong>Count first, then place:</strong> the system picks the most likely head count, then the most likely squares. In simulation this counted people correctly 82% of the time, versus 28% when each square was judged on its own.</li>
         </ul>
       </div>
-      <p>In our testing with 6 transmitters, the trained system recognized an empty room <strong>100%</strong> of the time, counted one person correctly at least <strong>76%</strong> of the time, and placed them within <strong>1–1.3&nbsp;m</strong>.</p>
+      <p>In our testing with 6 transmitters, the trained system reached about <strong>65%</strong> overall accuracy. It recognized an empty room <strong>100%</strong> of the time, counted one person correctly at least <strong>76%</strong> of the time, and placed them within <strong>1–1.3&nbsp;m</strong>. Adding transmitters raises accuracy, because more radio paths cross the room.</p>
     </section>
 
     <!-- Additional information: scaling, 5 GHz, disclaimer -->
@@ -253,8 +253,8 @@
           </figure>
         </div>
         <ul class="point-list split__text">
-          <li><strong>Up to 10 transmitters:</strong> our demo used 6, but the system supports up to 10. The more transmitters, the more paths cross the room and the more accurate the map.</li>
-          <li><strong>5&nbsp;GHz support:</strong> the system also works with transmitters sending packets on the 5&nbsp;GHz band; it only needs a 5&nbsp;GHz-capable receiver such as the <span class="part">ESP32-C5</span>. 5&nbsp;GHz is far less crowded, so it picks up much less interference.</li>
+          <li><strong>Up to 10 transmitters:</strong> our demo used 6 (about 65% overall accuracy), but the system supports up to 10. The more transmitters, the more paths cross the room and the higher the accuracy.</li>
+          <li><strong>5&nbsp;GHz support:</strong> the system also works on the 5&nbsp;GHz band, with transmitters sending packets on 5&nbsp;GHz and a 5&nbsp;GHz-capable receiver, such as <span class="part">ESP32-C5</span> boards. 5&nbsp;GHz is far less crowded, so it picks up much less interference.</li>
         </ul>
       </div>
 
@@ -291,6 +291,14 @@
     <section class="section panel">
       <h2>Credits</h2>
       <p>Built by <strong>Team Mech Tech</strong> for Verizon's Smart Campus competition.</p>
+      <h3 class="subhead">Contributors</h3>
+      <ul class="contributor-list">
+        <li>Rohan Shrivastava <span>(Rohan578)</span></li>
+        <li>Pratham Wankhede</li>
+        <li>Ubuntufanboy</li>
+        <li>cambukingham</li>
+      </ul>
+      <h3 class="subhead">Built with</h3>
       <div class="credit-grid">
         <a class="credit" href="https://github.com/espressif/esp-csi" target="_blank" rel="noopener">
           <span class="credit__name">Espressif esp-csi</span>
@@ -306,7 +314,7 @@
         </a>
       </div>
       <div class="section__actions">
-        <a class="button button--solid" href="https://github.com/Rohan578/RSSI-CSI-Demo-/tree/home-wifi-dual-band" target="_blank" rel="noopener">View the RSSI-CSI Demo on GitHub →</a>
+        <a class="button button--solid" href="https://github.com/Rohan578/RSSI-CSI-Demo-/tree/home-wifi-dual-band" target="_blank" rel="noopener">View the Project on GitHub →</a>
       </div>
     </section>
 
@@ -321,7 +329,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-2034"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-2050"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -343,6 +351,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261126-2034"></script>
+  <script src="js/main.js?v=20261126-2050"></script>
 </body>
 </html>
