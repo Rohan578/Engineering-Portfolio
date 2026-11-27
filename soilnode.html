@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soil Node | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261113-1823">
+  <link rel="stylesheet" href="css/theme.css?v=20261126-1928">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261113-1823"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-1928"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -28,31 +28,54 @@
 
   <main class="project">
 
-    <!-- Schematic: image left, text right -->
+    <!-- OVERVIEW: summary on the left, demo video on the right.
+         The video is media/soilnode/demo.mp4 (poster: demo-poster.jpg);
+         to update it, replace those files with the same names. -->
     <section class="section panel">
-      <h2>Schematic</h2>
-      <div class="split">
-        <a class="split__media split__media--wide zoom" href="media/soilnode/schematic.png" target="_blank">
-          <img class="framed" src="media/soilnode/schematic.png" alt="Soil Node schematic">
-        </a>
-        <p class="split__text">The Soil Node is built around an ESP32-C3 SuperMini. A capacitive soil moisture sensor feeds an analog input, and an AHT20 reports air temperature and humidity over I²C. An RGB LED and push button give quick status and user input. An MT3608 boost converter steps the battery up to a stable 5&nbsp;V rail, so the node can run untethered in the field.</p>
+      <h2>Overview</h2>
+      <div class="split split--reverse split--top">
+        <div class="split__media split__media--wide">
+          <video class="video" src="media/soilnode/demo.mp4" poster="media/soilnode/demo-poster.jpg" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="split__text">
+          <p>Soil Node is a small IoT device that monitors the soil moisture, air temperature, and humidity around your plants, to help them grow better with less effort. Once an hour, the node wakes up, samples its sensors for 5 seconds (soil moisture, air temperature, air humidity, and battery voltage), and sends the readings over Wi-Fi to a Python web server.</p>
+          <p>The server timestamps and smooths each reading, then plots it on three graphs over time: temperature and humidity, soil moisture, and battery level. Together they show how your home's environment, the moisture in the soil, and the battery change over time. Each node is assigned the type of plant it's monitoring, from a cactus to a tropical fern, and the server gives smart care recommendations based on it.</p>
+        </div>
       </div>
     </section>
 
-    <!-- Breadboard: text left, image right (split--reverse) -->
+    <!-- HARDWARE: description on the left, breadboard and schematic stacked
+         on the right, PCB design photos below -->
     <section class="section panel">
-      <h2>Breadboard Prototype</h2>
-      <div class="split split--reverse">
-        <a class="split__media zoom" href="media/soilnode/breadboard.jpeg" target="_blank">
-          <img class="framed" src="media/soilnode/breadboard.jpeg" alt="Soil Node breadboard prototype">
-        </a>
-        <p class="split__text">Before committing to a PCB, I wired the full circuit on a breadboard to validate the design. This let me check the sensor readings, I²C communication with the AHT20, the LED and button behavior, and the soil probe calibration, and fix wiring issues while changes were still cheap.</p>
+      <h2>Hardware</h2>
+      <div class="split split--reverse split--top">
+        <div class="split__media image-stack">
+          <figure>
+            <a class="zoom" href="media/soilnode/breadboard.jpeg" target="_blank">
+              <img class="framed" src="media/soilnode/breadboard.jpeg" alt="Soil Node breadboard prototype">
+            </a>
+            <figcaption>Breadboard Prototype</figcaption>
+          </figure>
+          <figure>
+            <a class="zoom" href="media/soilnode/schematic.png" target="_blank">
+              <img class="framed" src="media/soilnode/schematic.png" alt="Soil Node schematic">
+            </a>
+            <figcaption>Schematic</figcaption>
+          </figure>
+        </div>
+        <div class="split__text">
+          <p>I designed the node in KiCad around an <span class="part">ESP32-C3</span>, chosen for its power efficiency, small size, and built-in Wi-Fi.</p>
+          <ul class="point-list">
+            <li><strong>Soil moisture:</strong> a capacitive soil moisture sensor (v2.0) on an analog input.</li>
+            <li><strong>Air temperature and humidity:</strong> a higher-precision AHT20 sensor over I²C.</li>
+            <li><strong>RGB LED and button:</strong> for telling nodes apart, pairing, and sending readings outside the hourly schedule.</li>
+            <li><strong>Power:</strong> runs on a NiMH or lithium polymer (LiPo) battery, with an MT3608 boost converter providing a stable 5&nbsp;V rail.</li>
+          </ul>
+          <p>Before committing to a PCB, I wired the full circuit on a breadboard to check the sensor readings, I²C communication, LED and button behavior, and soil probe calibration, and to fix wiring issues while changes were still cheap.</p>
+        </div>
       </div>
-    </section>
 
-    <!-- PCB: 3D view and layout side by side, text below -->
-    <section class="section panel">
-      <h2>PCB Design</h2>
+      <h3 class="subhead">PCB Design</h3>
       <div class="image-pair">
         <figure>
           <a class="zoom" href="media/soilnode/pcb-3d-view.png" target="_blank">
@@ -67,19 +90,49 @@
           <figcaption>PCB Layout</figcaption>
         </figure>
       </div>
-      <p>After the breadboard prototype was validated, I moved the design onto a custom PCB. The board brings the ESP32-C3, power regulation, and sensor connectors onto one compact footprint, with JST-style connectors for the soil probe and AHT20 so sensors can be swapped easily. The 3D render was used to check component fit and connector placement before ordering.</p>
+      <p>The custom PCB brings the <span class="part">ESP32-C3</span>, power regulation, and sensor connectors onto one compact board, with JST-style connectors so the soil probe and AHT20 can be swapped easily. I used the 3D render to check component fit and connector placement before ordering.</p>
     </section>
 
-    <!-- Demo
-         The demo video is media/soilnode/demo.mp4 (poster: demo-poster.jpg).
-         To update it, replace those files with the same names.
-         Screenshots live in media/soilnode/ (led-*, server-*, portal-*).
-    -->
+    <!-- FEATURES: screenshots live in media/soilnode/ (portal-*, led-*, server-*) -->
     <section class="section panel">
-      <h2>Demo</h2>
-      <video class="video" src="media/soilnode/demo.mp4" poster="media/soilnode/demo-poster.jpg" controls playsinline preload="metadata"></video>
+      <h2>Features</h2>
+      <h3 class="subhead">1. Wi-Fi Setup Portal</h3>
+      <p>No code changes are needed to set up a node. On first boot it opens its own hotspot, your phone shows a setup page, and you choose your Wi-Fi network, the server address, and a node ID. The node then saves the settings and joins your network.</p>
+      <div class="phone-row">
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-1-join.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-1-join.webp" alt="Phone Wi-Fi settings showing the PlantMonitor-D35A hotspot" loading="lazy">
+          </a>
+          <figcaption>1. Join the node's hotspot</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-2-menu.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-2-menu.webp" alt="Plant Monitor setup page with Configure WiFi button" loading="lazy">
+          </a>
+          <figcaption>2. Setup page opens</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-3-networks.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-3-networks.webp" alt="List of nearby Wi-Fi networks (names hidden)" loading="lazy">
+          </a>
+          <figcaption>3. Pick your network</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-4-settings.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-4-settings.webp" alt="Fields for server URL and node ID" loading="lazy">
+          </a>
+          <figcaption>4. Server URL and node ID</figcaption>
+        </figure>
+        <figure class="shot">
+          <a class="zoom" href="media/soilnode/portal-5-saving.webp" target="_blank">
+            <img class="framed" src="media/soilnode/portal-5-saving.webp" alt="Saving credentials and connecting message" loading="lazy">
+          </a>
+          <figcaption>5. Saved, joining Wi-Fi</figcaption>
+        </figure>
+      </div>
+      <p class="source-note">Neighbouring Wi-Fi network names are blurred for privacy.</p>
 
-      <h3 class="subhead">LED Colour Switching</h3>
+      <h3 class="subhead">2. LED Colour Switching</h3>
       <p>Each node has an RGB LED so you can tell your plants apart at a glance. Pick a new colour on the dashboard, and the node picks it up the next time it wakes (within the hour, or right away if you press its button), then lights up in the new colour for 5 seconds.</p>
       <div class="image-pair">
         <figure class="shot">
@@ -96,7 +149,7 @@
         </figure>
       </div>
 
-      <h3 class="subhead">Server Dashboard</h3>
+      <h3 class="subhead">3. Server Dashboard</h3>
       <p>Every node reports to a small web server that stores its readings, draws history charts, gives care recommendations for the plant type, and raises alerts when something drifts out of range.</p>
       <div class="shot-grid">
         <figure class="shot">
@@ -143,41 +196,6 @@
         </figure>
       </div>
 
-      <h3 class="subhead">Wi-Fi Setup (Captive Portal)</h3>
-      <p>No code changes are needed to set up a node. On first boot it opens its own hotspot, your phone shows a setup page, and you choose your Wi-Fi network, the server address, and a node ID. The node then saves the settings and joins your network.</p>
-      <div class="phone-row">
-        <figure class="shot">
-          <a class="zoom" href="media/soilnode/portal-1-join.webp" target="_blank">
-            <img class="framed" src="media/soilnode/portal-1-join.webp" alt="Phone Wi-Fi settings showing the PlantMonitor-D35A hotspot" loading="lazy">
-          </a>
-          <figcaption>1. Join the node's hotspot</figcaption>
-        </figure>
-        <figure class="shot">
-          <a class="zoom" href="media/soilnode/portal-2-menu.webp" target="_blank">
-            <img class="framed" src="media/soilnode/portal-2-menu.webp" alt="Plant Monitor setup page with Configure WiFi button" loading="lazy">
-          </a>
-          <figcaption>2. Setup page opens</figcaption>
-        </figure>
-        <figure class="shot">
-          <a class="zoom" href="media/soilnode/portal-3-networks.webp" target="_blank">
-            <img class="framed" src="media/soilnode/portal-3-networks.webp" alt="List of nearby Wi-Fi networks (names hidden)" loading="lazy">
-          </a>
-          <figcaption>3. Pick your network</figcaption>
-        </figure>
-        <figure class="shot">
-          <a class="zoom" href="media/soilnode/portal-4-settings.webp" target="_blank">
-            <img class="framed" src="media/soilnode/portal-4-settings.webp" alt="Fields for server URL and node ID" loading="lazy">
-          </a>
-          <figcaption>4. Server URL and node ID</figcaption>
-        </figure>
-        <figure class="shot">
-          <a class="zoom" href="media/soilnode/portal-5-saving.webp" target="_blank">
-            <img class="framed" src="media/soilnode/portal-5-saving.webp" alt="Saving credentials and connecting message" loading="lazy">
-          </a>
-          <figcaption>5. Saved, joining Wi-Fi</figcaption>
-        </figure>
-      </div>
-      <p class="source-note">Neighbouring Wi-Fi network names are blurred for privacy.</p>
     </section>
 
     <!-- Current progress: update the items as the build moves along -->
@@ -231,7 +249,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261113-1823"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-1928"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -253,6 +271,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261113-1823"></script>
+  <script src="js/main.js?v=20261126-1928"></script>
 </body>
 </html>

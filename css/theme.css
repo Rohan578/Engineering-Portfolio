@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261113-1823") repeat;
+  background: url("../assets/starfield.svg?v=20261126-1928") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261113-1823") repeat;
+  background: url("../assets/starfield.svg?v=20261126-1928") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -760,7 +760,7 @@ img { max-width: 100%; }
 .image-pair figure { flex: 1; margin: 0; }
 
 figure { margin: 0; text-align: center; }
-figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; font-size: 0.95rem; color: var(--color-muted); }
+figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; font-size: 0.9rem; color: var(--color-muted); }
 
 /* Image pair frames: same height, whole image visible */
 .image-pair .framed { height: 340px; object-fit: contain; }
@@ -814,9 +814,10 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
 /* Smaller heading inside a section */
 .subhead {
   margin: 28px 0 14px;
-  font-family: var(--font-pixel);
+  font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
   color: var(--color-gold);
 }
 
@@ -1169,3 +1170,10 @@ figcaption { margin-top: 8px; font-family: var(--font-pixel); font-weight: 500; 
   .phone-row { grid-template-columns: 1fr 1fr; }
   .status-list li { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
+
+/* Split layout aligned to the top (long text beside media) */
+.split--top { align-items: flex-start; }
+.split__text > p:last-child { margin-bottom: 0; }
+
+/* Space between a bullet list and the paragraph after it */
+.point-list + p { margin-top: 16px; }
