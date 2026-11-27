@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261126-2013") repeat;
+  background: url("../assets/starfield.svg?v=20261126-2034") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261126-2013") repeat;
+  background: url("../assets/starfield.svg?v=20261126-2034") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -877,12 +877,12 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
   width: 28px;
   height: 28px;
   margin-bottom: 10px;
-  font-family: var(--font-pixel);
+  font-family: var(--font-body);
   font-weight: 700;
   color: #14102e;
   background: var(--color-gold);
 }
-.step-card__title { display: block; margin-bottom: 6px; font-family: var(--font-pixel); font-weight: 700; font-size: 1.1rem; color: var(--color-heading); }
+.step-card__title { display: block; margin-bottom: 6px; font-family: var(--font-body); font-weight: 700; font-size: 1.1rem; color: var(--color-heading); }
 .step-card__text { display: block; font-size: 0.95rem; line-height: 1.55; color: var(--color-text-soft); }
 
 /* Numbered "what you'll see" list under a video */
@@ -901,7 +901,7 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
   top: 1px;
   width: 24px;
   height: 24px;
-  font-family: var(--font-pixel);
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.9rem;
   line-height: 24px;
@@ -941,7 +941,7 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
   justify-content: center;
   width: 32px;
   height: 32px;
-  font-family: var(--font-pixel);
+  font-family: var(--font-body);
   font-weight: 700;
   color: #14102e;
   background: var(--color-gold);
@@ -1181,3 +1181,35 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
 /* Overview: summary right under a video */
 .section .video + .lead { margin-top: 6px; }
 .fact-grid + .subhead { margin-top: 24px; }
+
+/* Two videos side by side (Clairvoyance overview) */
+.video-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+.video-pair figure { margin: 0; }
+.video-pair .video { margin-bottom: 0; aspect-ratio: 16 / 9; object-fit: contain; }
+.video-pair figcaption { margin-top: 8px; }
+
+/* One-column numbered list */
+.timeline--single { grid-template-columns: 1fr; margin-bottom: 8px; }
+
+/* Jump links to the sections below */
+.section--intro { text-align: center; }
+.jump-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: jump; }
+.jump-list li { counter-increment: jump; }
+.jump-list a {
+  display: block;
+  padding: 10px 16px;
+  color: var(--color-text);
+  background: rgba(5, 4, 15, 0.55);
+  border: 2px solid var(--color-border-soft);
+}
+.jump-list a::before { content: counter(jump) ". "; color: var(--color-gold); font-weight: 700; }
+.jump-list a:hover { border-color: var(--color-gold); text-decoration: none; }
+.section .point-list + p, .section .point-list + .source-note { margin-top: 16px; }
+.fact-grid + .source-note { margin-top: 10px; }
+
+@media (max-width: 700px) {
+  .video-pair { grid-template-columns: 1fr; }
+}
+
+/* Breathing room after a side-by-side block */
+.section .split + p, .section .split + .disclaimer { margin-top: 22px; }

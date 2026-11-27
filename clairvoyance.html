@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clairvoyance | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261126-2013">
+  <link rel="stylesheet" href="css/theme.css?v=20261126-2034">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-2013"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-2034"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -28,85 +28,93 @@
 
   <main class="project">
 
-    <!-- The concept: short lead, 3D view, and four quick facts -->
-    <section class="section panel">
-      <h2>Seeing Through Wi-Fi</h2>
+    <!-- OVERVIEW: both demo videos side by side, summary, results, and the
+         hardware we used. Live demo is on YouTube (https://youtu.be/_GauObu2fKE). -->
+    <section class="section panel" id="overview">
+      <h2>Overview</h2>
       <p class="event-line"><span class="verizon-badge">Verizon</span> Built for Verizon's Smart Campus competition (Round 1) as Team Mech Tech.</p>
+      <div class="video-pair">
+        <figure>
+          <div class="video video--embed">
+            <iframe src="https://www.youtube-nocookie.com/embed/_GauObu2fKE?rel=0"
+                    title="Clairvoyance live demo" loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <figcaption>Live demo (<a href="https://youtu.be/_GauObu2fKE" target="_blank" rel="noopener">watch on YouTube</a>)</figcaption>
+        </figure>
+        <figure>
+          <video class="video" src="media/clairvoyance/simulation-demo.mp4" poster="media/clairvoyance/simulation-demo-poster.jpg" controls playsinline preload="metadata"></video>
+          <figcaption>Simulation: how the system should work</figcaption>
+        </figure>
+      </div>
+
       <p class="lead">Clairvoyance finds people in a room using nothing but Wi-Fi: no cameras, no microphones, nothing worn.</p>
-      <div class="split">
-        <a class="split__media split__media--wide zoom" href="media/clairvoyance/room-3d-view.png" target="_blank">
-          <img class="framed" src="media/clairvoyance/room-3d-view.png" alt="3D room view showing transmitters, the receiver, radio paths, and a person located from Wi-Fi alone">
-        </a>
-        <div class="split__text">
-          <p>Small <span class="part">ESP32</span> boards around the room send radio packets to a receiver. A person's body absorbs and reflects those signals, and the Wi-Fi chip measures the change as <strong>Channel State Information (CSI)</strong>.</p>
-          <p>By watching <em>which</em> radio paths get disturbed, the system works out where each person is standing and shows them live in a 3D model of the room.</p>
+      <p>Small <span class="part">ESP32</span> transmitters around the room send tiny ESP-NOW packets 50 times a second to a CSI receiver. A person's body blocks and reflects those radio signals, and the receiver's Wi-Fi chip measures the change as <strong>Channel State Information (CSI)</strong>. A Raspberry Pi 5 compares every radio path with the empty room, works out which paths a person is disturbing, and shows each person live in a 3D model of the room.</p>
+      <div class="fact-grid">
+        <div class="fact"><span class="fact__value">6</span><span class="fact__label">transmitters on 2.4&nbsp;GHz</span></div>
+        <div class="fact"><span class="fact__value">100%</span><span class="fact__label">empty rooms recognized</span></div>
+        <div class="fact"><span class="fact__value">≥76%</span><span class="fact__label">one person counted correctly</span></div>
+        <div class="fact"><span class="fact__value">1–1.3 m</span><span class="fact__label">position error</span></div>
+      </div>
+      <p class="source-note">Results from our testing with 6 transmitters on 2.4&nbsp;GHz.</p>
+
+      <h3 class="subhead">What We Used</h3>
+      <div class="spec-grid">
+        <div class="spec">
+          <span class="spec__label">Transmitters (6)</span>
+          <p>Four <span class="part">ESP32</span> dev modules and two <span class="part">Seeed Studio XIAO ESP32-S3</span> boards with wire antennas.</p>
+          <div class="board-row">
+            <figure class="board">
+              <img src="media/clairvoyance/board-esp32-devkitc.webp" alt="3D view of an ESP32 dev module" loading="lazy">
+              <figcaption><span class="part">ESP32</span> dev module</figcaption>
+            </figure>
+            <figure class="board">
+              <img src="media/clairvoyance/board-xiao-s3-wire.webp" alt="3D render of a XIAO ESP32-S3 with a wire antenna" loading="lazy">
+              <figcaption><span class="part">XIAO ESP32-S3</span> + wire antenna</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="spec">
+          <span class="spec__label">CSI receiver</span>
+          <p>A <span class="part">XIAO ESP32-S3</span> with a dipole antenna, sensing on 2.4&nbsp;GHz.</p>
+          <div class="board-row">
+            <figure class="board">
+              <img src="media/clairvoyance/board-xiao-s3-dipole.webp" alt="3D render of a XIAO ESP32-S3 with a dipole antenna" loading="lazy">
+              <figcaption><span class="part">XIAO ESP32-S3</span> + dipole</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Server</span>
+          <p>A Raspberry Pi 5 (8&nbsp;GB) hosted the AI model, the signal processing, and the 3D view.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Network</span>
+          <p>An industrial-grade enterprise access point hosted the Wi-Fi network on channel 11.</p>
         </div>
       </div>
-      <div class="fact-grid">
-        <div class="fact"><span class="fact__value">0</span><span class="fact__label">cameras</span></div>
-        <div class="fact"><span class="fact__value">≤10</span><span class="fact__label">transmitters</span></div>
-        <div class="fact"><span class="fact__value">52</span><span class="fact__label">subcarriers per packet</span></div>
-        <div class="fact"><span class="fact__value">4×</span><span class="fact__label">updates per second</span></div>
-      </div>
+      <p class="source-note"><span class="part">ESP32</span> and <span class="part">ESP32-C5</span> board images: Espressif <a href="https://github.com/espressif/esp-dev-kits" target="_blank" rel="noopener">esp-dev-kits</a> docs (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; background removed). <span class="part">XIAO ESP32-S3</span> images are simplified 3D renders made for this page.</p>
     </section>
 
-    <!-- How it works: five numbered step cards, then the dashboard -->
-    <section class="section panel">
-      <h2>How It Works</h2>
-      <ol class="step-grid">
-        <li class="step-card">
-          <span class="step-card__title">Transmit</span>
-          <span class="step-card__text">Boards around the walls broadcast a tiny ESP-NOW packet 50 times a second.</span>
-        </li>
-        <li class="step-card">
-          <span class="step-card__title">Measure</span>
-          <span class="step-card__text">The receiver measures each packet's CSI, how strongly each of 52 frequencies arrived, and streams it to the server.</span>
-        </li>
-        <li class="step-card">
-          <span class="step-card__title">Compare</span>
-          <span class="step-card__text">The server compares every path with the empty room and filters out interference that hits all paths at once.</span>
-        </li>
-        <li class="step-card">
-          <span class="step-card__title">Locate</span>
-          <span class="step-card__text">It finds the floor spot that best explains which paths changed, or lets the trained AI model pick the zone and head count.</span>
-        </li>
-        <li class="step-card">
-          <span class="step-card__title">Show</span>
-          <span class="step-card__text">The 3D view draws the room, the glowing radio paths, and each person, four times a second.</span>
-        </li>
+    <!-- IN-DEPTH: intro and jump links to the sections below -->
+    <section class="section panel section--intro">
+      <h2>A Deeper Look: How We Built Clairvoyance</h2>
+      <p class="lead">From picking the boards to processing the radio signals and training the model.</p>
+      <ol class="jump-list">
+        <li><a href="#choosing">Choosing the right <span class="part">ESP32</span></a></li>
+        <li><a href="#how-it-works">How it works: processing the CSI data</a></li>
+        <li><a href="#training">Teaching it the room</a></li>
+        <li><a href="#more">Additional information</a></li>
       </ol>
-      <figure>
-        <a class="zoom" href="media/clairvoyance/link-dashboard.png" target="_blank">
-          <img class="framed" src="media/clairvoyance/link-dashboard.png" alt="CSI sensing dashboard with signal strength, motion score, and CSI amplitude per subcarrier for each transmitter">
-        </a>
-        <figcaption>The link dashboard: live signal strength, motion, and CSI for every radio path</figcaption>
-      </figure>
     </section>
 
-    <!-- Training: image left, short points right -->
-    <section class="section panel">
-      <h2>Teaching It the Room</h2>
-      <p class="lead">Every room bends Wi-Fi differently, so the system learns each space.</p>
-      <div class="split">
-        <a class="split__media split__media--wide zoom" href="media/clairvoyance/collect-running.png" target="_blank">
-          <img class="framed" src="media/clairvoyance/collect-running.png" alt="Guided data collection page telling volunteers which taped square to stand in">
-        </a>
-        <ul class="point-list split__text">
-          <li>We taped a <strong>3 × 3 grid</strong> on the floor.</li>
-          <li>A guided page told volunteers out loud which square to stand or walk in, and <strong>labeled the recordings automatically</strong>.</li>
-          <li>Those sessions trained <strong>random forest models</strong> (scikit-learn) that predict each person's zone and the head count.</li>
-          <li>In our simulator benchmark, the model placed one person in the exact square <strong>about 80%</strong> of the time and <strong>never</strong> showed a person in an empty room, even with heavy interference.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Hardware research (my part of the project): board ranking, roles,
-         antennas, and a warning about SuperMini boards -->
-    <section class="section panel">
+    <!-- Board and antenna choice (my part of the project) -->
+    <section class="section panel" id="choosing">
       <h2>Choosing the Right ESP32</h2>
-      <p class="lead">My part of the project was the <span class="part">ESP32</span> side: picking the boards and antennas, getting the transmitters talking over ESP-NOW, and making sure CSI sensing worked on the receivers before the data reached the Pi.</p>
+      <p class="lead">My part of the project was the <span class="part">ESP32</span> side: picking the boards and antennas, getting the transmitters talking over ESP-NOW, and making sure CSI sensing worked on the receiver before the data reached the Pi. These recommendations come from our own testing and from Espressif's guidance for CSI applications.</p>
 
-      <h3 class="subhead">Which board is best for CSI sensing</h3>
+      <h3 class="subhead">Which board we recommend for CSI sensing</h3>
       <ol class="rank-list">
         <li class="rank"><span class="rank__chip"><span class="part">ESP32-C5</span></span><span class="rank__note">Best. Wi-Fi 6 on both 2.4&nbsp;GHz and 5&nbsp;GHz, so it can sense on the quieter 5&nbsp;GHz band.</span></li>
         <li class="rank"><span class="rank__chip"><span class="part">ESP32-C6</span></span><span class="rank__note">Best 2.4&nbsp;GHz choice. Wi-Fi 6, but 2.4&nbsp;GHz only.</span></li>
@@ -155,93 +163,138 @@
       </div>
     </section>
 
-    <!-- Example video of how the system should look (simulation) -->
-    <section class="section panel">
-      <h2>Our Demo Setup</h2>
-      <p class="lead">This simulation shows how the system should work in a real room.</p>
-      <video class="video" src="media/clairvoyance/simulation-demo.mp4" poster="media/clairvoyance/simulation-demo-poster.jpg" controls playsinline preload="metadata"></video>
-      <ol class="timeline">
-        <li><strong>Up to 10 transmitters:</strong> each one sends its own Wi-Fi path across the room to the receiver.</li>
-        <li><strong>A person walks in:</strong> the paths they cross light up.</li>
-        <li><strong>Tracked by zone:</strong> they're followed around the room with no cameras, just Wi-Fi.</li>
-        <li><strong>A second person enters:</strong> both are tracked at once.</li>
+    <!-- How it works, in depth: pipeline, what CSI is, each processing step, dashboard -->
+    <section class="section panel" id="how-it-works">
+      <h2>How It Works</h2>
+      <ol class="step-grid">
+        <li class="step-card">
+          <span class="step-card__title">Transmit</span>
+          <span class="step-card__text">Boards around the walls broadcast a tiny ESP-NOW packet 50 times a second.</span>
+        </li>
+        <li class="step-card">
+          <span class="step-card__title">Measure</span>
+          <span class="step-card__text">The receiver measures each packet's CSI, how strongly each of 52 frequencies arrived, and streams it to the server.</span>
+        </li>
+        <li class="step-card">
+          <span class="step-card__title">Compare</span>
+          <span class="step-card__text">The server compares every path with the empty room and filters out interference that hits all paths at once.</span>
+        </li>
+        <li class="step-card">
+          <span class="step-card__title">Locate</span>
+          <span class="step-card__text">It finds the floor spot that best explains which paths changed, or lets the trained AI model pick the zone and head count.</span>
+        </li>
+        <li class="step-card">
+          <span class="step-card__title">Show</span>
+          <span class="step-card__text">The 3D view draws the room, the glowing radio paths, and each person, four times a second.</span>
+        </li>
       </ol>
+
+      <h3 class="subhead">What CSI actually is</h3>
+      <ul class="point-list">
+        <li><strong>Many frequencies at once:</strong> a Wi-Fi packet is sent on 52 data <em>subcarriers</em>, narrow frequencies side by side.</li>
+        <li><strong>Measured on every packet:</strong> the receiver compares a known training pattern at the start of each packet with what actually arrived. The result, how much each subcarrier was weakened and delayed, is the CSI.</li>
+        <li><strong>Radio takes many paths:</strong> signals bounce off walls, floor, furniture, and people, so each link has its own jagged CSI "shape."</li>
+        <li><strong>A body changes the paths:</strong> standing on a link blocks it (signal strength drops a few dB), standing anywhere changes the reflections (the shape changes), and moving makes the CSI wobble from packet to packet.</li>
+      </ul>
+      <p>An <span class="part">ESP32</span> has one antenna and its phase readings aren't stable, so the system uses <strong>amplitude and signal strength (RSSI)</strong> only.</p>
+
+      <h3 class="subhead">Processing the data, step by step</h3>
+      <ol class="timeline timeline--single">
+        <li><strong>Extract:</strong> pull the 52 subcarrier amplitudes out of each packet's raw CSI bytes.</li>
+        <li><strong>Remove gain changes:</strong> the radio rescales its signal automatically, which could look like someone walking in, so each packet is divided by its own average. Signal strength is tracked separately.</li>
+        <li><strong>Summarize:</strong> every 250&nbsp;ms, each link's last second becomes four numbers: <em>motion</em> (wobble), <em>deviation</em> (shape change vs. the empty room, which catches people standing still), change in signal strength, and signal-strength wobble.</li>
+        <li><strong>Calibrate:</strong> about 20 seconds of the empty room gives every link a baseline and a normal noise level.</li>
+        <li><strong>Score:</strong> each link gets a 0–1 disturbance score. Links that are already unusually weak (reflections cancelling the direct signal) count for less, because they jump whenever anyone moves anywhere.</li>
+        <li><strong>Filter interference:</strong> other Wi-Fi traffic disturbs <em>every</em> link at once, while a person disturbs only the links near them, so room-wide disturbances are subtracted.</li>
+        <li><strong>Locate:</strong> the floor is split into a 10&nbsp;cm grid, and the disturbance pattern is matched against the pattern a person would cause at each spot. The best match becomes the glowing spot on the floor, and a tracker smooths each person's movement.</li>
+      </ol>
+
+      <h3 class="subhead">Reading the CSI sensing dashboard</h3>
+      <figure>
+        <a class="zoom" href="media/clairvoyance/link-dashboard.png" target="_blank">
+          <img class="framed" src="media/clairvoyance/link-dashboard.png" alt="CSI sensing dashboard with signal strength, motion score, and CSI amplitude per subcarrier for each transmitter">
+        </a>
+        <figcaption>Each transmitter's link, live: signal strength, motion score, and CSI amplitude across the 52 subcarriers</figcaption>
+      </figure>
+      <ul class="point-list">
+        <li><strong>Signal strength (RSSI):</strong> drops when someone stands on that link's direct line.</li>
+        <li><strong>Motion score:</strong> rises when someone moves near the link.</li>
+        <li><strong>CSI amplitude chart:</strong> the link's "shape" across the subcarriers; it changes when people add or block reflections.</li>
+      </ul>
     </section>
 
-    <!-- Real demo: video placeholder, the hardware we used, and the disclaimer -->
-    <section class="section panel">
-      <h2>Demo &amp; Disclaimer</h2>
-      <!-- Our real demo, hosted on YouTube (https://youtu.be/_GauObu2fKE).
-           To swap videos, change the ID after /embed/ and in the link below. -->
-      <div class="video video--embed">
-        <iframe src="https://www.youtube-nocookie.com/embed/_GauObu2fKE?rel=0"
-                title="Clairvoyance live demo" loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <!-- Training the model -->
+    <section class="section panel" id="training">
+      <h2>Teaching It the Room</h2>
+      <p class="lead">Every room bends Wi-Fi differently, so the system learns each space.</p>
+      <div class="split split--top">
+        <a class="split__media split__media--wide zoom" href="media/clairvoyance/collect-running.png" target="_blank">
+          <img class="framed" src="media/clairvoyance/collect-running.png" alt="Guided data collection page telling volunteers which taped square to stand in">
+        </a>
+        <ul class="point-list split__text">
+          <li><strong>Grid:</strong> we taped a 3 × 3 grid on the floor.</li>
+          <li><strong>Guided sessions:</strong> a page told volunteers out loud which square to stand or walk in, and labeled the recordings automatically.</li>
+          <li><strong>Features:</strong> every second, each link gives 30 numbers: shape change and wobble for 13 groups of subcarriers, plus its four summary numbers.</li>
+          <li><strong>Two models:</strong> scikit-learn random forests (300 trees each), one predicting which squares are occupied and one predicting the head count (0–3).</li>
+          <li><strong>Count first, then place:</strong> the system picks the most likely head count, then the most likely squares. In simulation this counted people correctly 82% of the time, versus 28% when each square was judged on its own.</li>
+        </ul>
       </div>
-      <p class="source-note video-link">Can't see the video? <a href="https://youtu.be/_GauObu2fKE" target="_blank" rel="noopener">Watch it on YouTube →</a></p>
+      <p>In our testing with 6 transmitters, the trained system recognized an empty room <strong>100%</strong> of the time, counted one person correctly at least <strong>76%</strong> of the time, and placed them within <strong>1–1.3&nbsp;m</strong>.</p>
+    </section>
 
-      <h3 class="subhead">What We Used</h3>
-      <div class="spec-grid">
-        <div class="spec">
-          <span class="spec__label">Transmitters</span>
-          <p>Six boards, mostly <span class="part">ESP32</span> dev modules and <span class="part">Seeed Studio XIAO ESP32-S3</span> boards. The XIAO transmitters used wire antennas.</p>
-          <div class="board-row">
-            <figure class="board">
-              <img src="media/clairvoyance/board-esp32-devkitc.webp" alt="3D view of an ESP32 dev module" loading="lazy">
-              <figcaption><span class="part">ESP32</span> dev module</figcaption>
-            </figure>
-            <figure class="board">
-              <img src="media/clairvoyance/board-xiao-s3-wire.webp" alt="3D render of a XIAO ESP32-S3 with a wire antenna" loading="lazy">
-              <figcaption><span class="part">XIAO ESP32-S3</span> + wire antenna</figcaption>
-            </figure>
-          </div>
+    <!-- Additional information: scaling, 5 GHz, disclaimer -->
+    <section class="section panel" id="more">
+      <h2>Additional Information</h2>
+      <div class="split split--reverse split--top">
+        <div class="split__media">
+          <figure class="board">
+            <img src="media/clairvoyance/board-esp32-c5-devkitc.webp" alt="3D view of the ESP32-C5-DevKitC-1" loading="lazy">
+            <figcaption><span class="part">ESP32-C5-DevKitC-1</span>, for 5&nbsp;GHz sensing</figcaption>
+          </figure>
         </div>
-        <div class="spec">
-          <span class="spec__label">CSI receivers</span>
-          <p>A <span class="part">XIAO ESP32-S3</span> with a dipole antenna on 2.4&nbsp;GHz, and an <span class="part">ESP32-C5</span> dev board for 5&nbsp;GHz sensing.</p>
-          <div class="board-row">
-            <figure class="board">
-              <img src="media/clairvoyance/board-xiao-s3-dipole.webp" alt="3D render of a XIAO ESP32-S3 with a dipole antenna" loading="lazy">
-              <figcaption><span class="part">XIAO ESP32-S3</span> + dipole</figcaption>
-            </figure>
-            <figure class="board">
-              <img src="media/clairvoyance/board-esp32-c5-devkitc.webp" alt="3D view of the ESP32-C5-DevKitC-1" loading="lazy">
-              <figcaption><span class="part">ESP32-C5-DevKitC-1</span></figcaption>
-            </figure>
-          </div>
-        </div>
-        <div class="spec">
-          <span class="spec__label">Server</span>
-          <p>A Raspberry Pi 5 (8&nbsp;GB) hosted the AI model and the demo script.</p>
-        </div>
-        <div class="spec">
-          <span class="spec__label">Network</span>
-          <p>An industrial-grade enterprise access point hosted the Wi-Fi network on channel 11.</p>
-        </div>
+        <ul class="point-list split__text">
+          <li><strong>Up to 10 transmitters:</strong> our demo used 6, but the system supports up to 10. The more transmitters, the more paths cross the room and the more accurate the map.</li>
+          <li><strong>5&nbsp;GHz support:</strong> the system also works with transmitters sending packets on the 5&nbsp;GHz band; it only needs a 5&nbsp;GHz-capable receiver such as the <span class="part">ESP32-C5</span>. 5&nbsp;GHz is far less crowded, so it picks up much less interference.</li>
+        </ul>
       </div>
-
-      <p class="source-note"><span class="part">ESP32</span> and <span class="part">ESP32-C5</span> board images: Espressif <a href="https://github.com/espressif/esp-dev-kits" target="_blank" rel="noopener">esp-dev-kits</a> docs (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; background removed). <span class="part">XIAO ESP32-S3</span> images are simplified 3D renders made for this page.</p>
 
       <div class="disclaimer">
         <span class="disclaimer__label pixel">⚠ Disclaimer</span>
         <p>The map works with varying levels of success depending on the <strong><span class="part">ESP32</span> board</strong>, <strong>Wi-Fi interference</strong> on the channel, and the <strong>number of transmitters</strong>.</p>
         <ul class="point-list">
-          <li><strong>Transmitters:</strong> our demo used 6, but the system works with up to 10. The more transmitters, the more accurate the map.</li>
           <li><strong>Best results:</strong> 5&nbsp;GHz transmitters and receivers using <span class="part">ESP32-C5</span> boards.</li>
           <li><strong>If you need 2.4&nbsp;GHz:</strong> use <span class="part">ESP32-C6</span> transmitters (or transmitters with dipole or wire antennas) and an <span class="part">ESP32-C6</span> receiver with a dipole or wire antenna.</li>
         </ul>
       </div>
     </section>
 
+    <!-- Future goals -->
+    <section class="section panel">
+      <h2>Future Goals</h2>
+      <div class="spec-grid spec-grid--3">
+        <div class="spec">
+          <span class="spec__label">5&nbsp;GHz everywhere</span>
+          <p>Upgrade every transmitter and receiver to sense on 5&nbsp;GHz, with dipole antennas instead of PCB antennas.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">A smarter model</span>
+          <p>Because of time constraints, the model isn't highly accurate yet, though it's accurate enough to count the people in a room and approximate where they are. More training data and sessions would sharpen it.</p>
+        </div>
+        <div class="spec">
+          <span class="spec__label">Pose detection</span>
+          <p>Go beyond where people are to how they're positioned, such as standing, sitting, or lying down.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Credits + link to the repository -->
     <section class="section panel">
       <h2>Credits</h2>
-      <p>Built by <strong>Team Mech Tech</strong>.</p>
+      <p>Built by <strong>Team Mech Tech</strong> for Verizon's Smart Campus competition.</p>
       <div class="credit-grid">
         <a class="credit" href="https://github.com/espressif/esp-csi" target="_blank" rel="noopener">
           <span class="credit__name">Espressif esp-csi</span>
-          <span class="credit__text">Our firmware builds on its <code>csi_send</code>, <code>csi_recv</code>, and <code>csi_recv_router</code> examples.</span>
+          <span class="credit__text">Our firmware builds on its <code>csi_send</code> and <code>csi_recv</code> examples.</span>
         </a>
         <a class="credit" href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener">
           <span class="credit__name">three.js</span>
@@ -268,7 +321,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-2013"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-2034"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -290,6 +343,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261126-2013"></script>
+  <script src="js/main.js?v=20261126-2034"></script>
 </body>
 </html>
