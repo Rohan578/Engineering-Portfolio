@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soil Node | Rohan Shrivastava</title>
-  <link rel="stylesheet" href="css/theme.css?v=20261126-1928">
+  <link rel="stylesheet" href="css/theme.css?v=20261126-2013">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
        tools/generate_art.py) with this page's title in the sky above him.
        =================================================================== -->
   <header class="page-hero">
-    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-1928"
+    <img class="page-hero__scene" src="assets/project-scene.svg?v=20261126-2013"
          alt="Pixel art of the armored hero standing in a meadow at night, hands resting on his sword">
     <nav class="page-hero__nav">
       <a class="back-link" href="index.html">← Back to the Quest Log</a>
@@ -28,20 +28,28 @@
 
   <main class="project">
 
-    <!-- OVERVIEW: summary on the left, demo video on the right.
+    <!-- OVERVIEW: demo video on top, summary below.
          The video is media/soilnode/demo.mp4 (poster: demo-poster.jpg);
          to update it, replace those files with the same names. -->
     <section class="section panel">
       <h2>Overview</h2>
-      <div class="split split--reverse split--top">
-        <div class="split__media split__media--wide">
-          <video class="video" src="media/soilnode/demo.mp4" poster="media/soilnode/demo-poster.jpg" controls playsinline preload="metadata"></video>
-        </div>
-        <div class="split__text">
-          <p>Soil Node is a small IoT device that monitors the soil moisture, air temperature, and humidity around your plants, to help them grow better with less effort. Once an hour, the node wakes up, samples its sensors for 5 seconds (soil moisture, air temperature, air humidity, and battery voltage), and sends the readings over Wi-Fi to a Python web server.</p>
-          <p>The server timestamps and smooths each reading, then plots it on three graphs over time: temperature and humidity, soil moisture, and battery level. Together they show how your home's environment, the moisture in the soil, and the battery change over time. Each node is assigned the type of plant it's monitoring, from a cactus to a tropical fern, and the server gives smart care recommendations based on it.</p>
-        </div>
+      <video class="video" src="media/soilnode/demo.mp4" poster="media/soilnode/demo-poster.jpg" controls playsinline preload="metadata"></video>
+      <p class="lead">Soil Node is a small IoT device that monitors the soil moisture, air temperature, and humidity around your plants, to help them grow better with less effort.</p>
+      <div class="fact-grid">
+        <div class="fact"><span class="fact__value">1×/hr</span><span class="fact__label">readings</span></div>
+        <div class="fact"><span class="fact__value">5 s</span><span class="fact__label">sampling session</span></div>
+        <div class="fact"><span class="fact__value">~3 mo</span><span class="fact__label">battery life on 1&nbsp;Ah</span></div>
+        <div class="fact"><span class="fact__value">Wi-Fi</span><span class="fact__label">to a Python server</span></div>
       </div>
+      <h3 class="subhead">How it works</h3>
+      <ul class="point-list">
+        <li><strong>Sense:</strong> once an hour, the node wakes up and samples soil moisture, air temperature, humidity, and battery voltage for 5 seconds, then goes back to sleep.</li>
+        <li><strong>Send:</strong> it sends the readings over Wi-Fi to a Python web server.</li>
+        <li><strong>Process:</strong> the server timestamps each reading, takes the median of the 5-second session, and smooths the results with an adjustable moving average.</li>
+        <li><strong>Plot:</strong> three graphs show changes over time: temperature and humidity, soil moisture, and battery level.</li>
+        <li><strong>Recommend:</strong> each node is assigned the type of plant it's monitoring, from a cactus to a tropical fern, and the server gives care recommendations to match.</li>
+        <li><strong>Battery life:</strong> about 3 months on a power source with 1&nbsp;Ah (1000&nbsp;mAh) capacity.</li>
+      </ul>
     </section>
 
     <!-- HARDWARE: description on the left, breadboard and schematic stacked
@@ -64,12 +72,12 @@
           </figure>
         </div>
         <div class="split__text">
-          <p>I designed the node in KiCad around an <span class="part">ESP32-C3</span>, chosen for its power efficiency, small size, and built-in Wi-Fi.</p>
+          <p>I designed the node in KiCad around an <span class="part">ESP32-C3</span>, which offers good power efficiency, a small size, and built-in Wi-Fi. It was the starting point because no <span class="part">ESP32-C6</span> boards were available for most of the development (the C6 upgrade is listed under Future Improvements).</p>
           <ul class="point-list">
             <li><strong>Soil moisture:</strong> a capacitive soil moisture sensor (v2.0) on an analog input.</li>
-            <li><strong>Air temperature and humidity:</strong> a higher-precision AHT20 sensor over I²C.</li>
+            <li><strong>Air temperature and humidity:</strong> AHT20 over I²C.</li>
             <li><strong>RGB LED and button:</strong> for telling nodes apart, pairing, and sending readings outside the hourly schedule.</li>
-            <li><strong>Power:</strong> runs on a NiMH or lithium polymer (LiPo) battery, with an MT3608 boost converter providing a stable 5&nbsp;V rail.</li>
+            <li><strong>Power:</strong> a 2S NiMH pack (2.4&nbsp;V, 1&nbsp;Ah) or a lithium polymer (LiPo) battery, boosted to a stable 5&nbsp;V rail by an MT3608 boost converter.</li>
           </ul>
           <p>Before committing to a PCB, I wired the full circuit on a breadboard to check the sensor readings, I²C communication, LED and button behavior, and soil probe calibration, and to fix wiring issues while changes were still cheap.</p>
         </div>
@@ -90,7 +98,7 @@
           <figcaption>PCB Layout</figcaption>
         </figure>
       </div>
-      <p>The custom PCB brings the <span class="part">ESP32-C3</span>, power regulation, and sensor connectors onto one compact board, with JST-style connectors so the soil probe and AHT20 can be swapped easily. I used the 3D render to check component fit and connector placement before ordering.</p>
+      <p>I designed a custom PCB that carries a surface-mount <span class="part">ESP32-C3</span> and the MT3608 boost converter. A smaller button and RGB LED board and a custom AHT20 sensor board plug in through male header connectors, so parts are easy to replace or upgrade to better sensors.</p>
     </section>
 
     <!-- FEATURES: screenshots live in media/soilnode/ (portal-*, led-*, server-*) -->
@@ -249,7 +257,7 @@
        the address (handled in js/main.js).
        =================================================================== -->
   <footer class="contact" id="contact">
-    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-1928"
+    <img class="contact__scene" src="assets/contact-scene.svg?v=20261126-2013"
          alt="Pixel art of the armored hero seen from behind, sitting on the cliff and looking out at the ocean, the moon, and the stars">
 
     <div class="contact__card panel">
@@ -271,6 +279,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261126-1928"></script>
+  <script src="js/main.js?v=20261126-2013"></script>
 </body>
 </html>

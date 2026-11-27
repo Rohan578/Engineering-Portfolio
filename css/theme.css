@@ -109,13 +109,13 @@ body::after {
   pointer-events: none;
 }
 body::before {
-  background: url("../assets/starfield.svg?v=20261126-1928") repeat;
+  background: url("../assets/starfield.svg?v=20261126-2013") repeat;
   background-size: 360px 360px;
   opacity: 0.9;
 }
 /* Layer 2: same tile, larger and slowly drifting, for a sense of depth */
 body::after {
-  background: url("../assets/starfield.svg?v=20261126-1928") repeat;
+  background: url("../assets/starfield.svg?v=20261126-2013") repeat;
   background-size: 720px 720px;
   background-position: 180px 90px;
   opacity: 0.35;
@@ -849,7 +849,7 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
   background: rgba(5, 4, 15, 0.55);
   border: 2px solid var(--color-border-soft);
 }
-.fact__value { display: block; font-family: var(--font-pixel); font-weight: 700; font-size: 1.9rem; line-height: 1.1; color: var(--color-gold); }
+.fact__value { display: block; font-family: var(--font-body); font-weight: 700; font-size: 1.75rem; line-height: 1.15; color: var(--color-gold); }
 .fact__label { display: block; margin-top: 4px; font-size: 0.85rem; color: var(--color-muted); }
 
 /* Numbered step cards ("How It Works") */
@@ -1177,3 +1177,7 @@ figcaption { margin-top: 8px; font-family: var(--font-body); font-weight: 500; f
 
 /* Space between a bullet list and the paragraph after it */
 .point-list + p { margin-top: 16px; }
+
+/* Overview: summary right under a video */
+.section .video + .lead { margin-top: 6px; }
+.fact-grid + .subhead { margin-top: 24px; }
